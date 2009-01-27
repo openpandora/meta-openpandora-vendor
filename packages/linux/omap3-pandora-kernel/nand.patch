@@ -1,0 +1,11 @@
+diff --git a/drivers/mtd/nand/omap2.c b/drivers/mtd/nand/omap2.c index 2ede116..d18a8c9 100644
+--- a/drivers/mtd/nand/omap2.c
++++ b/drivers/mtd/nand/omap2.c
+@@ -196,7 +196,7 @@ static void omap_read_buf16(struct mtd_info *mtd, u_char *buf, int len)  {
+ 	struct nand_chip *nand = mtd->priv;
+
+-	__raw_readsl(nand->IO_ADDR_R, buf, len / 2);
++	readsw(nand->IO_ADDR_R, buf, len / 2);
+ }
+
+ /*

@@ -1,0 +1,19 @@
+1e76adf502f842190416d5d7e3a8bc4f8f7a2c2a
+ sta_dk_4_0_4_32/CUDK/CLI/Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/sta_dk_4_0_4_32/CUDK/CLI/Makefile b/sta_dk_4_0_4_32/CUDK/CLI/Makefile
+old mode 100644
+new mode 100755
+index 93bd1e5..97d07a7
+--- a/sta_dk_4_0_4_32/CUDK/CLI/Makefile
++++ b/sta_dk_4_0_4_32/CUDK/CLI/Makefile
+@@ -136,7 +136,7 @@ endif
+ 
+ $(TARGET): $(OBJS) $(TI_UTIL_ADAPTER_LIB)
+ #	echo MAKECMDGOALS: $(MAKECMDGOALS) : $(findstring $(MAKECMDGOALS), "clean cleanall")
+-	$(CROSS_COMPILE)gcc $(OBJS) -L $(CUDK_ROOT)/Output -l $(TI_UTIL_ADAPTER_LIB) $(LDFLAGS) -lpthread -lc -lstdc++ -static -o $@
++	$(CROSS_COMPILE)gcc $(OBJS) -L $(OUTPUT_DIR) -l $(TI_UTIL_ADAPTER_LIB) $(LDFLAGS) -lpthread -lc -lstdc++ -static -o $@
+ ifeq ($(DEBUG), y)
+ 	cp -a $(TARGET) $(TARGET)_debug
+ 	$(CROSS_COMPILE)strip -s $(TARGET)
