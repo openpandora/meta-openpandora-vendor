@@ -25,5 +25,4 @@ do_install() {
 #	install -m 0755 ${S}/tiwlan_loader ${D}${bindir}
 }
 
-FILES_${PN} = "/usr/bin/wlan_cu /usr/bin/tiwlan_loader"
-
+FILES_${PN} += "${bindir} ${sbindir} ${bindir}/wlan_cu ${bindir}/tiwlan_loader"

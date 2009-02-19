@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rmmod wlan
+
+insmod $(busybox find /lib/modules/$(uname -r) -name "wlan.ko")

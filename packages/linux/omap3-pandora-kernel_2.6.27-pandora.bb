@@ -5,14 +5,26 @@ KERNEL_IMAGETYPE = "uImage"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-SRCREV = "33280e83ef2260f8f6ba01345c5d75a9d97a49c0"
+#GIT HEAD 9th Feb
+SRCREV = "0a92d456b556a54589c09737276883014853953a"
 
-#PV = "2.6.27-pandora+git${SRCREV}"
-PR = "r15"
+#GIT HEAD 7th Feb
+#SRCREV = "98000fc8f72fd9d35ae2fea0528e756febbe0916"
+
+#MMC3/WiFi commit
+#SRCREV = "33280e83ef2260f8f6ba01345c5d75a9d97a49c0"
+
+#Pre MMC3
+#SRCREV = "fdb85aeee5f1993265bf46d4dfeae32a3fb8b886"
+
+PV = "2.6.27-pandora+${PR}+git${SRCREV}"
+PR = "r1.5"
 
 SRC_URI = " \
 	git://openpandora.org/pandora-kernel.git;protocol=git;branch=pandora-27-omap1 \
 	file://defconfig \
+	file://0001-Add-EHCI-patch-suggested-by-Steven-Kipisz.patch;patch=1 \
+	file://0002-Add-missing-define-to-EHCI-OMAP.c.patch;patch=1 \
 	file://no-empty-flash-warnings.patch;patch=1 \
 	file://oprofile-0.9.3.armv7.diff;patch=1 \
 	file://no-cortex-deadlock.patch;patch=1 \
@@ -40,7 +52,3 @@ SRC_URI = " \
 "
 	
 S = "${WORKDIR}/git"
-
-#do_configure_prepend() {
-#	install -m 0644 ${S}/arch/arm/configs/omap3_pandora_defconfig ${WORKDIR}/defconfig
-#}

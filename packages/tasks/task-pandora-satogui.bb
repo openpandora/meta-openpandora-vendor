@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for default GUI apps in the Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r6"
+PR = "r1.1"
 
 inherit task
 
