@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the 'desktop' Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r1.6"
+PR = "r1.7"
 
 inherit task
 
@@ -31,8 +31,7 @@ RDEPENDS_${PN} = "\
 	synergy \
 	x11vnc angstrom-x11vnc-xinit \
 	angstrom-gnome-icon-theme-enable \
-	connman-gnome \
-#	networkmanager-applet \
+	networkmanager-applet \
 	scummvm \
 	ogre-egl \
 "

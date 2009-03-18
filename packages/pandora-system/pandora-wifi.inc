@@ -8,6 +8,8 @@ S = "${WORKDIR}/git"
 
 inherit module
 
+PARALLEL_MAKE = ""
+
 EXTRA_OEMAKE = " \
           'KERNELVER=${KERNEL_VERSION}' \
           'LINUXSRC=${STAGING_KERNEL_DIR}' \
@@ -16,6 +18,7 @@ EXTRA_OEMAKE = " \
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
+#Warning: Here be hacks as the build system is a little nuts.
 MAKE_TARGETS = "BUILD=debug ARCH=arm CROSS_COMPILE=${TARGET_PREFIX} KERNEL_DIR=${STAGING_KERNEL_DIR} OUTPUT_DIR=${S} AR=ar"
 
 KCFLAGS = "-D__KERNEL__ -DMODULE \

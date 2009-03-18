@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for default GUI apps in the Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r1.4"
+PR = "r1.8"
 
 inherit task
 
@@ -30,13 +30,12 @@ RDEPENDS_${PN} = "\
         xterm \
         xtscal \
         matchbox-wm \
+        matchbox-desktop matchbox-panel-2 matchbox-panel-manager matchbox-panel-hacks \
         matchbox-keyboard matchbox-keyboard-applet matchbox-keyboard-im \
-        matchbox-desktop \
-        matchbox-common \
-        matchbox-config-gtk \
+        matchbox-common matchbox-config-gtk \
+        matchbox-terminal \
         matchbox-themes-gtk \
-        matchbox-panel-manager \
-        matchbox-panel-hacks \
+        pcmanfm \
         ttf-liberation-sans ttf-liberation-serif ttf-liberation-mono \
         xauth xhost xset xrandr \
         xcursor-transparent-theme \
@@ -45,7 +44,6 @@ RDEPENDS_${PN} = "\
         matchbox-applet-inputmanager \
         matchbox-applet-volume \
         matchbox-applet-startup-monitor \
-        connman-gnome \
 #	networkmanager-applet \
         scummvm \
 "

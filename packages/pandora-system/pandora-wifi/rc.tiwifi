@@ -1,5 +1,42 @@
 #!/bin/sh
 
-rmmod wlan
+DESC="TI1251 Wireless LAN driver"
+NAME="wlan"
 
-insmod $(busybox find /lib/modules/$(uname -r) -name "wlan.ko")
+d_stop() {
+	if `grep -q wlan /proc/modules` ; then
+		rmmod wlan
+	fi
+}
+
+d_start() {
+	insmod $(busybox find /lib/modules/$(uname -r) -name "wlan.ko")
+	/usr/bin/tiwlan_loader -n -f /lib/firmware/Fw1251r1c.bin -i /etc/tiwlan.ini
+}
+
+
+case "$1" in
+  start)
+	echo -n "Starting $DESC: $NAME"
+	d_start
+	echo "."
+	;;
+  stop)
+	echo -n "Stopping $DESC: $NAME"
+	d_stop
+	echo "."
+	;;
+  restart|force-reload)
+	echo -n "Restarting $DESC: $NAME"
+	d_stop
+	sleep 1
+	d_start
+	echo "."
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

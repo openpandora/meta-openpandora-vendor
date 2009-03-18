@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps in the Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r1.8"
+PR = "r3.2"
 
 inherit task 
 
@@ -15,7 +15,10 @@ RDEPENDS_${PN} = "\
         pandora-firmware \
         pandora-wifi pandora-wifi-tools \
         omap3-deviceid \	
-        omap3-sgx-modules libgles-omap3 \
+        omap3-sgx-modules devmem2 libgles-omap3 \
+        sudo \
+        lsof \
+        gnome-volume-manager \
         libwiimote \
         libsdl-gfx \
         nfs-utils nfs-utils-client \
@@ -28,7 +31,7 @@ RDEPENDS_${PN} = "\
         portmap \
         fuse sshfs-fuse ntfs-3g \
         file \
-        aufs \
+        aufs aufs-tools \
         socat \
         strace \
         python-pygame \

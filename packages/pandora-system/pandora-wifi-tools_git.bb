@@ -3,7 +3,7 @@ LICENSE = "GPLv2"
 
 DEPENDS = "pandora-wifi"
 
-PR = "r3"
+PR = "r3.2"
 
 # Check the include for the source location/GIT SRCREV etc.
 require pandora-wifi.inc
@@ -18,6 +18,10 @@ SRC_URI += " \
 do_compile_prepend() {
 	cd ${S}/sta_dk_4_0_4_32/CUDK/CLI/
 }
+
+#do_compile_append() {
+#	cd ${S}/sta_dk_4_0_4_32/CUDK/tiwlan_loader/ && oe_runmake CC=${TARGET_PREFIX}gcc AR= 
+#}
 
 do_install() {
 	install -d ${D}${bindir}
