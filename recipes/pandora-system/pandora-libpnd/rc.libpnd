@@ -1,0 +1,44 @@
+#! /bin/sh 
+#
+### BEGIN INIT INFO
+# Provides:          pndnotifyd
+# Required-Start:    #adjust
+# Required-Stop:     #adjust
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+### END INIT INFO
+ 
+PID=`pidof -o %PPID -x pndnotifyd`
+PNDNOTIFY='/usr/bin/pndnotifyd' #adjust
+ 
+case "$1" in
+start)
+	# Start daemon.
+	echo "starting $PID"
+                        if [ $PID ]
+                        then
+                                echo "pndnotifyd already running."
+                        else
+				$PNDNOTIFY -d
+				echo "started pndnotifyd"
+                        fi
+ 
+	;;
+stop)
+	# Stop daemon.
+	kill $PID
+	;;
+reload)
+	kill -HUP $PID
+	;;
+restart|force-reload)
+	$0 stop
+	$0 start
+    ;;
+*)
+	echo "Usage: $0 {start|stop|restart|reload|force-reload}" >&2
+	exit 2
+	;;
+esac
+exit 0
+
