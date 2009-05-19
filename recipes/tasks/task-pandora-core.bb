@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps in the Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r3.2"
+PR = "r3.3"
 
 inherit task 
 
@@ -14,6 +14,7 @@ RDEPENDS_${PN} = "\
         task-proper-tools \
         pandora-firmware \
         pandora-wifi pandora-wifi-tools \
+        pandora-libpnd \
         omap3-deviceid \	
         omap3-sgx-modules devmem2 libgles-omap3 \
         sudo \

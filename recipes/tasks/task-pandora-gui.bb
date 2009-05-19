@@ -2,12 +2,13 @@ DESCRIPTION = "Task file for default GUI apps in the Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r1.8"
+PR = "r1.9"
 
 inherit task
 
 RDEPENDS_${PN} = "\
         task-pandora-core \
+        entrance \
         angstrom-x11-base-depends \
         angstrom-gpe-task-base angstrom-gpe-task-game angstrom-ohand-task-pim angstrom-gpe-task-apps angstrom-gpe-task-settings \
         angstrom-zeroconf-audio \
@@ -30,7 +31,7 @@ RDEPENDS_${PN} = "\
         xterm \
         xtscal \
         matchbox-wm \
-        matchbox-desktop matchbox-panel-2 matchbox-panel-manager matchbox-panel-hacks \
+        matchbox-desktop matchbox-panel matchbox-panel-manager matchbox-panel-hacks \
         matchbox-keyboard matchbox-keyboard-applet matchbox-keyboard-im \
         matchbox-common matchbox-config-gtk \
         matchbox-terminal \
@@ -45,5 +46,6 @@ RDEPENDS_${PN} = "\
         matchbox-applet-volume \
         matchbox-applet-startup-monitor \
 #	networkmanager-applet \
+	connman-gnome \
         scummvm \
 "

@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the 'desktop' Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r1.7"
+PR = "r1.10"
 
 inherit task
 
@@ -10,6 +10,7 @@ ECONFIG ?= "places e-wm-config-angstrom e-wm-config-default"
 
 RDEPENDS_${PN} = "\
 	task-pandora-core \
+	entrance \
 	angstrom-x11-base-depends \
         angstrom-gpe-task-base angstrom-gpe-task-game angstrom-ohand-task-pim angstrom-gpe-task-apps angstrom-gpe-task-settings \
 	angstrom-zeroconf-audio \
@@ -24,14 +25,15 @@ RDEPENDS_${PN} = "\
 	abiword \
 	gnumeric \
 	gimp \
-	powertop oprofile \
+	oprofile \
 	pidgin \
 	gnome-games \
 	stalonetray \
 	synergy \
 	x11vnc angstrom-x11vnc-xinit \
 	angstrom-gnome-icon-theme-enable \
-	networkmanager-applet \
+#	networkmanager-applet \
+	connman-gnome \
 	scummvm \
 	ogre-egl \
 "
