@@ -5,8 +5,11 @@ KERNEL_IMAGETYPE = "uImage"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
+#GIT HEAD WITH DSS2
+SRCREV = 988a5dbcb012af46fb413d7a4105be81481076f0
+
 #GIT HEAD 8th March
-SRCREV = "6659d29395831bf5d6e589b288bfc3faf2096d2f"
+#SRCREV = "6659d29395831bf5d6e589b288bfc3faf2096d2f"
 
 #GIT HEAD 7th Feb
 #SRCREV = "98000fc8f72fd9d35ae2fea0528e756febbe0916"
@@ -18,7 +21,7 @@ SRCREV = "6659d29395831bf5d6e589b288bfc3faf2096d2f"
 #SRCREV = "fdb85aeee5f1993265bf46d4dfeae32a3fb8b886"
 
 PV = "2.6.27-pandora+${PR}+git${SRCREV}"
-PR = "r1.6"
+PR = "r1.8"
 
 SRC_URI = " \
 	git://openpandora.org/pandora-kernel.git;protocol=git;branch=pandora-27-omap1 \
@@ -35,7 +38,6 @@ SRC_URI = " \
 	file://mru-fix-timings.diff;patch=1 \
 	file://mru-fix-display-panning.diff;patch=1 \
 	file://mru-make-dpll4-m4-ck-programmable.diff;patch=1 \
-	file://mru-add-clk-get-parent.diff;patch=1 \
 	file://mru-improve-pixclock-config.diff;patch=1 \
 	file://mru-make-video-timings-selectable.diff;patch=1 \
 	file://mru-enable-overlay-optimalization.diff;patch=1 \
