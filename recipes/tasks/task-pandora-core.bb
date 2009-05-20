@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps in the Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r3.3"
+PR = "r3.4"
 
 inherit task 
 
@@ -49,7 +49,7 @@ RDEPENDS_${PN} = "\
         zip \
         openssh-scp openssh-ssh \
         mplayer \
-        networkmanager netm-cli \
+#        networkmanager netm-cli \
 "
 
 # Make sure we install all kernel modules with the Pandora images

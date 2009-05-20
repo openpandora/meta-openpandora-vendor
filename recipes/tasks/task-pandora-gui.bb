@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for default GUI apps in the Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r1.9"
+PR = "r1.10"
 
 inherit task
 
@@ -48,4 +48,5 @@ RDEPENDS_${PN} = "\
 #	networkmanager-applet \
 	connman-gnome \
         scummvm \
+        pandora-matchbox-gtk-theme \
 "

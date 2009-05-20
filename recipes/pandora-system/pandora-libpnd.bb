@@ -26,8 +26,6 @@ do_compile_prepend() {
           cd ${S}/
 }
 
-#EXTRA_OEMAKE = "all"
-
 do_compile() {
           oe_runmake 
           oe_runmake deploy
@@ -47,9 +45,9 @@ do_install() {
                    
           install -d ${D}${prefix}/pandora/
           install -d ${D}${prefix}/pandora/apps/
-          cp -pP ${S}/deployment/usr/pandora/apps/.* ${D}${prefix}/pandora/apps/
+#          cp -pP ${S}/deployment/usr/pandora/apps/*.* ${D}${prefix}/pandora/apps
           install -d ${D}${prefix}/pandora/scripts/
-          cp -pP ${S}/deployment/usr/pandora/scripts/*.* ${D}${prefix}/pandora/scripts/
+          cp -pP ${S}/deployment/usr/pandora/scripts/*.* ${D}${prefix}/pandora/scripts
           
           install -d ${D}${sysconfdir}/init.d/
           cp -pP ${WORKDIR}/rc.libpnd ${D}${sysconfdir}/init.d/libpnd-init
