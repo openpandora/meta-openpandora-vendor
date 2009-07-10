@@ -12,6 +12,8 @@ SRC_URI = "file://mem.c \
 
 S="${WORKDIR}"
 
+TARGET_CC_ARCH += "${LDFLAGS}"
+
 do_install() {
 	install -d ${D}${bindir}
 	install -m 0755 ${WORKDIR}/mem ${D}${bindir}

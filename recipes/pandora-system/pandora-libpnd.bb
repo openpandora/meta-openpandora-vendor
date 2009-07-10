@@ -1,7 +1,7 @@
 DESCRIPTION = "Support for the PND format in Pandora images (lib, daemon, init script etc.)"
 LICENSE = "lGPL"
 
-PR = "r1.7"
+PR = "r1.8"
 
 PARALLEL_MAKE = ""
 
@@ -38,6 +38,7 @@ do_install() {
 
           install -d ${D}${libdir}/
           cp -pP ${S}/deployment/usr/lib/libpnd.so.1.0.1 ${D}${libdir}/libpnd.so.1.0.1
+          cp -pP ${S}/deployment/usr/lib/libpnd.so.1.0.1 ${D}${libdir}/libpnd.so.1
           cp -pP ${S}/deployment/usr/lib/libpnd.a ${D}${libdir}/libpnd.a
           
           install -d ${D}${bindir}/
@@ -53,9 +54,9 @@ do_install() {
           cp -pP ${WORKDIR}/rc.libpnd ${D}${sysconfdir}/init.d/libpnd-init
 }
 
-pkg_postinst() {
-#!/bin/sh
-ln -sf /usr/lib/libpnd.so.1.0.1 /usr/lib/libpnd.so.1 
-}
+#pkg_postinst() {
+##!/bin/sh
+#ln -sf /usr/lib/libpnd.so.1.0.1 /usr/lib/libpnd.so.1 
+#}
 
-FILES_${PN} += "${bindir} ${sbindir}"
+FILES_${PN} += "${bindir} ${sbindir} ${prefix}/pandora/*"

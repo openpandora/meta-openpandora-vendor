@@ -1,0 +1,2161 @@
+From b7d47a9a3f249777d5bf04e987643d5743ba230c Mon Sep 17 00:00:00 2001
+From: David-John Willis <John.Willis@Distant-earth.com>
+Date: Wed, 10 Jun 2009 21:47:34 +0100
+Subject: [PATCH 1/5] Initial work on WEXT support.
+
+---
+ sta_dk_4_0_4_32/Makefile                   |    1 +
+ sta_dk_4_0_4_32/common.inc                 |    2 +-
+ sta_dk_4_0_4_32/pform/common/inc/osUtil.h  |    6 +-
+ sta_dk_4_0_4_32/pform/common/src/osUtil.c  |   50 +
+ sta_dk_4_0_4_32/pform/linux/inc/esta_drv.h |    2 +
+ sta_dk_4_0_4_32/pform/linux/inc/iw_ioctl.h |   32 +
+ sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c | 1950 ++++++++++++++++++++++++++++
+ sta_dk_4_0_4_32/pform/linux/src/osapi.c    |    6 +-
+ 8 files changed, 2046 insertions(+), 3 deletions(-)
+ mode change 100644 => 100755 sta_dk_4_0_4_32/Makefile
+ mode change 100644 => 100755 sta_dk_4_0_4_32/common.inc
+ mode change 100644 => 100755 sta_dk_4_0_4_32/pform/common/inc/osUtil.h
+ mode change 100644 => 100755 sta_dk_4_0_4_32/pform/common/src/osUtil.c
+ mode change 100644 => 100755 sta_dk_4_0_4_32/pform/linux/inc/esta_drv.h
+ create mode 100755 sta_dk_4_0_4_32/pform/linux/inc/iw_ioctl.h
+ create mode 100755 sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
+ mode change 100644 => 100755 sta_dk_4_0_4_32/pform/linux/src/osapi.c
+
+diff --git a/sta_dk_4_0_4_32/Makefile b/sta_dk_4_0_4_32/Makefile
+old mode 100644
+new mode 100755
+index 76fbe48..339cfd5
+--- a/sta_dk_4_0_4_32/Makefile
++++ b/sta_dk_4_0_4_32/Makefile
+@@ -61,6 +61,7 @@ OS_SRCS = \
+     $(DK_ROOT)/pform/linux/src/ioctl_utils.c \
+     $(DK_ROOT)/pform/linux/src/osRgstry_parser.c \
+     $(DK_ROOT)/pform/linux/src/ipc_k.c \
++    $(DK_ROOT)/pform/linux/src/iw_ioctl.c \
+     $(DK_ROOT)/pform/linux/src/proc_stat.c
+     
+ ifeq ($(DRIVER_PROFILING),y)
+diff --git a/sta_dk_4_0_4_32/common.inc b/sta_dk_4_0_4_32/common.inc
+old mode 100644
+new mode 100755
+index 17e8ec5..42c15df
+--- a/sta_dk_4_0_4_32/common.inc
++++ b/sta_dk_4_0_4_32/common.inc
+@@ -52,7 +52,7 @@ WORKQUEUE ?= y
+ #
+ # Enable or disable debugging
+ #
+-DEBUG ?= n
++DEBUG ?= y
+ 
+ #
+ # Enable or disable OS and init messages
+diff --git a/sta_dk_4_0_4_32/pform/common/inc/osUtil.h b/sta_dk_4_0_4_32/pform/common/inc/osUtil.h
+old mode 100644
+new mode 100755
+index e7a0de8..91736a7
+--- a/sta_dk_4_0_4_32/pform/common/inc/osUtil.h
++++ b/sta_dk_4_0_4_32/pform/common/inc/osUtil.h
+@@ -334,5 +334,9 @@ ULONG UtilPltRxTxCal(PTIWLN_ADAPTER_T pAdapter, PUCHAR pData, PULONG pOutLength,
+ VOID UtilPltRxTxCalCB(TI_HANDLE hAdapter,TI_STATUS status,PUINT8 pReadBuff);
+ ULONG UtilPltRxCal(PTIWLN_ADAPTER_T pAdapter, PUCHAR pData, PULONG pOutLength, ULONG InLength);
+ ULONG utilRxCalibrationStatus(PTIWLN_ADAPTER_T pAdapter, PUCHAR pData, PULONG pOutLength, ULONG InLength);
+- 
++ULONG UtilWepKeyGet (PTIWLN_ADAPTER_T pAdapter, PUCHAR pData, ULONG Length);
++ULONG UtilDesiredRatesSet (PTIWLN_ADAPTER_T pAdapter, PUCHAR pData, ULONG Length);
++
++TI_STATUS UtilGetParam(PTIWLN_ADAPTER_T pAdapter, externalParam_e ParamType, PUCHAR pData, ULONG Length);	/* CJP: proto needed */
++
+ #endif		/*__OSUTIL_H_*/
+diff --git a/sta_dk_4_0_4_32/pform/common/src/osUtil.c b/sta_dk_4_0_4_32/pform/common/src/osUtil.c
+old mode 100644
+new mode 100755
+index 757c443..79026fc
+--- a/sta_dk_4_0_4_32/pform/common/src/osUtil.c
++++ b/sta_dk_4_0_4_32/pform/common/src/osUtil.c
+@@ -5588,3 +5588,53 @@ ULONG utilRxCalibrationStatus(
+ 
+     return status;
+ }
++
++ULONG
++UtilWepKeyGet (
++   PTIWLN_ADAPTER_T pAdapter,
++   PUCHAR pData,
++   ULONG Length)
++{
++    securityKeys_t       rsnkey;
++    securityKeys_t       *wkey;
++    paramInfo_t          Param;
++    TI_STATUS            status;
++
++    wkey  = (securityKeys_t *)pData;
++
++    /* Fill Param fields and get the 802_11 capability information */
++    Param.paramType   = RSN_KEY_PARAM;
++    Param.paramLength = Length;
++    rsnkey.keyIndex = wkey->keyIndex;
++    Param.content.pRsnKey = &rsnkey;
++
++    status = configMgr_getParam(pAdapter->CoreHalCtx, &Param);
++
++    if(status != OK)
++        return NOK;
++
++        printk("UtilWepKeyGet 1 KeyIndex  %x , keyLength=%d\n",
++             Param.content.pRsnKey->keyIndex, Param.content.pRsnKey->encLen);
++        NdisMoveMemory(wkey, Param.content.pRsnKey, sizeof(securityKeys_t));
++        printk("UtilWepKeyGet 2 KeyIndex  %x , keyLength=%d\n",
++             wkey->keyIndex, wkey->encLen);
++    return status;
++}
++
++ULONG
++UtilDesiredRatesSet(
++        PTIWLN_ADAPTER_T pAdapter,
++        PUCHAR pData,
++        ULONG Length
++        )
++{
++        UCHAR rate;
++    ULONG retValue;
++
++        rate = (UCHAR) *(PULONG)pData;
++
++        retValue = UtilSetParam(pAdapter, SITE_MGR_DESIRED_TX_RATE_PARAM, (PUCHAR)&rate, sizeof(UCHAR));
++
++        return retValue;
++
++}
+diff --git a/sta_dk_4_0_4_32/pform/linux/inc/esta_drv.h b/sta_dk_4_0_4_32/pform/linux/inc/esta_drv.h
+old mode 100644
+new mode 100755
+index 14a5dd4..4d348ff
+--- a/sta_dk_4_0_4_32/pform/linux/inc/esta_drv.h
++++ b/sta_dk_4_0_4_32/pform/linux/inc/esta_drv.h
+@@ -67,6 +67,8 @@
+ #endif
+ #include "linux_ioctl_common.h"
+ 
++#include "iw_ioctl.h"
++
+ #define TIWLAN_DRV_NAME    "tiwlan"
+ #define TIWLAN_DRV_IF_NAME TIWLAN_DRV_NAME"%d"
+ #define TIWLAN_DRV_NAME_WIRELESS_PROTO "IEEE 802.11-DS"
+diff --git a/sta_dk_4_0_4_32/pform/linux/inc/iw_ioctl.h b/sta_dk_4_0_4_32/pform/linux/inc/iw_ioctl.h
+new file mode 100755
+index 0000000..08306a2
+--- /dev/null
++++ b/sta_dk_4_0_4_32/pform/linux/inc/iw_ioctl.h
+@@ -0,0 +1,32 @@
++/*
++ *  Copyright (C) 2009 John Willis
++ *  Copyright (C) 2008 Texas Instruments/Jorjin Technologies inc.
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; either version 2 of the License, or
++ *  (at your option) any later version.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ *  GNU General Public License for more details.
++ *
++ *
++ * This file implements support for Linux Wireless Extensions for TI 1251 driver.
++ *
++ */
++
++#ifndef _IW_IOCTL_H_
++#define _IW_IOCTL_H_
++
++/*extern ULONG UtilGetParam(
++			PTIWLN_ADAPTER_T pAdapter,
++			externalParam_e ParamType,
++			PUCHAR pData,
++			ULONG Length
++			);
++*/
++extern void tiwlan_iwhandler_init(struct net_device *dev);
++
++#endif /* _IW_IOCTL_H_ */
+diff --git a/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c b/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
+new file mode 100755
+index 0000000..0e28586
+--- /dev/null
++++ b/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
+@@ -0,0 +1,1950 @@
++/*
++ *  Copyright (C) 2009 John Willis
++ *  Copyright (C) 2008 Texas Instruments/Jorjin Technologies inc.
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; either version 2 of the License, or
++ *  (at your option) any later version.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ *  GNU General Public License for more details.
++ *
++ *
++ * This file implements support for Linux Wireless Extensions for TI 1251 driver.
++ *
++ */
++
++#include <linux/if_arp.h>
++#include <linux/wireless.h>
++#include <net/iw_handler.h>
++#include <net/ieee80211.h>
++#include "osAdapter.h"
++#include "tiioctl.h"
++#include "paramOut.h"
++#include "osUtil.h"
++#include "srcApi.h"
++#include "configMgr.h"
++#include "esta_drv.h"
++#include "osUtil.h"
++#include "scanMngrTypes.h"
++#include "scanMngrTypes.h"
++
++#define IOCTL_DBG 1
++
++static const long freq_list[] = { 2412, 2417, 2422, 2427, 2432, 2437, 2442,
++				  2447, 2452, 2457, 2462, 2467, 2472, 2484 };
++#define FREQ_COUNT (sizeof(freq_list) / sizeof(freq_list[0]))
++#define MAX_SSID_LEN 32
++#define MAX_NAME_LEN 32 /* this is assumed to be equal to MAX_SSID_LEN */
++#define VAL_DEFAULT_KEY_ID			110
++#define WEP_KEYS	4
++//#define MEGA	1e6
++
++scan_Params_t iw_appScanParams;
++scan_Policy_t iw_scanPolicy;
++
++void init_scan_params(void)
++{
++    int i,j;
++
++    /* init application scan default params */
++    iw_appScanParams.desiredSsid.len = 0;
++    iw_appScanParams.scanType = SCAN_TYPE_NORMAL_ACTIVE;
++    iw_appScanParams.band = RADIO_BAND_2_4_GHZ;
++    iw_appScanParams.probeReqNumber = 3;
++    iw_appScanParams.probeRequestRate = DRV_RATE_MASK_2_BARKER;
++    iw_appScanParams.numOfChannels = 11;
++    for ( i = 0; i < 11; i++ )
++    {
++        for ( j = 0; j < 6; j++ )
++        {
++            iw_appScanParams.channelEntry[ i ].normalChannelEntry.bssId.addr[ j ] = 0xff;
++        }
++        iw_appScanParams.channelEntry[ i ].normalChannelEntry.earlyTerminationEvent = SCAN_ET_COND_DISABLE;
++        iw_appScanParams.channelEntry[ i ].normalChannelEntry.ETMaxNumOfAPframes = 0;
++        iw_appScanParams.channelEntry[ i ].normalChannelEntry.maxChannelDwellTime = 60000;
++        iw_appScanParams.channelEntry[ i ].normalChannelEntry.minChannelDwellTime = 30000;
++        iw_appScanParams.channelEntry[ i ].normalChannelEntry.txPowerDbm = MAX_POWER_LEVEL;
++        iw_appScanParams.channelEntry[ i ].normalChannelEntry.channel = i + 1;
++    }
++
++    /* init default scan policy */
++    iw_scanPolicy.normalScanInterval = 10000;
++    iw_scanPolicy.deterioratingScanInterval = 5000;
++    iw_scanPolicy.maxTrackFailures = 3;
++    iw_scanPolicy.BSSListSize = 4;
++    iw_scanPolicy.BSSNumberToStartDiscovery = 1;
++    iw_scanPolicy.numOfBands = 1;
++    iw_scanPolicy.bandScanPolicy[ 0 ].band = RADIO_BAND_2_4_GHZ;
++    iw_scanPolicy.bandScanPolicy[ 0 ].rxRSSIThreshold = -80;
++    iw_scanPolicy.bandScanPolicy[ 0 ].numOfChannles = 11;
++    iw_scanPolicy.bandScanPolicy[ 0 ].numOfChannlesForDiscovery = 3;
++    for ( i = 0; i < 11; i++ )
++    {
++        iw_scanPolicy.bandScanPolicy[ 0 ].channelList[ i ] = i + 1;
++    }
++    iw_scanPolicy.bandScanPolicy[ 0 ].trackingMethod.scanType = SCAN_TYPE_NORMAL_ACTIVE;
++    iw_scanPolicy.bandScanPolicy[ 0 ].trackingMethod.method.basicMethodParams.earlyTerminationEvent = SCAN_ET_COND_DISABLE;
++    iw_scanPolicy.bandScanPolicy[ 0 ].trackingMethod.method.basicMethodParams.ETMaxNumberOfApFrames = 0;
++    iw_scanPolicy.bandScanPolicy[ 0 ].trackingMethod.method.basicMethodParams.maxChannelDwellTime = 30000;
++    iw_scanPolicy.bandScanPolicy[ 0 ].trackingMethod.method.basicMethodParams.minChannelDwellTime = 15000;
++    iw_scanPolicy.bandScanPolicy[ 0 ].trackingMethod.method.basicMethodParams.probReqParams.bitrate = DRV_RATE_MASK_1_BARKER;
++    iw_scanPolicy.bandScanPolicy[ 0 ].trackingMethod.method.basicMethodParams.probReqParams.numOfProbeReqs = 3;
++    iw_scanPolicy.bandScanPolicy[ 0 ].trackingMethod.method.basicMethodParams.probReqParams.txPowerDbm = 1;
++    iw_scanPolicy.bandScanPolicy[ 0 ].discoveryMethod.scanType = SCAN_TYPE_NORMAL_ACTIVE;
++    iw_scanPolicy.bandScanPolicy[ 0 ].discoveryMethod.method.basicMethodParams.earlyTerminationEvent = SCAN_ET_COND_DISABLE;
++    iw_scanPolicy.bandScanPolicy[ 0 ].discoveryMethod.method.basicMethodParams.ETMaxNumberOfApFrames = 0;
++    iw_scanPolicy.bandScanPolicy[ 0 ].discoveryMethod.method.basicMethodParams.maxChannelDwellTime = 30000;
++    iw_scanPolicy.bandScanPolicy[ 0 ].discoveryMethod.method.basicMethodParams.minChannelDwellTime = 15000;
++    iw_scanPolicy.bandScanPolicy[ 0 ].discoveryMethod.method.basicMethodParams.probReqParams.bitrate = DRV_RATE_MASK_2_BARKER;
++    iw_scanPolicy.bandScanPolicy[ 0 ].discoveryMethod.method.basicMethodParams.probReqParams.numOfProbeReqs = 3;
++    iw_scanPolicy.bandScanPolicy[ 0 ].discoveryMethod.method.basicMethodParams.probReqParams.txPowerDbm = 1;
++    iw_scanPolicy.bandScanPolicy[ 0 ].immediateScanMethod.scanType = SCAN_TYPE_NORMAL_ACTIVE;
++    iw_scanPolicy.bandScanPolicy[ 0 ].immediateScanMethod.method.basicMethodParams.earlyTerminationEvent = SCAN_ET_COND_DISABLE;
++    iw_scanPolicy.bandScanPolicy[ 0 ].immediateScanMethod.method.basicMethodParams.ETMaxNumberOfApFrames = 0;
++    iw_scanPolicy.bandScanPolicy[ 0 ].immediateScanMethod.method.basicMethodParams.maxChannelDwellTime = 30000;
++    iw_scanPolicy.bandScanPolicy[ 0 ].immediateScanMethod.method.basicMethodParams.minChannelDwellTime = 15000;
++    iw_scanPolicy.bandScanPolicy[ 0 ].immediateScanMethod.method.basicMethodParams.probReqParams.bitrate = DRV_RATE_MASK_5_5_CCK;
++    iw_scanPolicy.bandScanPolicy[ 0 ].immediateScanMethod.method.basicMethodParams.probReqParams.numOfProbeReqs = 3;
++    iw_scanPolicy.bandScanPolicy[ 0 ].immediateScanMethod.method.basicMethodParams.probReqParams.txPowerDbm = 1;
++}
++
++static int iw_ioctl_commit(struct net_device *dev, struct iw_request_info *info, char *name, char *extra)
++{
++	return (OK);
++}
++
++static int iw_get_name(struct net_device *dev,
++			   struct iw_request_info *info,
++			   char *name, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	int i;
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++/*	
++	u8 rates[10];
++	int len, i, over2 = 0;
++
++	len = iw_get_datarates(dev, rates);
++
++	for (i = 0; i < len; i++) {
++		if (rates[i] == 0x0b || rates[i] == 0x16) {
++			over2 = 1;
++			break;
++		}
++	}
++*/
++	strcpy(name, "IEEE 802.11g");
++
++
++	i = 0;
++	while (i < IFNAMSIZ && dev->name[i])
++		printk("%c", dev->name[i++]);
++	printk("\n");
++
++	for (i = 0; i < ETH_ADDR_SIZE; i++)
++		printk("%x:", pAdapter->CurrentAddr[i]);
++	printk("\n");
++
++	return 0;
++}
++
++static int iw_ioctl_siwencode(struct net_device *dev,
++				  struct iw_request_info *info,
++				  struct iw_point *erq, char *keybuf)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	cipherSuite_e 	cipher;
++	int i;
++	ULONG len; 
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	i = erq->flags & IW_ENCODE_INDEX;
++	if (i < 1 || i > 4)
++	{
++		UINT32 ID = VAL_DEFAULT_KEY_ID;
++		ULONG ID_size = 4;
++		UtilInfoCodeQueryInformation(pAdapter, (UINT8 *)&ID, &ID_size);
++		i = *((UINT8 *)&ID);
++	}
++	else
++		i--;
++	if (i < 0 || i >= WEP_KEYS)
++		return -EINVAL;
++
++	UtilWepStatusGet(pAdapter, (UINT8 *)&cipher, &len);
++	
++	if (erq->flags & IW_ENCODE_DISABLED) {
++		cipherSuite_e val=RSN_CIPHER_NONE;
++		UtilWepStatusSet(pAdapter, (UINT8 *)&val, sizeof(val));
++		goto done;
++	}
++	else
++	{
++		if (erq->length > 0) {
++			OS_802_11_WEP wep;
++			int len = erq->length <= 5 ? 5 : 13;
++			
++			cipherSuite_e val=RSN_CIPHER_WEP;
++			UtilWepStatusSet(pAdapter, (UINT8 *)&val, sizeof(val));
++			
++			if (len > erq->length)
++				memset(keybuf + erq->length, 0, len - erq->length);
++			memcpy(wep.KeyMaterial, keybuf, len);
++			wep.Length = sizeof(wep);
++			wep.KeyIndex = i;
++			wep.KeyLength = len;
++			UtilAddWep(pAdapter, (UINT8 *)&wep, wep.Length, true);
++		} else {
++			/* No key data - just set the default TX key index */
++			securityKeys_t key;
++			UINT8 data[5];
++			
++			memset(&key, 0, sizeof(securityKeys_t));
++			key.keyIndex = i;
++			if (!UtilWepKeyGet(pAdapter, (UINT8 *)&key, sizeof(securityKeys_t)))
++			{
++				if (key.encLen > 0)
++				{
++					*(UINT32 *)data = VAL_DEFAULT_KEY_ID;
++					data[4] = i;
++					UtilInfoCodeSetInformation(pAdapter, data, 5);
++					if (cipher == RSN_CIPHER_NONE)
++					{
++						cipherSuite_e val=RSN_CIPHER_WEP;
++						UtilWepStatusSet(pAdapter, (UINT8 *)&val, sizeof(val));
++					}
++				}
++				else
++					return -EINVAL;				
++			}
++			else
++				return -EINVAL;
++		}
++	}
++done:	
++	if (erq->flags & IW_ENCODE_OPEN)
++	{
++		UINT8 MixedMode = true;
++		UtilSetMixedMode(pAdapter, &MixedMode, 1);
++	}
++	else
++	{
++		UINT8 MixedMode = false;
++		UtilSetMixedMode(pAdapter, &MixedMode, 1);
++	}
++	return 0;
++}
++
++
++static int iw_ioctl_giwencode(struct net_device *dev,
++				  struct iw_request_info *info,
++				  struct iw_point *erq, char *key)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	cipherSuite_e 	cipher;
++	ULONG			len, i;
++	UINT8 			MixedMode;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	i = erq->flags & IW_ENCODE_INDEX;
++	if (i < 1 || i > 4)
++	{
++		UINT32 ID = VAL_DEFAULT_KEY_ID;
++		ULONG ID_size = 4;
++		UtilInfoCodeQueryInformation(pAdapter, (UINT8 *)&ID, &ID_size);
++		i = *((UINT8 *)&ID);
++	}
++	else
++		i--;
++	if (i < 0 || i >= WEP_KEYS)
++		return -EINVAL;
++
++	UtilWepStatusGet(pAdapter, (UINT8 *)&cipher, &len);
++	erq->flags = i + 1;
++
++#if IOCTL_DBG
++	printk("%s Call cipher=%d\n", __FUNCTION__, cipher);
++#endif
++
++	if (cipher == RSN_CIPHER_NONE) {
++		erq->length = 0;
++		erq->flags |= IW_ENCODE_DISABLED;
++	}
++	else
++	{
++		securityKeys_t wkey;
++		/* only WEP is supported with wireless extensions, so just
++		 * report that encryption is used */
++		memset(&wkey, 0, sizeof(securityKeys_t));
++		wkey.keyIndex = i;
++		if (!UtilWepKeyGet(pAdapter, (PUCHAR)&wkey, sizeof(securityKeys_t)))
++		{
++        	printk("iw_ioctl_giwencode KeyIndex  %x , keyLength=%d\n", 
++                      wkey.keyIndex, wkey.encLen);
++			if (wkey.encLen > 0)
++			{
++				int j;
++				erq->length = wkey.encLen;
++				memcpy(key, wkey.encKey, erq->length);
++				printk("key = ");
++				for (j=0;j<erq->length;j++)
++					printk("%02x ", *(key+j));
++				printk("\n");
++				erq->flags |= IW_ENCODE_ENABLED;
++			}
++			else
++			{
++				erq->length = 0;
++				erq->flags |= IW_ENCODE_DISABLED;
++			}
++		}
++		else
++		{
++			erq->length = 0;
++			erq->flags |= IW_ENCODE_DISABLED;
++		}
++	}
++
++	UtilGetMixedMode(pAdapter, RSN_MIXED_MODE, &MixedMode, &len);
++	if (MixedMode)
++		erq->flags |= IW_ENCODE_OPEN;
++	else
++		erq->flags |= IW_ENCODE_RESTRICTED;
++		
++	
++	return 0;
++}
++
++static int iw_ioctl_siwrate(struct net_device *dev,
++				struct iw_request_info *info,
++				struct iw_param *rrq, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	u32 val;
++	
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	if (!rrq->fixed)
++		val = 0;
++	else
++		val = (rrq->value*2/1000000);
++	
++	return UtilDesiredRatesSet(pAdapter, (UINT8 *)&val, 4);
++}
++
++
++static int iw_ioctl_giwrate(struct net_device *dev,
++				struct iw_request_info *info,
++				struct iw_param *rrq, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	ULONG val=0, len;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	if (UtilCurrentRatesGet(pAdapter, (UINT8 *)&val, &len))
++		return -EINVAL;
++
++	if (val > 0)
++	{
++		rrq->fixed = 1;
++		rrq->value = (val*1000000/2);
++	}
++	else
++	{
++		rrq->fixed = 1;
++		rrq->value = 54*1000000;
++	}
++
++	return 0;
++}
++
++static	UINT8  list_buf[10000];
++/* Deprecated in new wireless extension API */
++static int iw_ioctl_giwaplist(struct net_device *dev,
++				  struct iw_request_info *info,
++				  struct iw_point *data, char *extra)
++{
++	
++#if 1
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	struct sockaddr addr[IW_MAX_AP];
++	struct iw_quality qual[IW_MAX_AP];
++	UINT32 number_items;
++	ULONG len=10000;
++	OS_802_11_BSSID_EX *bssid;
++	OS_802_11_BSSID_LIST_EX *list;
++	int i;
++	
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	printk("iw_ioctl_giwaplist\n");
++	memset(list_buf, 0, 10000);
++    UtilBssidListGet(pAdapter, list_buf, &len, TRUE, FALSE);
++
++    list = (OS_802_11_BSSID_LIST_EX *) list_buf;
++    bssid = &list->Bssid[0];
++    printk("bssid 0x%x\n",(unsigned int)bssid);
++    number_items = list->NumberOfItems;
++    printk("number_items 0x%x\n",number_items);
++    
++	data->length = number_items;
++	
++	for (i=0;i<number_items;i++)
++	{
++		addr[i].sa_family = ARPHRD_ETHER;
++		memcpy(addr[i].sa_data, bssid->MacAddress, 6);
++		//memset((UINT8 *)qual[i], 0, size(struct iw_quality));
++		qual[i].qual = bssid->Rssi;
++		qual[i].level = 0;
++		qual[i].noise = 0;
++		qual[i].updated = 7;
++        bssid = (OS_802_11_BSSID_EX *) (((char *) bssid) + bssid->Length);
++	}
++	
++	memcpy(extra, &addr, sizeof(addr[0]) * data->length);
++	data->flags = 1; /* has quality information */
++	memcpy(extra + sizeof(addr[0]) * data->length, &qual,
++	       sizeof(qual[0]) * data->length);
++
++	return 0;
++#endif
++}
++
++
++static int iw_ioctl_siwrts(struct net_device *dev,
++			       struct iw_request_info *info,
++			       struct iw_param *rts, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	u32 val;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	if (rts->disabled)
++		val = 2347;
++	else if (rts->value < 0 || rts->value > 2347)
++		return -EINVAL;
++	else
++		val = rts->value;
++
++	UtilRtsThresholdSet(pAdapter, (UINT8 *)&val, 4);
++	
++	return 0;
++}
++
++static int iw_ioctl_giwrts(struct net_device *dev,
++			       struct iw_request_info *info,
++			       struct iw_param *rts, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	ULONG val, len;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	if (UtilRtsThresholdGet(pAdapter, (UINT8 *)&val, &len))
++		return -EINVAL;
++	if (val >= 2347) val = 2347;
++	rts->value = val;
++	rts->disabled = (rts->value == 2347);
++	rts->fixed = 1;
++
++	return 0;
++}
++
++
++static int iw_ioctl_siwfrag(struct net_device *dev,
++				struct iw_request_info *info,
++				struct iw_param *rts, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	u32 val;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	if (rts->disabled)
++		val = 2346;
++	else if (rts->value < 256 || rts->value > 2346)
++		return -EINVAL;
++	else
++		val = rts->value & ~0x1; /* even numbers only */
++
++	if (UtilFragmentationThresholdSet(pAdapter, (UINT8 *)&val, 4))
++		return -EINVAL;
++
++	return 0;
++}
++
++static int iw_ioctl_giwfrag(struct net_device *dev,
++				struct iw_request_info *info,
++				struct iw_param *rts, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	ULONG val, len;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	if (UtilFragmentationThresholdGet(pAdapter, (UINT8 *)&val, &len))
++		return -EINVAL;
++
++	if (val >= 2346) val = 2346;
++	rts->value = val;
++	rts->disabled = (rts->value == 2346);
++	rts->fixed = 1;
++
++	return 0;
++}
++
++
++static int iw_ioctl_siwap(struct net_device *dev,
++			      struct iw_request_info *info,
++			      struct sockaddr *ap_addr, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	return UtilSetBSSID(pAdapter, (UINT8 *)&ap_addr->sa_data, ETH_ALEN);
++}
++
++static int iw_ioctl_giwap(struct net_device *dev,
++			      struct iw_request_info *info,
++			      struct sockaddr *ap_addr, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	ULONG len;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	ap_addr->sa_family = ARPHRD_ETHER;
++	return UtilGetBSSID(pAdapter, (UINT8 *)&ap_addr->sa_data, &len);
++}
++
++static int iw_ioctl_giwnickn(struct net_device *dev,
++				 struct iw_request_info *info,
++				 struct iw_point *data, char *nickname)
++{
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	data->length = 7;
++	memcpy(nickname, "ti 1250", 7);
++
++	return 0;
++}
++
++
++static int iw_ioctl_siwfreq(struct net_device *dev,
++				struct iw_request_info *info,
++				struct iw_freq *freq, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	if (freq->m == -1)
++		return -EOPNOTSUPP;
++		
++	/* freq => chan. */
++	if (freq->e == 1 &&
++	    freq->m / 100000 >= freq_list[0] &&
++	    freq->m / 100000 <= freq_list[FREQ_COUNT - 1]) {
++		int ch;
++		int fr = freq->m / 100000;
++		for (ch = 0; ch < FREQ_COUNT; ch++) {
++			if (fr == freq_list[ch]) {
++				freq->e = 0;
++				freq->m = ch + 1;
++				break;
++			}
++		}
++	}
++
++	if (freq->e != 0 || freq->m < 1 || freq->m > FREQ_COUNT)
++		return -EINVAL;
++
++	UtilDesiredChannelSet(pAdapter, (UINT8 *)&freq->m, 1);
++
++	return 0;
++}
++
++static int iw_ioctl_giwfreq(struct net_device *dev, struct iw_request_info *info, struct iw_freq *freq, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	ULONG val, len;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	if (!pAdapter->CoreHalCtx) {
++		printk("CJP: CoreHalCtx is NULL - config Mgr has vanished???\n");
++		return -EINVAL;
++	}
++
++	UtilDesiredChannelGet(pAdapter, (UINT8 *)&val, &len);
++	if (val < 1 || val > FREQ_COUNT)
++		return -EINVAL;
++
++	freq->m = freq_list[val - 1] * 100000;
++	freq->e = 1;
++
++	return 0;
++}
++
++
++static int iw_ioctl_siwessid(struct net_device *dev,
++				 struct iw_request_info *info,
++				 struct iw_point *data, char *ssid)
++{	
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	OS_802_11_SSID essid;
++	OS_802_11_MAC_ADDRESS bssid = { 0xff,0xff,0xff,0xff,0xff,0xff };
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++
++    UtilSetBSSID(pAdapter, (UINT8 *)&bssid, sizeof(OS_802_11_MAC_ADDRESS));
++
++	memset(&essid, 0, sizeof(OS_802_11_SSID));
++	memcpy(essid.Ssid, ssid, data->length);
++	essid.SsidLength = data->length;
++
++	if (UtilSetSSID(pAdapter, (UINT8 *)&essid, sizeof(OS_802_11_SSID))){
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int iw_ioctl_giwessid(struct net_device *dev,
++				 struct iw_request_info *info,
++				 struct iw_point *data, char *essid)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	ULONG len=36;
++	OS_802_11_SSID ssid;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	memset(&ssid, 0, sizeof(OS_802_11_SSID));
++	data->flags = 1; /* active */
++	UtilGetSSID(pAdapter, (UINT8 *)&ssid, &len);
++	data->length = ssid.SsidLength;
++	memcpy(essid, ssid.Ssid, ssid.SsidLength);
++	
++	return 0;
++}
++
++static int iw_ioctl_siwmode(struct net_device *dev,
++				struct iw_request_info *info,
++				__u32 *mode, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	u32 val;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	if (*mode > IW_MODE_INFRA)
++		return -EOPNOTSUPP;
++
++	switch (*mode)
++	{
++	case IW_MODE_AUTO:
++		val = 2;
++		break;
++	case IW_MODE_ADHOC:
++		val = 0;
++		break;
++	case IW_MODE_INFRA:
++		val = 1;
++		break;
++	default:
++		val = 1;
++	}
++	
++    UtilInfrastructureModeSet(pAdapter, (UINT8 *)&val, 4);
++    
++	return 0;
++}
++
++
++static int iw_ioctl_giwmode(struct net_device *dev,
++				struct iw_request_info *info,
++				__u32 *mode, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	ULONG val, len;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++    UtilInfrastructureModeGet(pAdapter, (UINT8 *)&val, &len);
++	switch (val) {
++	case 0:
++		*mode = IW_MODE_ADHOC;
++		break;
++	case 1:
++		*mode = IW_MODE_INFRA;
++		break;
++	case 2:
++		*mode = IW_MODE_AUTO;
++		break;
++	default:
++		*mode = IW_MODE_INFRA;
++		break;
++	}
++	return 0;
++}
++
++#if 0
++int
++iw_ioctl_siwsens(struct ieee80211com *ic,
++			struct iw_request_info *info,
++			struct iw_param *sens, char *extra)
++{
++	return 0;
++}
++
++int
++iw_ioctl_giwsens(struct ieee80211com *ic,
++			struct iw_request_info *info,
++			struct iw_param *sens, char *extra)
++{
++	sens->value = 3;
++	sens->fixed = 1;
++
++	return 0;
++}
++#endif
++
++int
++iw_ioctl_giwrange(struct net_device *dev,
++			 struct iw_request_info *info,
++			 struct iw_point *data, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	struct iw_range *range = (struct iw_range *) extra;
++	ULONG val, len, i;
++	rates_t rateSet;
++
++	data->length = sizeof(struct iw_range);
++	memset(range, 0, sizeof(struct iw_range));
++
++	/* TODO: could fill num_txpower and txpower array with
++	 * something; however, there are 128 different values.. */
++
++	range->txpower_capa = IW_TXPOW_DBM;
++
++    UtilInfrastructureModeGet(pAdapter, (UINT8 *)&val, &len);
++	range->min_pmp = 1 * 1024;
++	range->max_pmp = 65535 * 1024;
++	range->min_pmt = 1 * 1024;
++	range->max_pmt = 1000 * 1024;
++	range->pmp_flags = IW_POWER_PERIOD;
++	range->pmt_flags = IW_POWER_TIMEOUT;
++	range->pm_capa = IW_POWER_PERIOD | IW_POWER_TIMEOUT |
++			IW_POWER_UNICAST_R | IW_POWER_ALL_R;
++
++	range->we_version_compiled = WIRELESS_EXT;
++	range->we_version_source = 18;
++
++	range->retry_capa = IW_RETRY_LIMIT;
++	range->retry_flags = IW_RETRY_LIMIT;
++	range->min_retry = 0;
++	range->max_retry = 255;
++
++	range->num_channels = FREQ_COUNT;	/* XXX */
++
++	val = 0;
++	for (i = 0; i < FREQ_COUNT; i++) {
++		range->freq[val].i = i + 1;
++		range->freq[val].m = freq_list[i] * 100000;
++		range->freq[val].e = 1;
++		val++;
++		if (val == IW_MAX_FREQUENCIES)
++			break;
++	}
++	range->num_frequency = val;
++
++	/* Max quality is max field value minus noise floor */
++	range->max_qual.qual  = 0xff - 161;
++
++	/*
++	 * In order to use dBm measurements, 'level' must be lower
++	 * than any possible measurement (see iw_print_stats() in
++	 * wireless tools).  It's unclear how this is meant to be
++	 * done, but setting zero in these values forces dBm and
++	 * the actual numbers are not used.
++	 */
++	range->max_qual.level = 0;
++	range->max_qual.noise = 0;
++
++	range->sensitivity = 3;
++
++	range->max_encoding_tokens = WEP_KEYS;
++	/* XXX query driver to find out supported key sizes */
++	range->num_encoding_sizes = 2;
++	range->encoding_size[0] = 5;		/* 40-bit */
++	range->encoding_size[1] = 13;		/* 104-bit */
++
++	/* XXX this only works for station mode */
++	UtilGetParam(pAdapter, SITE_MGR_DESIRED_SUPPORTED_RATE_SET_PARAM, (PUCHAR)&rateSet, sizeof(rates_t));
++	range->num_bitrates = 0;
++	for (i = 0; i < rateSet.len; i++) {
++		if (range->num_bitrates < IW_MAX_BITRATES) {
++			range->bitrate[range->num_bitrates] =
++				rateSet.ratesString[i] * 2 / 1000000;
++			range->num_bitrates++;
++		}
++	}
++
++	/* estimated maximum TCP throughput values (bps) */
++	range->throughput = 5500000;
++
++	range->min_rts = 0;
++	range->max_rts = 2347;
++	range->min_frag = 256;
++	range->max_frag = 2346;
++
++#if WIRELESS_EXT > 16
++	/* Event capability (kernel + driver) */
++	range->event_capa[0] = (IW_EVENT_CAPA_K_0 |
++				IW_EVENT_CAPA_MASK(SIOCGIWTHRSPY) |
++				IW_EVENT_CAPA_MASK(SIOCGIWAP) |
++				IW_EVENT_CAPA_MASK(SIOCGIWSCAN));
++	range->event_capa[1] = IW_EVENT_CAPA_K_1;
++	range->event_capa[4] = (IW_EVENT_CAPA_MASK(IWEVTXDROP) |
++				IW_EVENT_CAPA_MASK(IWEVCUSTOM) |
++				IW_EVENT_CAPA_MASK(IWEVREGISTERED) |
++				IW_EVENT_CAPA_MASK(IWEVEXPIRED));
++#endif /* WIRELESS_EXT > 16 */
++
++#if WIRELESS_EXT > 17
++	range->enc_capa = IW_ENC_CAPA_WPA | IW_ENC_CAPA_WPA2 |
++		IW_ENC_CAPA_CIPHER_TKIP | IW_ENC_CAPA_CIPHER_CCMP;
++#endif /* WIRELESS_EXT > 17 */
++
++	return 0;}
++
++static int iw_ioctl_siwpower(struct net_device *dev,
++				 struct iw_request_info *info,
++				 struct iw_param *wrq, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	UINT32 val=POWER_MODE_ACTIVE;
++	
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++
++	if (wrq->disabled)
++	{
++		UtilPowerModeSet(pAdapter, (UINT8 *)&val, sizeof(PowerMgr_PowerMode_e));
++		return 0;
++	}
++
++	switch (wrq->flags & IW_POWER_MODE) {
++	case IW_POWER_UNICAST_R:
++	case IW_POWER_ALL_R:
++	case IW_POWER_ON:
++		val = POWER_MODE_AUTO;
++		UtilPowerModeSet(pAdapter, (UINT8 *)&val, sizeof(PowerMgr_PowerMode_e));
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	if (wrq->flags & IW_POWER_TIMEOUT) {
++		return -EOPNOTSUPP;
++	}
++	if (wrq->flags & IW_POWER_PERIOD) {
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
++
++static int iw_ioctl_giwpower(struct net_device *dev,
++				 struct iw_request_info *info,
++				 struct iw_param *rrq, char *extra)
++{
++
++	printk("iw_ioctl_giwpower() tmp removal");
++#if 0	// cjp
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	UINT32 val=POWER_MODE_ACTIVE, len;
++	
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	UtilPowerModeGet(pAdapter, (UINT8 *)&val, &len);
++	
++	if (val==POWER_MODE_ACTIVE) {
++		rrq->disabled = 1;
++		return 0;
++	}
++
++	rrq->disabled = 0;
++#endif
++	return 0;
++}
++
++
++static int iw_ioctl_siwretry(struct net_device *dev,
++				 struct iw_request_info *info,
++				 struct iw_param *rrq, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	if (rrq->disabled)
++		return -EINVAL;
++
++	if (rrq->flags & IW_RETRY_LIMIT) {
++		if (rrq->flags & IW_RETRY_MAX)
++			UtilLongRetrySet(pAdapter, (UINT8 *)&(rrq->value), sizeof(rrq->value));
++		else if (rrq->flags & IW_RETRY_MIN)
++			UtilShortRetrySet(pAdapter, (UINT8 *)&(rrq->value), sizeof(rrq->value));
++		else {
++			UtilLongRetrySet(pAdapter, (UINT8 *)&(rrq->value), sizeof(rrq->value));
++			UtilShortRetrySet(pAdapter, (UINT8 *)&(rrq->value), sizeof(rrq->value));
++		}
++		return 0;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static int iw_ioctl_giwretry(struct net_device *dev,
++				 struct iw_request_info *info,
++				 struct iw_param *rrq, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	u16 shortretry, longretry;
++	ULONG len;
++	
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	if (UtilShortRetryGet(pAdapter, (UINT8 *)&shortretry, &len)!=0 || 
++		UtilLongRetryGet(pAdapter, (UINT8 *)&longretry, &len)!=0)
++		return -EINVAL;
++
++	rrq->disabled = 0;
++
++	if ((rrq->flags & IW_RETRY_TYPE) == IW_RETRY_LIFETIME) {
++		return -EOPNOTSUPP;
++	} else {
++		if ((rrq->flags & IW_RETRY_MAX)) {
++			rrq->flags = IW_RETRY_LIMIT | IW_RETRY_MAX;
++			rrq->value = longretry;
++		} else {
++			rrq->flags = IW_RETRY_LIMIT;
++			rrq->value = shortretry;
++			if (shortretry != longretry)
++				rrq->flags |= IW_RETRY_MIN;
++		}
++	}
++	return 0;
++}
++
++
++static int iw_ioctl_siwtxpow(struct net_device *dev,
++				 struct iw_request_info *info,
++				 struct iw_param *rrq, char *extra)
++{
++	return -EOPNOTSUPP;
++}
++
++static int iw_ioctl_giwtxpow(struct net_device *dev,
++				 struct iw_request_info *info,
++				 struct iw_param *rrq, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	INT8 val;
++	ULONG len;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++
++	UtilTxPowerLevelDbmGet(pAdapter, &val, &len);
++	rrq->flags = IW_TXPOW_DBM;
++	rrq->value = val;
++	rrq->disabled = 0;
++	rrq->fixed = 0;
++
++	return 0;
++}
++
++u32	scan_TimeStamp;
++
++static int iw_ioctl_siwscan(struct net_device *dev,
++				struct iw_request_info *info,
++				struct iw_point *data, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	int ret;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	
++	scan_TimeStamp = jiffies;
++	init_scan_params();
++	
++	ret = UtilStartAppScanSet(pAdapter, (PCHAR)&iw_appScanParams, sizeof(iw_appScanParams));
++	
++	return ret;
++}
++
++static inline int iw_scan_list(struct net_device *dev,
++				  struct iw_request_info *info,
++				  struct iw_point *data, char *extra)
++{
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	UINT32 number_items;
++	ULONG len=10000;
++	OS_802_11_BSSID_EX *bssid;
++	OS_802_11_BSSID_LIST_EX *list;
++	int i, j;
++	struct iw_event iwe;
++	char *current_ev = extra;
++	char *end_buf = extra + data->length;
++	u16 capabilities;
++	char *current_val;
++	char buf[64 * 2 + 30];
++    OS_802_11_VARIABLE_IEs  *pVarIes;
++    int IELen;
++	int chan;
++	u8 *pos;
++	spinlock_t lock;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	memset(list_buf, 0, 10000);
++    UtilBssidListGet(pAdapter, list_buf, &len, TRUE, FALSE);
++
++    list = (OS_802_11_BSSID_LIST_EX *) list_buf;
++    bssid = &list->Bssid[0];
++    number_items = list->NumberOfItems;
++    
++	spin_lock_bh(&lock);
++	for (i=0;i<number_items;i++)
++	{
++		memset(&iwe, 0, sizeof(iwe));
++		iwe.cmd = SIOCGIWAP;
++		iwe.u.ap_addr.sa_family = ARPHRD_ETHER;
++		memcpy(iwe.u.ap_addr.sa_data, bssid->MacAddress, ETH_ALEN);
++		iwe.len = IW_EV_ADDR_LEN;
++		current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe,
++						  IW_EV_ADDR_LEN);
++						  
++		memset(&iwe, 0, sizeof(iwe));
++		iwe.cmd = SIOCGIWESSID;
++		iwe.u.data.length = bssid->Ssid.SsidLength;
++		iwe.u.data.flags = 1;
++		iwe.len = IW_EV_POINT_LEN + iwe.u.data.length;
++		printk("essid=%s len=%d\n", bssid->Ssid.Ssid, bssid->Ssid.SsidLength);
++		current_ev = iwe_stream_add_point(info, current_ev, end_buf, &iwe, (char *)bssid->Ssid.Ssid);
++							  
++		memset(&iwe, 0, sizeof(iwe));
++		iwe.cmd = SIOCGIWMODE;
++		capabilities = bssid->Union.Capabilities;
++		if (capabilities & (WLAN_CAPABILITY_ESS |
++				    WLAN_CAPABILITY_IBSS)) {
++			if (capabilities & WLAN_CAPABILITY_ESS)
++				iwe.u.mode = IW_MODE_MASTER;
++			else
++				iwe.u.mode = IW_MODE_ADHOC;
++			iwe.len = IW_EV_UINT_LEN;
++			current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe,
++							  IW_EV_UINT_LEN);
++		}
++		
++		memset(&iwe, 0, sizeof(iwe));
++		iwe.cmd = SIOCGIWFREQ;
++		chan = bssid->Configuration.Union.channel;
++		if (chan > 0) {
++			iwe.u.freq.m = chan;
++			iwe.u.freq.e = 1;
++			iwe.len = IW_EV_FREQ_LEN;
++			current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe,
++							  IW_EV_FREQ_LEN);
++		}
++		
++		memset(&iwe, 0, sizeof(iwe));
++		iwe.cmd = IWEVQUAL;
++		iwe.u.qual.qual = bssid->Rssi;
++		iwe.u.qual.level = 0;
++		iwe.u.qual.noise = 0;
++		iwe.u.qual.updated = IW_QUAL_LEVEL_UPDATED
++				| IW_QUAL_NOISE_UPDATED
++				| IW_QUAL_QUAL_INVALID;
++		iwe.len = IW_EV_QUAL_LEN;
++		current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe,
++						  IW_EV_QUAL_LEN);
++
++		memset(&iwe, 0, sizeof(iwe));
++		iwe.cmd = SIOCGIWENCODE;
++		if (capabilities & WLAN_CAPABILITY_PRIVACY)
++			iwe.u.data.flags = IW_ENCODE_ENABLED | IW_ENCODE_NOKEY;
++		else
++			iwe.u.data.flags = IW_ENCODE_DISABLED;
++		iwe.u.data.length = 0;
++		iwe.len = IW_EV_POINT_LEN + iwe.u.data.length;
++		current_ev = iwe_stream_add_point(info, current_ev, end_buf, &iwe, "");
++		
++		/* TODO: add SuppRates into BSS table */
++		memset(&iwe, 0, sizeof(iwe));
++		iwe.cmd = SIOCGIWRATE;
++		current_val = current_ev + IW_EV_LCP_LEN;
++		pos = bssid->SupportedRates;
++		for (j = 0; j < sizeof(bssid->SupportedRates); j++) {
++			if (pos[j] == 0)
++				break;
++			/* Bit rate given in 500 kb/s units (+ 0x80) */
++			iwe.u.bitrate.value = ((pos[j] & 0x7f) * 500000);
++			current_val = iwe_stream_add_value(
++				info, current_ev, current_val, end_buf, &iwe,
++				IW_EV_PARAM_LEN);
++		}
++		/* Check if we added any event */
++		if ((current_val - current_ev) > IW_EV_LCP_LEN)
++			current_ev = current_val;
++	
++		/* TODO: add BeaconInt,resp_rate,atim into BSS table */
++		memset(&iwe, 0, sizeof(iwe));
++		iwe.cmd = IWEVCUSTOM;
++		sprintf(buf, "bcn_int=%d",
++			bssid->Configuration.BeaconPeriod);
++		iwe.u.data.length = strlen(buf);
++		current_ev = iwe_stream_add_point(info, current_ev, end_buf, &iwe,
++						  buf);
++
++		if (capabilities & WLAN_CAPABILITY_IBSS) {
++			memset(&iwe, 0, sizeof(iwe));
++			iwe.cmd = IWEVCUSTOM;
++			sprintf(buf, "atim=%d", bssid->Configuration.ATIMWindow);
++			iwe.u.data.length = strlen(buf);
++			current_ev = iwe_stream_add_point(info, current_ev, end_buf,
++							  &iwe, buf);
++		}
++		
++#if 1
++		IELen = 0;
++        IELen += sizeof(OS_802_11_FIXED_IEs);
++        pVarIes = (OS_802_11_VARIABLE_IEs*)&bssid->IEs[IELen];
++		while (IELen < bssid->IELength)
++		{
++			printk("IELen=%d pVarIes->ElementID=%d\n", IELen, pVarIes->ElementID);                
++			if (pVarIes->ElementID == MFIE_TYPE_RSN || pVarIes->ElementID == MFIE_TYPE_GENERIC) {
++				memset(&iwe, 0, sizeof(iwe));
++				iwe.cmd = IWEVGENIE;
++				iwe.u.data.length = pVarIes->Length;
++				current_ev = iwe_stream_add_point(
++						info, current_ev, end_buf, &iwe, (char *)pVarIes);
++			}
++		
++            IELen += (pVarIes->Length + 2);		
++        	pVarIes = (OS_802_11_VARIABLE_IEs*)&bssid->IEs[IELen];
++		}
++#endif        
++		if ((end_buf - current_ev) <= IW_EV_ADDR_LEN) {
++			/* Ask user space to try again with a bigger buffer */
++			spin_unlock_bh(&lock);
++			return -E2BIG;
++		}
++		printk("current_ev=%x\n", current_ev);
++        bssid = (OS_802_11_BSSID_EX *) (((char *) bssid) + bssid->Length);
++	}
++	
++	spin_unlock_bh(&lock);
++	return current_ev - extra;
++}
++
++static int iw_ioctl_giwscan(struct net_device *dev,
++				struct iw_request_info *info,
++				struct iw_point *data, char *extra)
++{
++	PTIWLN_ADAPTER_T 		pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	u32 					val, len;
++	int 					res;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++#if 0
++	if (scan_TimeStamp &&
++	    time_before(jiffies, scan_TimeStamp + 30 * HZ)) {
++	    	printk("iw_ioctl_giwscan time: 0x%x   0x%x\n",scan_TimeStamp,time_before(jiffies, scan_TimeStamp + 30 * HZ));
++		return -EAGAIN;
++	}
++#endif
++	if((jiffies - scan_TimeStamp) <= 4 * HZ){
++		return -EAGAIN;
++	}
++
++	res = iw_scan_list(dev, info, data, extra);
++//	printk("iw_ioctl_giwscan end res=%d\n", res);
++	if (res >= 0) {
++		data->length = res;
++		return 0;
++	} else {
++		data->length = 0;
++		return res;
++	}
++}
++
++#if 0
++static const struct iw_priv_args prism2_priv[] = {
++	{ iw_ioctl_MONITOR,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "monitor" },
++	{ iw_ioctl_READMIF,
++	  IW_PRIV_TYPE_BYTE | IW_PRIV_SIZE_FIXED | 1,
++	  IW_PRIV_TYPE_BYTE | IW_PRIV_SIZE_FIXED | 1, "readmif" },
++	{ iw_ioctl_WRITEMIF,
++	  IW_PRIV_TYPE_BYTE | IW_PRIV_SIZE_FIXED | 2, 0, "writemif" },
++	{ iw_ioctl_RESET,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "reset" },
++	{ iw_ioctl_INQUIRE,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "inquire" },
++	{ iw_ioctl_SET_RID_WORD,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 2, 0, "set_rid_word" },
++	{ iw_ioctl_MACCMD,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "maccmd" },
++#ifdef PRISM2_USE_WE_TYPE_ADDR
++	{ iw_ioctl_WDS_ADD,
++	  IW_PRIV_TYPE_ADDR | IW_PRIV_SIZE_FIXED | 1, 0, "wds_add" },
++	{ iw_ioctl_WDS_DEL,
++	  IW_PRIV_TYPE_ADDR | IW_PRIV_SIZE_FIXED | 1, 0, "wds_del" },
++	{ iw_ioctl_ADDMAC,
++	  IW_PRIV_TYPE_ADDR | IW_PRIV_SIZE_FIXED | 1, 0, "addmac" },
++	{ iw_ioctl_DELMAC,
++	  IW_PRIV_TYPE_ADDR | IW_PRIV_SIZE_FIXED | 1, 0, "delmac" },
++	{ iw_ioctl_KICKMAC,
++	  IW_PRIV_TYPE_ADDR | IW_PRIV_SIZE_FIXED | 1, 0, "kickmac" },
++#else /* PRISM2_USE_WE_TYPE_ADDR */
++	{ iw_ioctl_WDS_ADD,
++	  IW_PRIV_TYPE_CHAR | IW_PRIV_SIZE_FIXED | 18, 0, "wds_add" },
++	{ iw_ioctl_WDS_DEL,
++	  IW_PRIV_TYPE_CHAR | IW_PRIV_SIZE_FIXED | 18, 0, "wds_del" },
++	{ iw_ioctl_ADDMAC,
++	  IW_PRIV_TYPE_CHAR | IW_PRIV_SIZE_FIXED | 18, 0, "addmac" },
++	{ iw_ioctl_DELMAC,
++	  IW_PRIV_TYPE_CHAR | IW_PRIV_SIZE_FIXED | 18, 0, "delmac" },
++	{ iw_ioctl_KICKMAC,
++	  IW_PRIV_TYPE_CHAR | IW_PRIV_SIZE_FIXED | 18, 0, "kickmac" },
++#endif /* PRISM2_USE_WE_TYPE_ADDR */
++	/* --- raw access to sub-ioctls --- */
++	{ iw_ioctl_PRISM2_PARAM,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 2, 0, "prism2_param" },
++	{ iw_ioctl_GET_PRISM2_PARAM,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getprism2_param" },
++#ifdef PRISM2_USE_WE_SUB_IOCTLS
++	/* --- sub-ioctls handlers --- */
++	{ iw_ioctl_PRISM2_PARAM,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "" },
++	{ iw_ioctl_GET_PRISM2_PARAM,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "" },
++	/* --- sub-ioctls definitions --- */
++	{ PRISM2_PARAM_TXRATECTRL,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "txratectrl" },
++	{ PRISM2_PARAM_TXRATECTRL,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "gettxratectrl" },
++	{ PRISM2_PARAM_BEACON_INT,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "beacon_int" },
++	{ PRISM2_PARAM_BEACON_INT,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getbeacon_int" },
++#ifndef PRISM2_NO_STATION_MODES
++	{ PRISM2_PARAM_PSEUDO_IBSS,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "pseudo_ibss" },
++	{ PRISM2_PARAM_PSEUDO_IBSS,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getpseudo_ibss" },
++#endif /* PRISM2_NO_STATION_MODES */
++	{ PRISM2_PARAM_ALC,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "alc" },
++	{ PRISM2_PARAM_ALC,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getalc" },
++	{ PRISM2_PARAM_DUMP,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "dump" },
++	{ PRISM2_PARAM_DUMP,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getdump" },
++	{ PRISM2_PARAM_OTHER_AP_POLICY,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "other_ap_policy" },
++	{ PRISM2_PARAM_OTHER_AP_POLICY,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getother_ap_pol" },
++	{ PRISM2_PARAM_AP_MAX_INACTIVITY,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "max_inactivity" },
++	{ PRISM2_PARAM_AP_MAX_INACTIVITY,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getmax_inactivi" },
++	{ PRISM2_PARAM_AP_BRIDGE_PACKETS,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "bridge_packets" },
++	{ PRISM2_PARAM_AP_BRIDGE_PACKETS,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getbridge_packe" },
++	{ PRISM2_PARAM_DTIM_PERIOD,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "dtim_period" },
++	{ PRISM2_PARAM_DTIM_PERIOD,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getdtim_period" },
++	{ PRISM2_PARAM_AP_NULLFUNC_ACK,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "nullfunc_ack" },
++	{ PRISM2_PARAM_AP_NULLFUNC_ACK,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getnullfunc_ack" },
++	{ PRISM2_PARAM_MAX_WDS,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "max_wds" },
++	{ PRISM2_PARAM_MAX_WDS,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getmax_wds" },
++	{ PRISM2_PARAM_AP_AUTOM_AP_WDS,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "autom_ap_wds" },
++	{ PRISM2_PARAM_AP_AUTOM_AP_WDS,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getautom_ap_wds" },
++	{ PRISM2_PARAM_AP_AUTH_ALGS,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "ap_auth_algs" },
++	{ PRISM2_PARAM_AP_AUTH_ALGS,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getap_auth_algs" },
++	{ PRISM2_PARAM_MONITOR_ALLOW_FCSERR,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "allow_fcserr" },
++	{ PRISM2_PARAM_MONITOR_ALLOW_FCSERR,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getallow_fcserr" },
++	{ PRISM2_PARAM_HOST_ENCRYPT,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "host_encrypt" },
++	{ PRISM2_PARAM_HOST_ENCRYPT,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "gethost_encrypt" },
++	{ PRISM2_PARAM_HOST_DECRYPT,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "host_decrypt" },
++	{ PRISM2_PARAM_HOST_DECRYPT,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "gethost_decrypt" },
++	{ PRISM2_PARAM_BUS_MASTER_THRESHOLD_RX,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "busmaster_rx" },
++	{ PRISM2_PARAM_BUS_MASTER_THRESHOLD_RX,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getbusmaster_rx" },
++	{ PRISM2_PARAM_BUS_MASTER_THRESHOLD_TX,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "busmaster_tx" },
++	{ PRISM2_PARAM_BUS_MASTER_THRESHOLD_TX,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getbusmaster_tx" },
++#ifndef PRISM2_NO_STATION_MODES
++	{ PRISM2_PARAM_HOST_ROAMING,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "host_roaming" },
++	{ PRISM2_PARAM_HOST_ROAMING,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "gethost_roaming" },
++#endif /* PRISM2_NO_STATION_MODES */
++	{ PRISM2_PARAM_BCRX_STA_KEY,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "bcrx_sta_key" },
++	{ PRISM2_PARAM_BCRX_STA_KEY,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getbcrx_sta_key" },
++	{ PRISM2_PARAM_IEEE_802_1X,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "ieee_802_1x" },
++	{ PRISM2_PARAM_IEEE_802_1X,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getieee_802_1x" },
++	{ PRISM2_PARAM_ANTSEL_TX,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "antsel_tx" },
++	{ PRISM2_PARAM_ANTSEL_TX,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getantsel_tx" },
++	{ PRISM2_PARAM_ANTSEL_RX,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "antsel_rx" },
++	{ PRISM2_PARAM_ANTSEL_RX,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getantsel_rx" },
++	{ PRISM2_PARAM_MONITOR_TYPE,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "monitor_type" },
++	{ PRISM2_PARAM_MONITOR_TYPE,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getmonitor_type" },
++	{ PRISM2_PARAM_WDS_TYPE,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "wds_type" },
++	{ PRISM2_PARAM_WDS_TYPE,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getwds_type" },
++	{ PRISM2_PARAM_HOSTSCAN,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "hostscan" },
++	{ PRISM2_PARAM_HOSTSCAN,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "gethostscan" },
++	{ PRISM2_PARAM_AP_SCAN,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "ap_scan" },
++	{ PRISM2_PARAM_AP_SCAN,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getap_scan" },
++	{ PRISM2_PARAM_ENH_SEC,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "enh_sec" },
++	{ PRISM2_PARAM_ENH_SEC,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getenh_sec" },
++#ifdef PRISM2_IO_DEBUG
++	{ PRISM2_PARAM_IO_DEBUG,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "io_debug" },
++	{ PRISM2_PARAM_IO_DEBUG,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getio_debug" },
++#endif /* PRISM2_IO_DEBUG */
++	{ PRISM2_PARAM_BASIC_RATES,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "basic_rates" },
++	{ PRISM2_PARAM_BASIC_RATES,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getbasic_rates" },
++	{ PRISM2_PARAM_OPER_RATES,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "oper_rates" },
++	{ PRISM2_PARAM_OPER_RATES,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getoper_rates" },
++	{ PRISM2_PARAM_HOSTAPD,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "hostapd" },
++	{ PRISM2_PARAM_HOSTAPD,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "gethostapd" },
++	{ PRISM2_PARAM_HOSTAPD_STA,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "hostapd_sta" },
++	{ PRISM2_PARAM_HOSTAPD_STA,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "gethostapd_sta" },
++	{ PRISM2_PARAM_WPA,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "wpa" },
++	{ PRISM2_PARAM_WPA,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getwpa" },
++	{ PRISM2_PARAM_PRIVACY_INVOKED,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "privacy_invoked" },
++	{ PRISM2_PARAM_PRIVACY_INVOKED,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getprivacy_invo" },
++	{ PRISM2_PARAM_TKIP_COUNTERMEASURES,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "tkip_countermea" },
++	{ PRISM2_PARAM_TKIP_COUNTERMEASURES,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "gettkip_counter" },
++	{ PRISM2_PARAM_DROP_UNENCRYPTED,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "drop_unencrypte" },
++	{ PRISM2_PARAM_DROP_UNENCRYPTED,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getdrop_unencry" },
++	{ PRISM2_PARAM_SCAN_CHANNEL_MASK,
++	  IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "scan_channels" },
++	{ PRISM2_PARAM_SCAN_CHANNEL_MASK,
++	  0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, "getscan_channel" },
++#endif /* PRISM2_USE_WE_SUB_IOCTLS */
++};
++#endif
++
++#if WIRELESS_EXT > 17
++static int iw_ioctl_siwauth(struct net_device *dev,
++				struct iw_request_info *info,
++				struct iw_param *data, char *extra)
++{
++#if 0
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	u32 val, len;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	switch (data->flags & IW_AUTH_INDEX) {
++	case IW_AUTH_WPA_VERSION:
++	case IW_AUTH_CIPHER_PAIRWISE:
++	case IW_AUTH_CIPHER_GROUP:
++	case IW_AUTH_KEY_MGMT:
++		/* Host AP driver does not use these parameters and allows
++		 * wpa_supplicant to control them internally. */
++		break;
++	case IW_AUTH_TKIP_COUNTERMEASURES:
++		local->tkip_countermeasures = data->value;
++		break;
++	case IW_AUTH_DROP_UNENCRYPTED:
++		local->drop_unencrypted = data->value;
++		break;
++	case IW_AUTH_80211_AUTH_ALG:
++		local->auth_algs = data->value;
++		break;
++	case IW_AUTH_WPA_ENABLED:
++		if (data->value == 0) {
++			local->wpa = 0;
++			if (local->sta_fw_ver < PRISM2_FW_VER(1,7,0))
++				break;
++			prism2_set_genericelement(dev, "", 0);
++			local->host_roaming = 0;
++			local->privacy_invoked = 0;
++			if (hostap_set_word(dev, HFA384X_RID_SSNHANDLINGMODE,
++					    0) ||
++			    hostap_set_roaming(local) ||
++			    hostap_set_encryption(local) ||
++			    local->func->reset_port(dev))
++				return -EINVAL;
++			break;
++		}
++		if (local->sta_fw_ver < PRISM2_FW_VER(1,7,0))
++			return -EOPNOTSUPP;
++		local->host_roaming = 2;
++		local->privacy_invoked = 1;
++		local->wpa = 1;
++		if (hostap_set_word(dev, HFA384X_RID_SSNHANDLINGMODE, 1) ||
++		    hostap_set_roaming(local) ||
++		    hostap_set_encryption(local) ||
++		    local->func->reset_port(dev))
++			return -EINVAL;
++		break;
++	case IW_AUTH_RX_UNENCRYPTED_EAPOL:
++		local->ieee_802_1x = data->value;
++		break;
++	case IW_AUTH_PRIVACY_INVOKED:
++		local->privacy_invoked = data->value;
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++	return 0;
++#endif
++	return -EOPNOTSUPP;	
++}
++
++
++static int iw_ioctl_giwauth(struct net_device *dev,
++				struct iw_request_info *info,
++				struct iw_param *data, char *extra)
++{
++#if 0
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	u32 val, len;
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++	switch (data->flags & IW_AUTH_INDEX) {
++	case IW_AUTH_WPA_VERSION:
++	case IW_AUTH_CIPHER_PAIRWISE:
++	case IW_AUTH_CIPHER_GROUP:
++	case IW_AUTH_KEY_MGMT:
++		/* Host AP driver does not use these parameters and allows
++		 * wpa_supplicant to control them internally. */
++		return -EOPNOTSUPP;
++	case IW_AUTH_TKIP_COUNTERMEASURES:
++		data->value = local->tkip_countermeasures;
++		break;
++	case IW_AUTH_DROP_UNENCRYPTED:
++		data->value = local->drop_unencrypted;
++		break;
++	case IW_AUTH_80211_AUTH_ALG:
++		data->value = local->auth_algs;
++		break;
++	case IW_AUTH_WPA_ENABLED:
++		data->value = local->wpa;
++		break;
++	case IW_AUTH_RX_UNENCRYPTED_EAPOL:
++		data->value = local->ieee_802_1x;
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++	return 0;
++#endif
++	return -EOPNOTSUPP;	
++}
++
++
++static int iw_ioctl_siwencodeext(struct net_device *dev,
++				     struct iw_request_info *info,
++				     struct iw_point *erq, char *extra)
++{
++
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++#if 0	
++	struct hostap_interface *iface = dev->priv;
++	local_info_t *local = iface->local;
++	struct iw_encode_ext *ext = (struct iw_encode_ext *) extra;
++	int i, ret = 0;
++	struct hostap_crypto_ops *ops;
++	struct prism2_crypt_data **crypt;
++	void *sta_ptr;
++	u8 *addr;
++	const char *alg, *module;
++
++	i = erq->flags & IW_ENCODE_INDEX;
++	if (i > WEP_KEYS)
++		return -EINVAL;
++	if (i < 1 || i > WEP_KEYS)
++		i = local->tx_keyidx;
++	else
++		i--;
++	if (i < 0 || i >= WEP_KEYS)
++		return -EINVAL;
++
++	addr = ext->addr.sa_data;
++	if (addr[0] == 0xff && addr[1] == 0xff && addr[2] == 0xff &&
++	    addr[3] == 0xff && addr[4] == 0xff && addr[5] == 0xff) {
++		sta_ptr = NULL;
++		crypt = &local->crypt[i];
++	} else {
++		if (i != 0)
++			return -EINVAL;
++		sta_ptr = ap_crypt_get_ptrs(local->ap, addr, 0, &crypt);
++		if (sta_ptr == NULL) {
++			if (local->iw_mode == IW_MODE_INFRA) {
++				/* TODO: add STA entry for the current AP so
++				 * that unicast key can be used. For now, this
++				 * is emulated by using default key idx 0. */
++				i = 0;
++				crypt = &local->crypt[i];
++			} else
++				return -EINVAL;
++		}
++	}
++
++	if ((erq->flags & IW_ENCODE_DISABLED) ||
++	    ext->alg == IW_ENCODE_ALG_NONE) {
++		if (*crypt)
++			prism2_crypt_delayed_deinit(local, crypt);
++		goto done;
++	}
++
++	switch (ext->alg) {
++	case IW_ENCODE_ALG_WEP:
++		alg = "WEP";
++		module = "hostap_crypt_wep";
++		break;
++	case IW_ENCODE_ALG_TKIP:
++		alg = "TKIP";
++		module = "hostap_crypt_tkip";
++		break;
++	case IW_ENCODE_ALG_CCMP:
++		alg = "CCMP";
++		module = "hostap_crypt_ccmp";
++		break;
++	default:
++		printk(KERN_DEBUG "%s: unsupported algorithm %d\n",
++		       local->dev->name, ext->alg);
++		ret = -EOPNOTSUPP;
++		goto done;
++	}
++
++	ops = hostap_get_crypto_ops(alg);
++	if (ops == NULL) {
++		request_module(module);
++		ops = hostap_get_crypto_ops(alg);
++	}
++	if (ops == NULL) {
++		printk(KERN_DEBUG "%s: unknown crypto alg '%s'\n",
++		       local->dev->name, alg);
++		ret = -EOPNOTSUPP;
++		goto done;
++	}
++
++	if (sta_ptr || ext->alg != IW_ENCODE_ALG_WEP) {
++		/* station based encryption and other than WEP algorithms
++		 * require host-based encryption, so force them on
++		 * automatically */
++		local->host_decrypt = local->host_encrypt = 1;
++	}
++
++	if (*crypt == NULL || (*crypt)->ops != ops) {
++		struct prism2_crypt_data *new_crypt;
++
++		prism2_crypt_delayed_deinit(local, crypt);
++
++		new_crypt = (struct prism2_crypt_data *)
++			kmalloc(sizeof(struct prism2_crypt_data), GFP_KERNEL);
++		if (new_crypt == NULL) {
++			ret = -ENOMEM;
++			goto done;
++		}
++		memset(new_crypt, 0, sizeof(struct prism2_crypt_data));
++		new_crypt->ops = ops;
++		new_crypt->priv = new_crypt->ops->init(i);
++		if (new_crypt->priv == NULL) {
++			kfree(new_crypt);
++			ret = -EINVAL;
++			goto done;
++		}
++
++		*crypt = new_crypt;
++	}
++
++	/* TODO: if ext_flags does not have IW_ENCODE_EXT_RX_SEQ_VALID, the
++	 * existing seq# should not be changed. */
++	/* TODO: if ext_flags has IW_ENCODE_EXT_TX_SEQ_VALID, next TX seq#
++	 * should be changed to something else than zero. */
++	if ((!(ext->ext_flags & IW_ENCODE_EXT_SET_TX_KEY) || ext->key_len > 0)
++	    && (*crypt)->ops->set_key &&
++	    (*crypt)->ops->set_key(ext->key, ext->key_len, ext->rx_seq,
++				   (*crypt)->priv) < 0) {
++		printk(KERN_DEBUG "%s: key setting failed\n",
++		       local->dev->name);
++		ret = -EINVAL;
++		goto done;
++	}
++
++	if (ext->ext_flags & IW_ENCODE_EXT_SET_TX_KEY) {
++		if (!sta_ptr)
++			local->tx_keyidx = i;
++		else if (i) {
++			ret = -EINVAL;
++			goto done;
++		}
++	}
++
++
++	if (sta_ptr == NULL && ext->key_len > 0) {
++		int first = 1, j;
++		for (j = 0; j < WEP_KEYS; j++) {
++			if (j != i && local->crypt[j]) {
++				first = 0;
++				break;
++			}
++		}
++		if (first)
++			local->tx_keyidx = i;
++	}
++
++ done:
++	if (sta_ptr)
++		hostap_handle_sta_release(sta_ptr);
++
++	local->open_wep = erq->flags & IW_ENCODE_OPEN;
++
++	/* Do not reset port0 if card is in Managed mode since resetting will
++	 * generate new IEEE 802.11 authentication which may end up in looping
++	 * with IEEE 802.1X. Prism2 documentation seem to require port reset
++	 * after WEP configuration. However, keys are apparently changed at
++	 * least in Managed mode. */
++	if (ret == 0 &&
++	    (hostap_set_encryption(local) ||
++	     (local->iw_mode != IW_MODE_INFRA &&
++	      local->func->reset_port(local->dev))))
++		ret = -EINVAL;
++
++	return ret;
++#endif
++	return -EOPNOTSUPP;	
++}
++
++
++static int iw_ioctl_giwencodeext(struct net_device *dev,
++				     struct iw_request_info *info,
++				     struct iw_point *erq, char *extra)
++{
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++#if 0	
++	struct hostap_interface *iface = dev->priv;
++	local_info_t *local = iface->local;
++	struct prism2_crypt_data **crypt;
++	void *sta_ptr;
++	int max_key_len, i;
++	struct iw_encode_ext *ext = (struct iw_encode_ext *) extra;
++	u8 *addr;
++
++	max_key_len = erq->length - sizeof(*ext);
++	if (max_key_len < 0)
++		return -EINVAL;
++
++	i = erq->flags & IW_ENCODE_INDEX;
++	if (i < 1 || i > WEP_KEYS)
++		i = local->tx_keyidx;
++	else
++		i--;
++
++	addr = ext->addr.sa_data;
++	if (addr[0] == 0xff && addr[1] == 0xff && addr[2] == 0xff &&
++	    addr[3] == 0xff && addr[4] == 0xff && addr[5] == 0xff) {
++		sta_ptr = NULL;
++		crypt = &local->crypt[i];
++	} else {
++		i = 0;
++		sta_ptr = ap_crypt_get_ptrs(local->ap, addr, 0, &crypt);
++		if (sta_ptr == NULL)
++			return -EINVAL;
++	}
++	erq->flags = i + 1;
++	memset(ext, 0, sizeof(*ext));
++
++	if (*crypt == NULL || (*crypt)->ops == NULL) {
++		ext->alg = IW_ENCODE_ALG_NONE;
++		ext->key_len = 0;
++		erq->flags |= IW_ENCODE_DISABLED;
++	} else {
++		if (strcmp((*crypt)->ops->name, "WEP") == 0)
++			ext->alg = IW_ENCODE_ALG_WEP;
++		else if (strcmp((*crypt)->ops->name, "TKIP") == 0)
++			ext->alg = IW_ENCODE_ALG_TKIP;
++		else if (strcmp((*crypt)->ops->name, "CCMP") == 0)
++			ext->alg = IW_ENCODE_ALG_CCMP;
++		else
++			return -EINVAL;
++
++		if ((*crypt)->ops->get_key) {
++			ext->key_len =
++				(*crypt)->ops->get_key(ext->key,
++						       max_key_len,
++						       ext->tx_seq,
++						       (*crypt)->priv);
++			if (ext->key_len &&
++			    (ext->alg == IW_ENCODE_ALG_TKIP ||
++			     ext->alg == IW_ENCODE_ALG_CCMP))
++				ext->ext_flags |= IW_ENCODE_EXT_TX_SEQ_VALID;
++		}
++	}
++
++	if (sta_ptr)
++		hostap_handle_sta_release(sta_ptr);
++
++	return 0;
++#endif
++	return -EOPNOTSUPP;		
++}
++#endif /* WIRELESS_EXT > 17 */
++
++
++#if WIRELESS_EXT > 17
++static int iw_ioctl_siwgenie(struct net_device *dev,
++				 struct iw_request_info *info,
++				 struct iw_point *data, char *extra)
++{
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++		return -EOPNOTSUPP;
++}
++#endif
++
++static int iw_ioctl_giwgenie(struct net_device *dev,
++				 struct iw_request_info *info,
++				 struct iw_point *data, char *extra)
++{
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++		return -EOPNOTSUPP;
++}
++
++
++#if WIRELESS_EXT > 17
++static int iw_ioctl_siwmlme(struct net_device *dev,
++				struct iw_request_info *info,
++				struct iw_point *data, char *extra)
++{
++#if IOCTL_DBG
++	printk("%s Call\n", __FUNCTION__);
++#endif
++		return -EOPNOTSUPP;
++}
++#endif
++
++/* Structures to export the Wireless Handlers */
++
++static const iw_handler ti_handler[] =
++{
++	(iw_handler) iw_ioctl_commit,						/* SIOCSIWCOMMIT */
++	(iw_handler) iw_get_name,				/* SIOCGIWNAME */
++	(iw_handler) NULL,						/* SIOCSIWNWID */
++	(iw_handler) NULL,						/* SIOCGIWNWID */
++	(iw_handler) iw_ioctl_siwfreq,			/* SIOCSIWFREQ */
++	(iw_handler) iw_ioctl_giwfreq,			/* SIOCGIWFREQ */
++	(iw_handler) iw_ioctl_siwmode,			/* SIOCSIWMODE */
++	(iw_handler) iw_ioctl_giwmode,			/* SIOCGIWMODE */
++	(iw_handler) NULL,	//iw_ioctl_siwsens,			/* SIOCSIWSENS */
++	(iw_handler) NULL,	//iw_ioctl_giwsens,			/* SIOCGIWSENS */
++	(iw_handler) NULL /* not used */,		/* SIOCSIWRANGE */
++	(iw_handler) iw_ioctl_giwrange,			/* SIOCGIWRANGE */
++	(iw_handler) NULL /* not used */,		/* SIOCSIWPRIV */
++	(iw_handler) NULL /* kernel code */,	/* SIOCGIWPRIV */
++	(iw_handler) NULL /* not used */,		/* SIOCSIWSTATS */
++	(iw_handler) NULL /* kernel code */,	/* SIOCGIWSTATS */
++#if WIRELESS_EXT > 15
++	iw_handler_set_thrspy,					/* SIOCSIWTHRSPY */
++	iw_handler_get_thrspy,					/* SIOCGIWTHRSPY */
++	iw_handler_set_spy,						/* SIOCSIWSPY */
++	iw_handler_get_spy,						/* SIOCGIWSPY */
++#else /* WIRELESS_EXT > 15 */
++	(iw_handler) NULL,						/* SIOCSIWSPY */
++	(iw_handler) NULL,						/* SIOCGIWSPY */
++	(iw_handler) NULL,						/* -- hole -- */
++	(iw_handler) NULL,						/* -- hole -- */
++#endif /* WIRELESS_EXT > 15 */
++	(iw_handler) iw_ioctl_siwap,			/* SIOCSIWAP */
++	(iw_handler) iw_ioctl_giwap,			/* SIOCGIWAP */
++#if WIRELESS_EXT > 17
++	(iw_handler) iw_ioctl_siwmlme,			/* SIOCSIWMLME */
++#else /* WIRELESS_EXT > 17 */
++	(iw_handler) NULL,				/* -- hole -- */
++#endif /* WIRELESS_EXT > 17 */
++	(iw_handler) iw_ioctl_giwaplist,		/* SIOCGIWAPLIST */
++	(iw_handler) iw_ioctl_siwscan,			/* SIOCSIWSCAN */
++	(iw_handler) iw_ioctl_giwscan,			/* SIOCGIWSCAN */
++	(iw_handler) iw_ioctl_siwessid,			/* SIOCSIWESSID */
++	(iw_handler) iw_ioctl_giwessid,			/* SIOCGIWESSID */
++	(iw_handler) NULL,						/* SIOCSIWNICKN */
++	(iw_handler) iw_ioctl_giwnickn,			/* SIOCGIWNICKN */
++	(iw_handler) NULL,						/* -- hole -- */
++	(iw_handler) NULL,						/* -- hole -- */
++	(iw_handler) iw_ioctl_siwrate,			/* SIOCSIWRATE */
++	(iw_handler) iw_ioctl_giwrate,			/* SIOCGIWRATE */
++	(iw_handler) iw_ioctl_siwrts,			/* SIOCSIWRTS */
++	(iw_handler) iw_ioctl_giwrts,			/* SIOCGIWRTS */
++	(iw_handler) iw_ioctl_siwfrag,			/* SIOCSIWFRAG */
++	(iw_handler) iw_ioctl_giwfrag,			/* SIOCGIWFRAG */
++	(iw_handler) iw_ioctl_siwtxpow,			/* SIOCSIWTXPOW */
++	(iw_handler) iw_ioctl_giwtxpow,			/* SIOCGIWTXPOW */
++	(iw_handler) iw_ioctl_siwretry,			/* SIOCSIWRETRY */
++	(iw_handler) iw_ioctl_giwretry,			/* SIOCGIWRETRY */
++	(iw_handler) iw_ioctl_siwencode,		/* SIOCSIWENCODE */
++	(iw_handler) iw_ioctl_giwencode,		/* SIOCGIWENCODE */
++	(iw_handler) iw_ioctl_siwpower,			/* SIOCSIWPOWER */
++	(iw_handler) iw_ioctl_giwpower,			/* SIOCGIWPOWER */
++#if WIRELESS_EXT > 17
++	(iw_handler) NULL,						/* -- hole -- */
++	(iw_handler) NULL,						/* -- hole -- */
++	(iw_handler) iw_ioctl_siwgenie,			/* SIOCSIWGENIE */
++	(iw_handler) iw_ioctl_giwgenie,			/* SIOCGIWGENIE */
++	(iw_handler) iw_ioctl_siwauth,			/* SIOCSIWAUTH */
++	(iw_handler) iw_ioctl_giwauth,			/* SIOCGIWAUTH */
++	(iw_handler) iw_ioctl_siwencodeext,		/* SIOCSIWENCODEEXT */
++	(iw_handler) iw_ioctl_giwencodeext,		/* SIOCGIWENCODEEXT */
++	(iw_handler) NULL,						/* SIOCSIWPMKSA */
++	(iw_handler) NULL,						/* -- hole -- */
++#endif /* WIRELESS_EXT > 17 */
++};
++
++#if 0
++static const iw_handler ti_private_handler[] =
++{							/* SIOCIWFIRSTPRIV + */
++	(iw_handler) iw_ioctl_priv_prism2_param,	/* 0 */
++	(iw_handler) iw_ioctl_priv_get_prism2_param, /* 1 */
++	(iw_handler) iw_ioctl_priv_writemif,	/* 2 */
++	(iw_handler) iw_ioctl_priv_readmif,		/* 3 */
++};
++#endif
++
++static const struct iw_handler_def ti_iw_handler_def =
++{
++	.num_standard	= sizeof(ti_handler) / sizeof(iw_handler),
++//	.num_private	= sizeof(ti_private_handler) / sizeof(iw_handler),
++//	.num_private_args = sizeof(ti_priv) / sizeof(struct iw_priv_args),
++	.standard	= (iw_handler *) ti_handler,
++//	.private	= (iw_handler *) ti_private_handler,
++//	.private_args	= (struct iw_priv_args *) ti_priv,
++#if WIRELESS_EXT == 16
++//	.spy_offset	= offsetof(struct hostap_interface, spy_data),
++#endif /* WIRELESS_EXT == 16 */
++#if WIRELESS_EXT > 16
++//	.get_wireless_stats = ti_get_wireless_stats,
++#endif /* WIRELESS_EXT > 16 */
++};
++
++void tiwlan_iwhandler_init(struct net_device *dev)
++{
++   dev->wireless_handlers = (struct iw_handler_def *) &ti_iw_handler_def;
++   printk("CJP: wext start :: tiwlan_iwhandler_init");
++}
+diff --git a/sta_dk_4_0_4_32/pform/linux/src/osapi.c b/sta_dk_4_0_4_32/pform/linux/src/osapi.c
+old mode 100644
+new mode 100755
+index a5a798c..3d657e7
+--- a/sta_dk_4_0_4_32/pform/linux/src/osapi.c
++++ b/sta_dk_4_0_4_32/pform/linux/src/osapi.c
+@@ -99,7 +99,11 @@ static int os_tl_timerHandlr(struct tiwlan_req *req);
+ static void os_timerHandlr(unsigned long parm);
+ static void send_frag(char* msg, int message_len, int level, int module);
+ 
+-BOOL use_debug_module = FALSE;
++extern void disable_irq(unsigned int);
++extern void enable_irq(unsigned int);
++
++BOOL use_debug_module = FALSE;
++#define debug_module_enqueue_message
+ 
+ /****************************************************************************************
+  *                        																*
+-- 
+1.6.3.1
+

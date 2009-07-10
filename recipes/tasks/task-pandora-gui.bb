@@ -2,21 +2,20 @@ DESCRIPTION = "Task file for default GUI apps in the Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r1.10"
+PR = "r0.1"
 
 inherit task
 
 RDEPENDS_${PN} = "\
         task-pandora-core \
-        entrance \
         angstrom-x11-base-depends \
-        angstrom-gpe-task-base angstrom-gpe-task-game angstrom-ohand-task-pim angstrom-gpe-task-apps angstrom-gpe-task-settings \
+        angstrom-gpe-task-base angstrom-gpe-task-game angstrom-gpe-task-apps angstrom-gpe-task-settings \
         angstrom-zeroconf-audio \
         angstrom-led-config \ 
         angstrom-gnome-icon-theme-enable \
         gpe-scap \
         xterm xmms \
-        firefox midori \
+        firefox \
         swfdec-mozilla \
         abiword \
         claws-mail \
@@ -25,8 +24,7 @@ RDEPENDS_${PN} = "\
         pidgin \
         gnome-games \
         synergy \
-        vnc \
-        x11vnc \
+	x11vnc angstrom-x11vnc-xinit \
         xmms \
         xterm \
         xtscal \
@@ -35,7 +33,7 @@ RDEPENDS_${PN} = "\
         matchbox-keyboard matchbox-keyboard-applet matchbox-keyboard-im \
         matchbox-common matchbox-config-gtk \
         matchbox-terminal \
-        matchbox-themes-gtk \
+        matchbox-themes-gtk pandora-matchbox-gtk-theme \
         pcmanfm \
         ttf-liberation-sans ttf-liberation-serif ttf-liberation-mono \
         xauth xhost xset xrandr \
@@ -45,8 +43,6 @@ RDEPENDS_${PN} = "\
         matchbox-applet-inputmanager \
         matchbox-applet-volume \
         matchbox-applet-startup-monitor \
-#	networkmanager-applet \
 	connman-gnome \
         scummvm \
-        pandora-matchbox-gtk-theme \
 "

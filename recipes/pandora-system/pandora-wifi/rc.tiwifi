@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DESC="TI1251 Wireless LAN driver"
-NAME="wlan"
+NAME="tiwlan"
 
 d_stop() {
 	if `grep -q wlan /proc/modules` ; then
@@ -11,7 +11,7 @@ d_stop() {
 
 d_start() {
 	insmod $(busybox find /lib/modules/$(uname -r) -name "wlan.ko")
-	/usr/bin/tiwlan_loader -n -f /lib/firmware/Fw1251r1c.bin -i /etc/tiwlan.ini
+	/usr/bin/tiwlan_loader -n -f /lib/firmware/wl1251-fw.bin -i /etc/tiwlan.ini
 }
 
 

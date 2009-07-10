@@ -13,8 +13,16 @@ PARALLEL_MAKE = ""
 EXTRA_OEMAKE = " \
           'KERNELVER=${KERNEL_VERSION}' \
           'LINUXSRC=${STAGING_KERNEL_DIR}' \
+          'KERNEL_DIR=${STAGING_KERNEL_DIR}' \
+          'CROSS_COMPILE=${TARGET_PREFIX}' \
           'CC=${TARGET_PREFIX}' \
-          'OS=${TARGET_OS}'"
+          'OS=${TARGET_OS}' \
+          'WSPI=n' \
+          'ARCH=arm' \
+          'DV_KERNEL_BASELINE_IS=baseline2' \
+          'OUTPUT_DIR=${S}' \
+          'AR=ar' \
+          "
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 

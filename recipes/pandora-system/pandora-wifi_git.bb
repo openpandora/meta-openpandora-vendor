@@ -1,14 +1,16 @@
 DESCRIPTION = "Kernel drivers for the TI1251 WiFi chip found on the Pandora - Connected via SDIO"
 LICENSE = "GPLv2"
 
-PR = "r9.2"
-
 # Check the include for the source location/GIT SRCREV etc.
 require pandora-wifi.inc
 
 SRC_URI += " \
 	file://rc.tiwifi \
-#	file://0011-Add-in-the-start-of-wireless-extensions-support-ioc.patch;patch=1 \
+	file://0001-Initial-work-on-WEXT-support.patch;patch=1 \
+	file://0002-More-cleanup-work-on-WEXT.-Now-at-the-point-that-use.patch;patch=1 \
+	file://0003-Oooops-now-lets-try-something-that-compiles.patch;patch=1 \
+	file://0004-Clean-up-to-use-IW_RETRY_LONG-and-IW_RETRY_SHORT.patch;patch=1 \
+	file://0005-Fix-ooops-I-really-don-t-want-funky-private-features.patch;patch=1 \
 "
 
 inherit update-rc.d

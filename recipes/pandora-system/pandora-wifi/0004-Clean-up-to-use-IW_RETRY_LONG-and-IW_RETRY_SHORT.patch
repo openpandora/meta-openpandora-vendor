@@ -1,0 +1,76 @@
+From ffc95b80674d5e9dfdc3dc877e68cf4af613758d Mon Sep 17 00:00:00 2001
+From: David-John Willis <John.Willis@Distant-earth.com>
+Date: Thu, 11 Jun 2009 15:12:28 +0100
+Subject: [PATCH 4/5] Clean up to use IW_RETRY_LONG and IW_RETRY_SHORT.
+
+---
+ sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c |   26 ++++++++++----------------
+ 1 files changed, 10 insertions(+), 16 deletions(-)
+
+diff --git a/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c b/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
+index f925b21..ef35c2b 100755
+--- a/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
++++ b/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
+@@ -927,9 +927,9 @@ static int iw_ioctl_siwretry(struct net_device *dev,
+ 		return -EINVAL;
+ 
+ 	if (rrq->flags & IW_RETRY_LIMIT) {
+-		if (rrq->flags & IW_RETRY_MAX)
++		if (rrq->flags & IW_RETRY_LONG)
+ 			UtilLongRetrySet(pAdapter, (UINT8 *)&(rrq->value), sizeof(rrq->value));
+-		else if (rrq->flags & IW_RETRY_MIN)
++		else if (rrq->flags & IW_RETRY_SHORT)
+ 			UtilShortRetrySet(pAdapter, (UINT8 *)&(rrq->value), sizeof(rrq->value));
+ 		else {
+ 			UtilLongRetrySet(pAdapter, (UINT8 *)&(rrq->value), sizeof(rrq->value));
+@@ -961,14 +961,14 @@ static int iw_ioctl_giwretry(struct net_device *dev,
+ 	if ((rrq->flags & IW_RETRY_TYPE) == IW_RETRY_LIFETIME) {
+ 		return -EOPNOTSUPP;
+ 	} else {
+-		if ((rrq->flags & IW_RETRY_MAX)) {
+-			rrq->flags = IW_RETRY_LIMIT | IW_RETRY_MAX;
++		if ((rrq->flags & IW_RETRY_LONG)) {
++			rrq->flags = IW_RETRY_LIMIT | IW_RETRY_LONG;
+ 			rrq->value = longretry;
+ 		} else {
+ 			rrq->flags = IW_RETRY_LIMIT;
+ 			rrq->value = shortretry;
+ 			if (shortretry != longretry)
+-				rrq->flags |= IW_RETRY_MIN;
++				rrq->flags |= IW_RETRY_SHORT;
+ 		}
+ 	}
+ 	return 0;
+@@ -1902,24 +1902,18 @@ static const iw_handler ti_handler[] =
+ 	(iw_handler) NULL,						/* SIOCSIWPMKSA */
+ };
+ 
+-#if 0
+ static const iw_handler ti_private_handler[] =
+-{							/* SIOCIWFIRSTPRIV + */
+-	(iw_handler) iw_ioctl_priv_prism2_param,	/* 0 */
+-	(iw_handler) iw_ioctl_priv_get_prism2_param, /* 1 */
+-	(iw_handler) iw_ioctl_priv_writemif,	/* 2 */
+-	(iw_handler) iw_ioctl_priv_readmif,		/* 3 */
++{							/* SIOCIWFIRSTPRIV + num */
+ };
+-#endif
+ 
+ static const struct iw_handler_def ti_iw_handler_def =
+ {
+ 	.num_standard	= sizeof(ti_handler) / sizeof(iw_handler),
+-//	.num_private	= sizeof(ti_private_handler) / sizeof(iw_handler),
+-//	.num_private_args = sizeof(ti_priv) / sizeof(struct iw_priv_args),
++	.num_private	= sizeof(ti_private_handler) / sizeof(iw_handler),
++	.num_private_args = sizeof(ti_priv) / sizeof(struct iw_priv_args),
+ 	.standard	= (iw_handler *) ti_handler,
+-//	.private	= (iw_handler *) ti_private_handler,
+-//	.private_args	= (struct iw_priv_args *) ti_priv,
++	.private	= (iw_handler *) ti_private_handler,
++	.private_args	= (struct iw_priv_args *) ti_priv,
+ //	.get_wireless_stats = ti_get_wireless_stats,
+ };
+ 
+-- 
+1.6.3.1
+

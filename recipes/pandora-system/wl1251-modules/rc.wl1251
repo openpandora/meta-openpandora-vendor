@@ -1,0 +1,61 @@
+#!/bin/sh
+
+DESC="WL1251 MAC80211 Wireless LAN driver"
+NAME="wl1251"
+
+d_stop() {
+	if `grep -q wl12xx /proc/modules` ; then
+		rmmod wl12xx_sdio
+		rmmod wl12xx
+	fi
+	if `grep -q mac80211 /proc/modules` ; then
+		rmmod mac80211
+		rmmod cfg80211
+		rmmod rfkill_backport
+		rmmod lib80211_crypt_ccmp
+		rmmod lib80211_crypt_wep
+		rmmod lib80211_crypt_tkip
+		rmmod lib80211
+	fi
+}
+
+d_start() {
+	insmod $(busybox find /lib/modules/$(uname -r) -name "arc4.ko")
+	insmod $(busybox find /lib/modules/$(uname -r) -name "ecb.ko")
+	insmod $(busybox find /lib/modules/$(uname -r) -name "pcbc.ko")
+	insmod $(busybox find /lib/modules/$(uname -r) -name "rfkill_backport.ko")
+	insmod $(busybox find /lib/modules/$(uname -r) -name "cfg80211.ko")
+	insmod $(busybox find /lib/modules/$(uname -r) -name "mac80211.ko")
+	insmod $(busybox find /lib/modules/$(uname -r) -name "lib80211.ko")
+	insmod $(busybox find /lib/modules/$(uname -r) -name "lib80211_crypt_tkip.ko")
+	insmod $(busybox find /lib/modules/$(uname -r) -name "lib80211_crypt_wep.ko")
+	insmod $(busybox find /lib/modules/$(uname -r) -name "lib80211_crypt_ccmp.ko")
+	insmod $(busybox find /lib/modules/$(uname -r) -name "wl12xx.ko")
+	insmod $(busybox find /lib/modules/$(uname -r) -name "wl12xx_sdio.ko")
+}
+
+case "$1" in
+  start)
+	echo -n "Starting $DESC: $NAME"
+	d_start
+	echo "."
+	;;
+  stop)
+	echo -n "Stopping $DESC: $NAME"
+	d_stop
+	echo "."
+	;;
+  restart|force-reload)
+	echo -n "Restarting $DESC: $NAME"
+	d_stop
+	sleep 1
+	d_start
+	echo "."
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

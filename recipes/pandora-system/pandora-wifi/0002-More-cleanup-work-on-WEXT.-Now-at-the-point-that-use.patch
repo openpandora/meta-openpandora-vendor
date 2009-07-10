@@ -1,0 +1,543 @@
+From 313c5075ba5833b3cb544a3ed54f62e57b143fc4 Mon Sep 17 00:00:00 2001
+From: David-John Willis <John.Willis@Distant-earth.com>
+Date: Thu, 11 Jun 2009 09:42:00 +0100
+Subject: [PATCH 2/5] More cleanup work on WEXT. Now at the point that userspace may do something ;-).
+
+---
+ sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c |  155 ++++++++++++----------------
+ 1 files changed, 68 insertions(+), 87 deletions(-)
+
+diff --git a/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c b/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
+index 0e28586..28011e8 100755
+--- a/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
++++ b/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
+@@ -32,7 +32,8 @@
+ #include "scanMngrTypes.h"
+ #include "scanMngrTypes.h"
+ 
+-#define IOCTL_DBG 1
++/* Enable to turn on function printk's */
++#define IOCTL_DBG
+ 
+ static const long freq_list[] = { 2412, 2417, 2422, 2427, 2432, 2437, 2442,
+ 				  2447, 2452, 2457, 2462, 2467, 2472, 2484 };
+@@ -126,7 +127,7 @@ static int iw_get_name(struct net_device *dev,
+ #if IOCTL_DBG
+ 	printk("%s Call\n", __FUNCTION__);
+ #endif
+-/*	
++/*
+ 	u8 rates[10];
+ 	int len, i, over2 = 0;
+ 
+@@ -161,7 +162,7 @@ static int iw_ioctl_siwencode(struct net_device *dev,
+ 	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
+ 	cipherSuite_e 	cipher;
+ 	int i;
+-	ULONG len; 
++	ULONG len;
+ 
+ #if IOCTL_DBG
+ 	printk("%s Call\n", __FUNCTION__);
+@@ -180,7 +181,7 @@ static int iw_ioctl_siwencode(struct net_device *dev,
+ 		return -EINVAL;
+ 
+ 	UtilWepStatusGet(pAdapter, (UINT8 *)&cipher, &len);
+-	
++
+ 	if (erq->flags & IW_ENCODE_DISABLED) {
+ 		cipherSuite_e val=RSN_CIPHER_NONE;
+ 		UtilWepStatusSet(pAdapter, (UINT8 *)&val, sizeof(val));
+@@ -191,10 +192,10 @@ static int iw_ioctl_siwencode(struct net_device *dev,
+ 		if (erq->length > 0) {
+ 			OS_802_11_WEP wep;
+ 			int len = erq->length <= 5 ? 5 : 13;
+-			
++
+ 			cipherSuite_e val=RSN_CIPHER_WEP;
+ 			UtilWepStatusSet(pAdapter, (UINT8 *)&val, sizeof(val));
+-			
++
+ 			if (len > erq->length)
+ 				memset(keybuf + erq->length, 0, len - erq->length);
+ 			memcpy(wep.KeyMaterial, keybuf, len);
+@@ -206,7 +207,7 @@ static int iw_ioctl_siwencode(struct net_device *dev,
+ 			/* No key data - just set the default TX key index */
+ 			securityKeys_t key;
+ 			UINT8 data[5];
+-			
++
+ 			memset(&key, 0, sizeof(securityKeys_t));
+ 			key.keyIndex = i;
+ 			if (!UtilWepKeyGet(pAdapter, (UINT8 *)&key, sizeof(securityKeys_t)))
+@@ -223,13 +224,13 @@ static int iw_ioctl_siwencode(struct net_device *dev,
+ 					}
+ 				}
+ 				else
+-					return -EINVAL;				
++					return -EINVAL;
+ 			}
+ 			else
+ 				return -EINVAL;
+ 		}
+ 	}
+-done:	
++done:
+ 	if (erq->flags & IW_ENCODE_OPEN)
+ 	{
+ 		UINT8 MixedMode = true;
+@@ -289,7 +290,7 @@ static int iw_ioctl_giwencode(struct net_device *dev,
+ 		wkey.keyIndex = i;
+ 		if (!UtilWepKeyGet(pAdapter, (PUCHAR)&wkey, sizeof(securityKeys_t)))
+ 		{
+-        	printk("iw_ioctl_giwencode KeyIndex  %x , keyLength=%d\n", 
++        	printk("iw_ioctl_giwencode KeyIndex  %x , keyLength=%d\n",
+                       wkey.keyIndex, wkey.encLen);
+ 			if (wkey.encLen > 0)
+ 			{
+@@ -320,8 +321,8 @@ static int iw_ioctl_giwencode(struct net_device *dev,
+ 		erq->flags |= IW_ENCODE_OPEN;
+ 	else
+ 		erq->flags |= IW_ENCODE_RESTRICTED;
+-		
+-	
++
++
+ 	return 0;
+ }
+ 
+@@ -331,7 +332,7 @@ static int iw_ioctl_siwrate(struct net_device *dev,
+ {
+ 	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
+ 	u32 val;
+-	
++
+ #if IOCTL_DBG
+ 	printk("%s Call\n", __FUNCTION__);
+ #endif
+@@ -339,7 +340,7 @@ static int iw_ioctl_siwrate(struct net_device *dev,
+ 		val = 0;
+ 	else
+ 		val = (rrq->value*2/1000000);
+-	
++
+ 	return UtilDesiredRatesSet(pAdapter, (UINT8 *)&val, 4);
+ }
+ 
+@@ -377,7 +378,7 @@ static int iw_ioctl_giwaplist(struct net_device *dev,
+ 				  struct iw_request_info *info,
+ 				  struct iw_point *data, char *extra)
+ {
+-	
++
+ #if 1
+ 	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
+ 	struct sockaddr addr[IW_MAX_AP];
+@@ -387,7 +388,7 @@ static int iw_ioctl_giwaplist(struct net_device *dev,
+ 	OS_802_11_BSSID_EX *bssid;
+ 	OS_802_11_BSSID_LIST_EX *list;
+ 	int i;
+-	
++
+ #if IOCTL_DBG
+ 	printk("%s Call\n", __FUNCTION__);
+ #endif
+@@ -400,9 +401,9 @@ static int iw_ioctl_giwaplist(struct net_device *dev,
+     printk("bssid 0x%x\n",(unsigned int)bssid);
+     number_items = list->NumberOfItems;
+     printk("number_items 0x%x\n",number_items);
+-    
++
+ 	data->length = number_items;
+-	
++
+ 	for (i=0;i<number_items;i++)
+ 	{
+ 		addr[i].sa_family = ARPHRD_ETHER;
+@@ -414,7 +415,7 @@ static int iw_ioctl_giwaplist(struct net_device *dev,
+ 		qual[i].updated = 7;
+         bssid = (OS_802_11_BSSID_EX *) (((char *) bssid) + bssid->Length);
+ 	}
+-	
++
+ 	memcpy(extra, &addr, sizeof(addr[0]) * data->length);
+ 	data->flags = 1; /* has quality information */
+ 	memcpy(extra + sizeof(addr[0]) * data->length, &qual,
+@@ -443,7 +444,7 @@ static int iw_ioctl_siwrts(struct net_device *dev,
+ 		val = rts->value;
+ 
+ 	UtilRtsThresholdSet(pAdapter, (UINT8 *)&val, 4);
+-	
++
+ 	return 0;
+ }
+ 
+@@ -564,7 +565,7 @@ static int iw_ioctl_siwfreq(struct net_device *dev,
+ #endif
+ 	if (freq->m == -1)
+ 		return -EOPNOTSUPP;
+-		
++
+ 	/* freq => chan. */
+ 	if (freq->e == 1 &&
+ 	    freq->m / 100000 >= freq_list[0] &&
+@@ -597,7 +598,6 @@ static int iw_ioctl_giwfreq(struct net_device *dev, struct iw_request_info *info
+ 	printk("%s Call\n", __FUNCTION__);
+ #endif
+ 	if (!pAdapter->CoreHalCtx) {
+-		printk("CJP: CoreHalCtx is NULL - config Mgr has vanished???\n");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -615,7 +615,7 @@ static int iw_ioctl_giwfreq(struct net_device *dev, struct iw_request_info *info
+ static int iw_ioctl_siwessid(struct net_device *dev,
+ 				 struct iw_request_info *info,
+ 				 struct iw_point *data, char *ssid)
+-{	
++{
+ 	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
+ 	OS_802_11_SSID essid;
+ 	OS_802_11_MAC_ADDRESS bssid = { 0xff,0xff,0xff,0xff,0xff,0xff };
+@@ -653,7 +653,7 @@ static int iw_ioctl_giwessid(struct net_device *dev,
+ 	UtilGetSSID(pAdapter, (UINT8 *)&ssid, &len);
+ 	data->length = ssid.SsidLength;
+ 	memcpy(essid, ssid.Ssid, ssid.SsidLength);
+-	
++
+ 	return 0;
+ }
+ 
+@@ -684,9 +684,9 @@ static int iw_ioctl_siwmode(struct net_device *dev,
+ 	default:
+ 		val = 1;
+ 	}
+-	
++
+     UtilInfrastructureModeSet(pAdapter, (UINT8 *)&val, 4);
+-    
++
+ 	return 0;
+ }
+ 
+@@ -855,7 +855,7 @@ static int iw_ioctl_siwpower(struct net_device *dev,
+ {
+ 	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
+ 	UINT32 val=POWER_MODE_ACTIVE;
+-	
++
+ #if IOCTL_DBG
+ 	printk("%s Call\n", __FUNCTION__);
+ #endif
+@@ -897,12 +897,12 @@ static int iw_ioctl_giwpower(struct net_device *dev,
+ #if 0	// cjp
+ 	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
+ 	UINT32 val=POWER_MODE_ACTIVE, len;
+-	
++
+ #if IOCTL_DBG
+ 	printk("%s Call\n", __FUNCTION__);
+ #endif
+ 	UtilPowerModeGet(pAdapter, (UINT8 *)&val, &len);
+-	
++
+ 	if (val==POWER_MODE_ACTIVE) {
+ 		rrq->disabled = 1;
+ 		return 0;
+@@ -919,7 +919,7 @@ static int iw_ioctl_siwretry(struct net_device *dev,
+ 				 struct iw_param *rrq, char *extra)
+ {
+ 	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
+-	
++
+ #if IOCTL_DBG
+ 	printk("%s Call\n", __FUNCTION__);
+ #endif
+@@ -948,11 +948,11 @@ static int iw_ioctl_giwretry(struct net_device *dev,
+ 	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
+ 	u16 shortretry, longretry;
+ 	ULONG len;
+-	
++
+ #if IOCTL_DBG
+ 	printk("%s Call\n", __FUNCTION__);
+ #endif
+-	if (UtilShortRetryGet(pAdapter, (UINT8 *)&shortretry, &len)!=0 || 
++	if (UtilShortRetryGet(pAdapter, (UINT8 *)&shortretry, &len)!=0 ||
+ 		UtilLongRetryGet(pAdapter, (UINT8 *)&longretry, &len)!=0)
+ 		return -EINVAL;
+ 
+@@ -1015,12 +1015,12 @@ static int iw_ioctl_siwscan(struct net_device *dev,
+ #if IOCTL_DBG
+ 	printk("%s Call\n", __FUNCTION__);
+ #endif
+-	
++
+ 	scan_TimeStamp = jiffies;
+ 	init_scan_params();
+-	
++
+ 	ret = UtilStartAppScanSet(pAdapter, (PCHAR)&iw_appScanParams, sizeof(iw_appScanParams));
+-	
++
+ 	return ret;
+ }
+ 
+@@ -1055,7 +1055,7 @@ static inline int iw_scan_list(struct net_device *dev,
+     list = (OS_802_11_BSSID_LIST_EX *) list_buf;
+     bssid = &list->Bssid[0];
+     number_items = list->NumberOfItems;
+-    
++
+ 	spin_lock_bh(&lock);
+ 	for (i=0;i<number_items;i++)
+ 	{
+@@ -1066,7 +1066,7 @@ static inline int iw_scan_list(struct net_device *dev,
+ 		iwe.len = IW_EV_ADDR_LEN;
+ 		current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe,
+ 						  IW_EV_ADDR_LEN);
+-						  
++
+ 		memset(&iwe, 0, sizeof(iwe));
+ 		iwe.cmd = SIOCGIWESSID;
+ 		iwe.u.data.length = bssid->Ssid.SsidLength;
+@@ -1074,7 +1074,7 @@ static inline int iw_scan_list(struct net_device *dev,
+ 		iwe.len = IW_EV_POINT_LEN + iwe.u.data.length;
+ 		printk("essid=%s len=%d\n", bssid->Ssid.Ssid, bssid->Ssid.SsidLength);
+ 		current_ev = iwe_stream_add_point(info, current_ev, end_buf, &iwe, (char *)bssid->Ssid.Ssid);
+-							  
++
+ 		memset(&iwe, 0, sizeof(iwe));
+ 		iwe.cmd = SIOCGIWMODE;
+ 		capabilities = bssid->Union.Capabilities;
+@@ -1088,7 +1088,7 @@ static inline int iw_scan_list(struct net_device *dev,
+ 			current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe,
+ 							  IW_EV_UINT_LEN);
+ 		}
+-		
++
+ 		memset(&iwe, 0, sizeof(iwe));
+ 		iwe.cmd = SIOCGIWFREQ;
+ 		chan = bssid->Configuration.Union.channel;
+@@ -1099,7 +1099,7 @@ static inline int iw_scan_list(struct net_device *dev,
+ 			current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe,
+ 							  IW_EV_FREQ_LEN);
+ 		}
+-		
++
+ 		memset(&iwe, 0, sizeof(iwe));
+ 		iwe.cmd = IWEVQUAL;
+ 		iwe.u.qual.qual = bssid->Rssi;
+@@ -1121,7 +1121,7 @@ static inline int iw_scan_list(struct net_device *dev,
+ 		iwe.u.data.length = 0;
+ 		iwe.len = IW_EV_POINT_LEN + iwe.u.data.length;
+ 		current_ev = iwe_stream_add_point(info, current_ev, end_buf, &iwe, "");
+-		
++
+ 		/* TODO: add SuppRates into BSS table */
+ 		memset(&iwe, 0, sizeof(iwe));
+ 		iwe.cmd = SIOCGIWRATE;
+@@ -1139,7 +1139,7 @@ static inline int iw_scan_list(struct net_device *dev,
+ 		/* Check if we added any event */
+ 		if ((current_val - current_ev) > IW_EV_LCP_LEN)
+ 			current_ev = current_val;
+-	
++
+ 		/* TODO: add BeaconInt,resp_rate,atim into BSS table */
+ 		memset(&iwe, 0, sizeof(iwe));
+ 		iwe.cmd = IWEVCUSTOM;
+@@ -1157,14 +1157,14 @@ static inline int iw_scan_list(struct net_device *dev,
+ 			current_ev = iwe_stream_add_point(info, current_ev, end_buf,
+ 							  &iwe, buf);
+ 		}
+-		
++
+ #if 1
+ 		IELen = 0;
+         IELen += sizeof(OS_802_11_FIXED_IEs);
+         pVarIes = (OS_802_11_VARIABLE_IEs*)&bssid->IEs[IELen];
+ 		while (IELen < bssid->IELength)
+ 		{
+-			printk("IELen=%d pVarIes->ElementID=%d\n", IELen, pVarIes->ElementID);                
++			printk("IELen=%d pVarIes->ElementID=%d\n", IELen, pVarIes->ElementID);
+ 			if (pVarIes->ElementID == MFIE_TYPE_RSN || pVarIes->ElementID == MFIE_TYPE_GENERIC) {
+ 				memset(&iwe, 0, sizeof(iwe));
+ 				iwe.cmd = IWEVGENIE;
+@@ -1172,11 +1172,11 @@ static inline int iw_scan_list(struct net_device *dev,
+ 				current_ev = iwe_stream_add_point(
+ 						info, current_ev, end_buf, &iwe, (char *)pVarIes);
+ 			}
+-		
+-            IELen += (pVarIes->Length + 2);		
++
++            IELen += (pVarIes->Length + 2);
+         	pVarIes = (OS_802_11_VARIABLE_IEs*)&bssid->IEs[IELen];
+ 		}
+-#endif        
++#endif
+ 		if ((end_buf - current_ev) <= IW_EV_ADDR_LEN) {
+ 			/* Ask user space to try again with a bigger buffer */
+ 			spin_unlock_bh(&lock);
+@@ -1185,7 +1185,7 @@ static inline int iw_scan_list(struct net_device *dev,
+ 		printk("current_ev=%x\n", current_ev);
+         bssid = (OS_802_11_BSSID_EX *) (((char *) bssid) + bssid->Length);
+ 	}
+-	
++
+ 	spin_unlock_bh(&lock);
+ 	return current_ev - extra;
+ }
+@@ -1213,7 +1213,7 @@ static int iw_ioctl_giwscan(struct net_device *dev,
+ 	}
+ 
+ 	res = iw_scan_list(dev, info, data, extra);
+-//	printk("iw_ioctl_giwscan end res=%d\n", res);
++	printk("iw_ioctl_giwscan end res=%d\n", res);
+ 	if (res >= 0) {
+ 		data->length = res;
+ 		return 0;
+@@ -1505,7 +1505,7 @@ static int iw_ioctl_siwauth(struct net_device *dev,
+ 	}
+ 	return 0;
+ #endif
+-	return -EOPNOTSUPP;	
++	return -EOPNOTSUPP;
+ }
+ 
+ 
+@@ -1548,7 +1548,7 @@ static int iw_ioctl_giwauth(struct net_device *dev,
+ 	}
+ 	return 0;
+ #endif
+-	return -EOPNOTSUPP;	
++	return -EOPNOTSUPP;
+ }
+ 
+ 
+@@ -1560,7 +1560,7 @@ static int iw_ioctl_siwencodeext(struct net_device *dev,
+ #if IOCTL_DBG
+ 	printk("%s Call\n", __FUNCTION__);
+ #endif
+-#if 0	
++#if 0
+ 	struct hostap_interface *iface = dev->priv;
+ 	local_info_t *local = iface->local;
+ 	struct iw_encode_ext *ext = (struct iw_encode_ext *) extra;
+@@ -1726,7 +1726,7 @@ static int iw_ioctl_siwencodeext(struct net_device *dev,
+ 
+ 	return ret;
+ #endif
+-	return -EOPNOTSUPP;	
++	return -EOPNOTSUPP;
+ }
+ 
+ 
+@@ -1737,7 +1737,7 @@ static int iw_ioctl_giwencodeext(struct net_device *dev,
+ #if IOCTL_DBG
+ 	printk("%s Call\n", __FUNCTION__);
+ #endif
+-#if 0	
++#if 0
+ 	struct hostap_interface *iface = dev->priv;
+ 	local_info_t *local = iface->local;
+ 	struct prism2_crypt_data **crypt;
+@@ -1802,7 +1802,7 @@ static int iw_ioctl_giwencodeext(struct net_device *dev,
+ 
+ 	return 0;
+ #endif
+-	return -EOPNOTSUPP;		
++	return -EOPNOTSUPP;
+ }
+ #endif /* WIRELESS_EXT > 17 */
+ 
+@@ -1846,7 +1846,7 @@ static int iw_ioctl_siwmlme(struct net_device *dev,
+ 
+ static const iw_handler ti_handler[] =
+ {
+-	(iw_handler) iw_ioctl_commit,						/* SIOCSIWCOMMIT */
++	(iw_handler) NULL,						/* SIOCSIWCOMMIT */
+ 	(iw_handler) iw_get_name,				/* SIOCGIWNAME */
+ 	(iw_handler) NULL,						/* SIOCSIWNWID */
+ 	(iw_handler) NULL,						/* SIOCGIWNWID */
+@@ -1854,33 +1854,22 @@ static const iw_handler ti_handler[] =
+ 	(iw_handler) iw_ioctl_giwfreq,			/* SIOCGIWFREQ */
+ 	(iw_handler) iw_ioctl_siwmode,			/* SIOCSIWMODE */
+ 	(iw_handler) iw_ioctl_giwmode,			/* SIOCGIWMODE */
+-	(iw_handler) NULL,	//iw_ioctl_siwsens,			/* SIOCSIWSENS */
+-	(iw_handler) NULL,	//iw_ioctl_giwsens,			/* SIOCGIWSENS */
+-	(iw_handler) NULL /* not used */,		/* SIOCSIWRANGE */
++	(iw_handler) NULL,						/* SIOCSIWSENS - iw_ioctl_siwsens, */
++	(iw_handler) NULL,						/* SIOCGIWSENS - iw_ioctl_giwsens, */
++	(iw_handler) NULL,						/* SIOCSIWRANGE */
+ 	(iw_handler) iw_ioctl_giwrange,			/* SIOCGIWRANGE */
+-	(iw_handler) NULL /* not used */,		/* SIOCSIWPRIV */
+-	(iw_handler) NULL /* kernel code */,	/* SIOCGIWPRIV */
+-	(iw_handler) NULL /* not used */,		/* SIOCSIWSTATS */
+-	(iw_handler) NULL /* kernel code */,	/* SIOCGIWSTATS */
+-#if WIRELESS_EXT > 15
+-	iw_handler_set_thrspy,					/* SIOCSIWTHRSPY */
+-	iw_handler_get_thrspy,					/* SIOCGIWTHRSPY */
++	(iw_handler) NULL,						/* SIOCSIWPRIV */
++	(iw_handler) NULL,						/* SIOCGIWPRIV */
++	(iw_handler) NULL,						/* SIOCSIWSTATS */
++	(iw_handler) NULL,						/* SIOCGIWSTATS */
+ 	iw_handler_set_spy,						/* SIOCSIWSPY */
+ 	iw_handler_get_spy,						/* SIOCGIWSPY */
+-#else /* WIRELESS_EXT > 15 */
+-	(iw_handler) NULL,						/* SIOCSIWSPY */
+-	(iw_handler) NULL,						/* SIOCGIWSPY */
+-	(iw_handler) NULL,						/* -- hole -- */
+-	(iw_handler) NULL,						/* -- hole -- */
+-#endif /* WIRELESS_EXT > 15 */
++	iw_handler_set_thrspy,					/* SIOCSIWTHRSPY */
++	iw_handler_get_thrspy,					/* SIOCGIWTHRSPY */
+ 	(iw_handler) iw_ioctl_siwap,			/* SIOCSIWAP */
+ 	(iw_handler) iw_ioctl_giwap,			/* SIOCGIWAP */
+-#if WIRELESS_EXT > 17
+ 	(iw_handler) iw_ioctl_siwmlme,			/* SIOCSIWMLME */
+-#else /* WIRELESS_EXT > 17 */
+-	(iw_handler) NULL,				/* -- hole -- */
+-#endif /* WIRELESS_EXT > 17 */
+-	(iw_handler) iw_ioctl_giwaplist,		/* SIOCGIWAPLIST */
++	(iw_handler) iw_ioctl_giwaplist,		/* SIOCGIWAPLIST - Deprecated */
+ 	(iw_handler) iw_ioctl_siwscan,			/* SIOCSIWSCAN */
+ 	(iw_handler) iw_ioctl_giwscan,			/* SIOCGIWSCAN */
+ 	(iw_handler) iw_ioctl_siwessid,			/* SIOCSIWESSID */
+@@ -1903,7 +1892,6 @@ static const iw_handler ti_handler[] =
+ 	(iw_handler) iw_ioctl_giwencode,		/* SIOCGIWENCODE */
+ 	(iw_handler) iw_ioctl_siwpower,			/* SIOCSIWPOWER */
+ 	(iw_handler) iw_ioctl_giwpower,			/* SIOCGIWPOWER */
+-#if WIRELESS_EXT > 17
+ 	(iw_handler) NULL,						/* -- hole -- */
+ 	(iw_handler) NULL,						/* -- hole -- */
+ 	(iw_handler) iw_ioctl_siwgenie,			/* SIOCSIWGENIE */
+@@ -1913,8 +1901,6 @@ static const iw_handler ti_handler[] =
+ 	(iw_handler) iw_ioctl_siwencodeext,		/* SIOCSIWENCODEEXT */
+ 	(iw_handler) iw_ioctl_giwencodeext,		/* SIOCGIWENCODEEXT */
+ 	(iw_handler) NULL,						/* SIOCSIWPMKSA */
+-	(iw_handler) NULL,						/* -- hole -- */
+-#endif /* WIRELESS_EXT > 17 */
+ };
+ 
+ #if 0
+@@ -1935,16 +1921,11 @@ static const struct iw_handler_def ti_iw_handler_def =
+ 	.standard	= (iw_handler *) ti_handler,
+ //	.private	= (iw_handler *) ti_private_handler,
+ //	.private_args	= (struct iw_priv_args *) ti_priv,
+-#if WIRELESS_EXT == 16
+-//	.spy_offset	= offsetof(struct hostap_interface, spy_data),
+-#endif /* WIRELESS_EXT == 16 */
+-#if WIRELESS_EXT > 16
+-//	.get_wireless_stats = ti_get_wireless_stats,
+-#endif /* WIRELESS_EXT > 16 */
++	.get_wireless_stats = ti_get_wireless_stats,
+ };
+ 
+ void tiwlan_iwhandler_init(struct net_device *dev)
+ {
+    dev->wireless_handlers = (struct iw_handler_def *) &ti_iw_handler_def;
+-   printk("CJP: wext start :: tiwlan_iwhandler_init");
++   printk("TIWLAN :: Wireless Extentions Active");
+ }
+-- 
+1.6.3.1
+
