@@ -1,5 +1,5 @@
-#! /bin/sh 
-#
+#!/bin/sh
+
 ### BEGIN INIT INFO
 # Provides:          pndnotifyd
 # Required-Start:    #adjust
@@ -10,35 +10,64 @@
  
 PID=`pidof -o %PPID -x pndnotifyd`
 PNDNOTIFY='/usr/bin/pndnotifyd' #adjust
- 
+
+DESC="Pandora PND Deamon"
+NAME="pndnotifyd"
+
+d_stop() {
+	if [ $PID ]
+	then
+		kill $PID
+	else
+		echo "$DESC: $NAME not running."
+	fi
+}
+
+d_start() {
+	if [ $PID ]
+	then
+		echo "$DESC: $NAME already running."
+	else
+		$PNDNOTIFY -d
+	fi
+}
+
+d_reload() {
+	if [ $PID ]
+	then
+		kill -HUP $PID
+	else
+		echo "$DESC: $NAME not running."
+	fi
+}
+
 case "$1" in
-start)
-	# Start daemon.
-	echo "starting $PID"
-                        if [ $PID ]
-                        then
-                                echo "pndnotifyd already running."
-                        else
-				$PNDNOTIFY -d
-				echo "started pndnotifyd"
-                        fi
- 
+  start)
+	echo -n "Starting $DESC: $NAME"
+	d_start
+	echo "."
 	;;
-stop)
-	# Stop daemon.
-	kill $PID
+  stop)
+	echo -n "Stopping $DESC: $NAME"
+	d_stop
+	echo "."
 	;;
-reload)
-	kill -HUP $PID
+  reload)
+	echo -n "Reloading $DESC: $NAME"
+	d_reload
+	echo "."
+	;;	
+  restart|force-reload)
+	echo -n "Restarting $DESC: $NAME"
+	d_stop
+	sleep 1
+	d_start
+	echo "."
 	;;
-restart|force-reload)
-	$0 stop
-	$0 start
-    ;;
-*)
+  *)
 	echo "Usage: $0 {start|stop|restart|reload|force-reload}" >&2
-	exit 2
+	exit 1
 	;;
 esac
-exit 0
 
+exit 0
