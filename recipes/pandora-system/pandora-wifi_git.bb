@@ -6,11 +6,19 @@ require pandora-wifi.inc
 
 SRC_URI += " \
 	file://rc.tiwifi \
-	file://0001-Initial-work-on-WEXT-support.patch;patch=1 \
-	file://0002-More-cleanup-work-on-WEXT.-Now-at-the-point-that-use.patch;patch=1 \
-	file://0003-Oooops-now-lets-try-something-that-compiles.patch;patch=1 \
-	file://0004-Clean-up-to-use-IW_RETRY_LONG-and-IW_RETRY_SHORT.patch;patch=1 \
-	file://0005-Fix-ooops-I-really-don-t-want-funky-private-features.patch;patch=1 \
+#	file://0001-Initial-work-on-WEXT-support.patch;patch=1 \
+#	file://0002-More-cleanup-work-on-WEXT.-Now-at-the-point-that-use.patch;patch=1 \
+#	file://0003-Oooops-now-lets-try-something-that-compiles.patch;patch=1 \
+#	file://0004-Clean-up-to-use-IW_RETRY_LONG-and-IW_RETRY_SHORT.patch;patch=1 \
+#	file://0005-Fix-ooops-I-really-don-t-want-funky-private-features.patch;patch=1 \
+	file://0001-Fix-in-wlan_cu-makefile-to-make-OUTPUT_DIR-not-fixed.patch;patch=1 \
+	file://0002-Add-in-the-start-of-wireless-extensions-support-ioct.patch;patch=1 \
+	file://0003-Merge-in-latest-wireless-ext.-hacks.patch;patch=1 \
+	file://0004-Default-to-DEBUG-Y-for-testing.patch;patch=1 \
+	file://0005-More-WEXT-cleanup.patch;patch=1 \	
+	file://0006-Add-back-in-missing-header-o.patch;patch=1 \
+	file://0007-Add-iw_ioctl.h-header.patch;patch=1 \
+	file://0008-Update-Wireless-EXT-with-test-code.patch;patch=1 \
 "
 
 inherit update-rc.d

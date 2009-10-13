@@ -1,24 +1,14 @@
-From b7d47a9a3f249777d5bf04e987643d5743ba230c Mon Sep 17 00:00:00 2001
+From ff10751bd182684f71ac7f572c06fb1fc662e5e0 Mon Sep 17 00:00:00 2001
 From: David-John Willis <John.Willis@Distant-earth.com>
-Date: Wed, 10 Jun 2009 21:47:34 +0100
-Subject: [PATCH 1/5] Initial work on WEXT support.
+Date: Tue, 3 Mar 2009 20:36:24 +0000
+Subject: [PATCH 2/5] Add in the start of wireless extensions support (ioctl stuff).
 
 ---
  sta_dk_4_0_4_32/Makefile                   |    1 +
- sta_dk_4_0_4_32/common.inc                 |    2 +-
- sta_dk_4_0_4_32/pform/common/inc/osUtil.h  |    6 +-
- sta_dk_4_0_4_32/pform/common/src/osUtil.c  |   50 +
- sta_dk_4_0_4_32/pform/linux/inc/esta_drv.h |    2 +
- sta_dk_4_0_4_32/pform/linux/inc/iw_ioctl.h |   32 +
- sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c | 1950 ++++++++++++++++++++++++++++
- sta_dk_4_0_4_32/pform/linux/src/osapi.c    |    6 +-
- 8 files changed, 2046 insertions(+), 3 deletions(-)
+ sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c | 1906 ++++++++++++++++++++++++++++
+ sta_dk_4_0_4_32/pform/linux/src/osapi.c    |    7 +-
+ 3 files changed, 1913 insertions(+), 1 deletions(-)
  mode change 100644 => 100755 sta_dk_4_0_4_32/Makefile
- mode change 100644 => 100755 sta_dk_4_0_4_32/common.inc
- mode change 100644 => 100755 sta_dk_4_0_4_32/pform/common/inc/osUtil.h
- mode change 100644 => 100755 sta_dk_4_0_4_32/pform/common/src/osUtil.c
- mode change 100644 => 100755 sta_dk_4_0_4_32/pform/linux/inc/esta_drv.h
- create mode 100755 sta_dk_4_0_4_32/pform/linux/inc/iw_ioctl.h
  create mode 100755 sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
  mode change 100644 => 100755 sta_dk_4_0_4_32/pform/linux/src/osapi.c
 
@@ -36,175 +26,13 @@ index 76fbe48..339cfd5
      $(DK_ROOT)/pform/linux/src/proc_stat.c
      
  ifeq ($(DRIVER_PROFILING),y)
-diff --git a/sta_dk_4_0_4_32/common.inc b/sta_dk_4_0_4_32/common.inc
-old mode 100644
-new mode 100755
-index 17e8ec5..42c15df
---- a/sta_dk_4_0_4_32/common.inc
-+++ b/sta_dk_4_0_4_32/common.inc
-@@ -52,7 +52,7 @@ WORKQUEUE ?= y
- #
- # Enable or disable debugging
- #
--DEBUG ?= n
-+DEBUG ?= y
- 
- #
- # Enable or disable OS and init messages
-diff --git a/sta_dk_4_0_4_32/pform/common/inc/osUtil.h b/sta_dk_4_0_4_32/pform/common/inc/osUtil.h
-old mode 100644
-new mode 100755
-index e7a0de8..91736a7
---- a/sta_dk_4_0_4_32/pform/common/inc/osUtil.h
-+++ b/sta_dk_4_0_4_32/pform/common/inc/osUtil.h
-@@ -334,5 +334,9 @@ ULONG UtilPltRxTxCal(PTIWLN_ADAPTER_T pAdapter, PUCHAR pData, PULONG pOutLength,
- VOID UtilPltRxTxCalCB(TI_HANDLE hAdapter,TI_STATUS status,PUINT8 pReadBuff);
- ULONG UtilPltRxCal(PTIWLN_ADAPTER_T pAdapter, PUCHAR pData, PULONG pOutLength, ULONG InLength);
- ULONG utilRxCalibrationStatus(PTIWLN_ADAPTER_T pAdapter, PUCHAR pData, PULONG pOutLength, ULONG InLength);
-- 
-+ULONG UtilWepKeyGet (PTIWLN_ADAPTER_T pAdapter, PUCHAR pData, ULONG Length);
-+ULONG UtilDesiredRatesSet (PTIWLN_ADAPTER_T pAdapter, PUCHAR pData, ULONG Length);
-+
-+TI_STATUS UtilGetParam(PTIWLN_ADAPTER_T pAdapter, externalParam_e ParamType, PUCHAR pData, ULONG Length);	/* CJP: proto needed */
-+
- #endif		/*__OSUTIL_H_*/
-diff --git a/sta_dk_4_0_4_32/pform/common/src/osUtil.c b/sta_dk_4_0_4_32/pform/common/src/osUtil.c
-old mode 100644
-new mode 100755
-index 757c443..79026fc
---- a/sta_dk_4_0_4_32/pform/common/src/osUtil.c
-+++ b/sta_dk_4_0_4_32/pform/common/src/osUtil.c
-@@ -5588,3 +5588,53 @@ ULONG utilRxCalibrationStatus(
- 
-     return status;
- }
-+
-+ULONG
-+UtilWepKeyGet (
-+   PTIWLN_ADAPTER_T pAdapter,
-+   PUCHAR pData,
-+   ULONG Length)
-+{
-+    securityKeys_t       rsnkey;
-+    securityKeys_t       *wkey;
-+    paramInfo_t          Param;
-+    TI_STATUS            status;
-+
-+    wkey  = (securityKeys_t *)pData;
-+
-+    /* Fill Param fields and get the 802_11 capability information */
-+    Param.paramType   = RSN_KEY_PARAM;
-+    Param.paramLength = Length;
-+    rsnkey.keyIndex = wkey->keyIndex;
-+    Param.content.pRsnKey = &rsnkey;
-+
-+    status = configMgr_getParam(pAdapter->CoreHalCtx, &Param);
-+
-+    if(status != OK)
-+        return NOK;
-+
-+        printk("UtilWepKeyGet 1 KeyIndex  %x , keyLength=%d\n",
-+             Param.content.pRsnKey->keyIndex, Param.content.pRsnKey->encLen);
-+        NdisMoveMemory(wkey, Param.content.pRsnKey, sizeof(securityKeys_t));
-+        printk("UtilWepKeyGet 2 KeyIndex  %x , keyLength=%d\n",
-+             wkey->keyIndex, wkey->encLen);
-+    return status;
-+}
-+
-+ULONG
-+UtilDesiredRatesSet(
-+        PTIWLN_ADAPTER_T pAdapter,
-+        PUCHAR pData,
-+        ULONG Length
-+        )
-+{
-+        UCHAR rate;
-+    ULONG retValue;
-+
-+        rate = (UCHAR) *(PULONG)pData;
-+
-+        retValue = UtilSetParam(pAdapter, SITE_MGR_DESIRED_TX_RATE_PARAM, (PUCHAR)&rate, sizeof(UCHAR));
-+
-+        return retValue;
-+
-+}
-diff --git a/sta_dk_4_0_4_32/pform/linux/inc/esta_drv.h b/sta_dk_4_0_4_32/pform/linux/inc/esta_drv.h
-old mode 100644
-new mode 100755
-index 14a5dd4..4d348ff
---- a/sta_dk_4_0_4_32/pform/linux/inc/esta_drv.h
-+++ b/sta_dk_4_0_4_32/pform/linux/inc/esta_drv.h
-@@ -67,6 +67,8 @@
- #endif
- #include "linux_ioctl_common.h"
- 
-+#include "iw_ioctl.h"
-+
- #define TIWLAN_DRV_NAME    "tiwlan"
- #define TIWLAN_DRV_IF_NAME TIWLAN_DRV_NAME"%d"
- #define TIWLAN_DRV_NAME_WIRELESS_PROTO "IEEE 802.11-DS"
-diff --git a/sta_dk_4_0_4_32/pform/linux/inc/iw_ioctl.h b/sta_dk_4_0_4_32/pform/linux/inc/iw_ioctl.h
-new file mode 100755
-index 0000000..08306a2
---- /dev/null
-+++ b/sta_dk_4_0_4_32/pform/linux/inc/iw_ioctl.h
-@@ -0,0 +1,32 @@
-+/*
-+ *  Copyright (C) 2009 John Willis
-+ *  Copyright (C) 2008 Texas Instruments/Jorjin Technologies inc.
-+ *
-+ *  This program is free software; you can redistribute it and/or modify
-+ *  it under the terms of the GNU General Public License as published by
-+ *  the Free Software Foundation; either version 2 of the License, or
-+ *  (at your option) any later version.
-+ *
-+ *  This program is distributed in the hope that it will be useful,
-+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-+ *  GNU General Public License for more details.
-+ *
-+ *
-+ * This file implements support for Linux Wireless Extensions for TI 1251 driver.
-+ *
-+ */
-+
-+#ifndef _IW_IOCTL_H_
-+#define _IW_IOCTL_H_
-+
-+/*extern ULONG UtilGetParam(
-+			PTIWLN_ADAPTER_T pAdapter,
-+			externalParam_e ParamType,
-+			PUCHAR pData,
-+			ULONG Length
-+			);
-+*/
-+extern void tiwlan_iwhandler_init(struct net_device *dev);
-+
-+#endif /* _IW_IOCTL_H_ */
 diff --git a/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c b/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
 new file mode 100755
-index 0000000..0e28586
+index 0000000..3b02424
 --- /dev/null
 +++ b/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
-@@ -0,0 +1,1950 @@
-+/*
-+ *  Copyright (C) 2009 John Willis
-+ *  Copyright (C) 2008 Texas Instruments/Jorjin Technologies inc.
-+ *
-+ *  This program is free software; you can redistribute it and/or modify
-+ *  it under the terms of the GNU General Public License as published by
-+ *  the Free Software Foundation; either version 2 of the License, or
-+ *  (at your option) any later version.
-+ *
-+ *  This program is distributed in the hope that it will be useful,
-+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-+ *  GNU General Public License for more details.
-+ *
-+ *
-+ * This file implements support for Linux Wireless Extensions for TI 1251 driver.
-+ *
-+ */
+@@ -0,0 +1,1906 @@
++/* ioctl() (mostly Linux Wireless Extensions) routines for TI 1251 driver */
 +
 +#include <linux/if_arp.h>
 +#include <linux/wireless.h>
@@ -301,17 +129,10 @@ index 0000000..0e28586
 +    iw_scanPolicy.bandScanPolicy[ 0 ].immediateScanMethod.method.basicMethodParams.probReqParams.txPowerDbm = 1;
 +}
 +
-+static int iw_ioctl_commit(struct net_device *dev, struct iw_request_info *info, char *name, char *extra)
-+{
-+	return (OK);
-+}
-+
 +static int iw_get_name(struct net_device *dev,
 +			   struct iw_request_info *info,
 +			   char *name, char *extra)
 +{
-+	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
-+	int i;
 +#if IOCTL_DBG
 +	printk("%s Call\n", __FUNCTION__);
 +#endif
@@ -329,16 +150,6 @@ index 0000000..0e28586
 +	}
 +*/
 +	strcpy(name, "IEEE 802.11g");
-+
-+
-+	i = 0;
-+	while (i < IFNAMSIZ && dev->name[i])
-+		printk("%c", dev->name[i++]);
-+	printk("\n");
-+
-+	for (i = 0; i < ETH_ADDR_SIZE; i++)
-+		printk("%x:", pAdapter->CurrentAddr[i]);
-+	printk("\n");
 +
 +	return 0;
 +}
@@ -586,7 +397,7 @@ index 0000000..0e28586
 +
 +    list = (OS_802_11_BSSID_LIST_EX *) list_buf;
 +    bssid = &list->Bssid[0];
-+    printk("bssid 0x%x\n",(unsigned int)bssid);
++    printk("bssid 0x%x\n",bssid);
 +    number_items = list->NumberOfItems;
 +    printk("number_items 0x%x\n",number_items);
 +    
@@ -777,7 +588,9 @@ index 0000000..0e28586
 +	return 0;
 +}
 +
-+static int iw_ioctl_giwfreq(struct net_device *dev, struct iw_request_info *info, struct iw_freq *freq, char *extra)
++static int iw_ioctl_giwfreq(struct net_device *dev,
++				struct iw_request_info *info,
++				struct iw_freq *freq, char *extra)
 +{
 +	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
 +	ULONG val, len;
@@ -785,11 +598,6 @@ index 0000000..0e28586
 +#if IOCTL_DBG
 +	printk("%s Call\n", __FUNCTION__);
 +#endif
-+	if (!pAdapter->CoreHalCtx) {
-+		printk("CJP: CoreHalCtx is NULL - config Mgr has vanished???\n");
-+		return -EINVAL;
-+	}
-+
 +	UtilDesiredChannelGet(pAdapter, (UINT8 *)&val, &len);
 +	if (val < 1 || val > FREQ_COUNT)
 +		return -EINVAL;
@@ -908,7 +716,6 @@ index 0000000..0e28586
 +	return 0;
 +}
 +
-+#if 0
 +int
 +iw_ioctl_siwsens(struct ieee80211com *ic,
 +			struct iw_request_info *info,
@@ -927,7 +734,6 @@ index 0000000..0e28586
 +
 +	return 0;
 +}
-+#endif
 +
 +int
 +iw_ioctl_giwrange(struct net_device *dev,
@@ -1060,7 +866,7 @@ index 0000000..0e28586
 +	case IW_POWER_ALL_R:
 +	case IW_POWER_ON:
 +		val = POWER_MODE_AUTO;
-+		UtilPowerModeSet(pAdapter, (UINT8 *)&val, sizeof(PowerMgr_PowerMode_e));
++		UtilPowerModeSet(pAdapter, &val, sizeof(PowerMgr_PowerMode_e));
 +		break;
 +	default:
 +		return -EINVAL;
@@ -1081,9 +887,6 @@ index 0000000..0e28586
 +				 struct iw_request_info *info,
 +				 struct iw_param *rrq, char *extra)
 +{
-+
-+	printk("iw_ioctl_giwpower() tmp removal");
-+#if 0	// cjp
 +	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
 +	UINT32 val=POWER_MODE_ACTIVE, len;
 +	
@@ -1098,7 +901,7 @@ index 0000000..0e28586
 +	}
 +
 +	rrq->disabled = 0;
-+#endif
++
 +	return 0;
 +}
 +
@@ -1198,12 +1001,11 @@ index 0000000..0e28586
 +				struct iw_request_info *info,
 +				struct iw_point *data, char *extra)
 +{
-+	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
-+	int ret;
-+
 +#if IOCTL_DBG
 +	printk("%s Call\n", __FUNCTION__);
 +#endif
++	PTIWLN_ADAPTER_T pAdapter = &(((tiwlan_net_dev_t *)(dev->priv))->adapter);
++	int ret;
 +	
 +	scan_TimeStamp = jiffies;
 +	init_scan_params();
@@ -1234,7 +1036,7 @@ index 0000000..0e28586
 +	int chan;
 +	u8 *pos;
 +	spinlock_t lock;
-+
++	
 +#if IOCTL_DBG
 +	printk("%s Call\n", __FUNCTION__);
 +#endif
@@ -1253,7 +1055,7 @@ index 0000000..0e28586
 +		iwe.u.ap_addr.sa_family = ARPHRD_ETHER;
 +		memcpy(iwe.u.ap_addr.sa_data, bssid->MacAddress, ETH_ALEN);
 +		iwe.len = IW_EV_ADDR_LEN;
-+		current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe,
++		current_ev = iwe_stream_add_event(current_ev, end_buf, &iwe,
 +						  IW_EV_ADDR_LEN);
 +						  
 +		memset(&iwe, 0, sizeof(iwe));
@@ -1261,20 +1063,20 @@ index 0000000..0e28586
 +		iwe.u.data.length = bssid->Ssid.SsidLength;
 +		iwe.u.data.flags = 1;
 +		iwe.len = IW_EV_POINT_LEN + iwe.u.data.length;
-+		printk("essid=%s len=%d\n", bssid->Ssid.Ssid, bssid->Ssid.SsidLength);
-+		current_ev = iwe_stream_add_point(info, current_ev, end_buf, &iwe, (char *)bssid->Ssid.Ssid);
++//		printk("essid=%s len=%d\n", bssid->Ssid.Ssid, bssid->Ssid.SsidLength);
++		current_ev = iwe_stream_add_point(current_ev, end_buf, &iwe, (char *)bssid->Ssid.Ssid);
 +							  
 +		memset(&iwe, 0, sizeof(iwe));
 +		iwe.cmd = SIOCGIWMODE;
 +		capabilities = bssid->Union.Capabilities;
-+		if (capabilities & (WLAN_CAPABILITY_ESS |
++		if (capabilities & (WLAN_CAPABILITY_BSS |
 +				    WLAN_CAPABILITY_IBSS)) {
-+			if (capabilities & WLAN_CAPABILITY_ESS)
++			if (capabilities & WLAN_CAPABILITY_BSS)
 +				iwe.u.mode = IW_MODE_MASTER;
 +			else
 +				iwe.u.mode = IW_MODE_ADHOC;
 +			iwe.len = IW_EV_UINT_LEN;
-+			current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe,
++			current_ev = iwe_stream_add_event(current_ev, end_buf, &iwe,
 +							  IW_EV_UINT_LEN);
 +		}
 +		
@@ -1285,7 +1087,7 @@ index 0000000..0e28586
 +			iwe.u.freq.m = chan;
 +			iwe.u.freq.e = 1;
 +			iwe.len = IW_EV_FREQ_LEN;
-+			current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe,
++			current_ev = iwe_stream_add_event(current_ev, end_buf, &iwe,
 +							  IW_EV_FREQ_LEN);
 +		}
 +		
@@ -1298,7 +1100,7 @@ index 0000000..0e28586
 +				| IW_QUAL_NOISE_UPDATED
 +				| IW_QUAL_QUAL_INVALID;
 +		iwe.len = IW_EV_QUAL_LEN;
-+		current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe,
++		current_ev = iwe_stream_add_event(current_ev, end_buf, &iwe,
 +						  IW_EV_QUAL_LEN);
 +
 +		memset(&iwe, 0, sizeof(iwe));
@@ -1309,7 +1111,7 @@ index 0000000..0e28586
 +			iwe.u.data.flags = IW_ENCODE_DISABLED;
 +		iwe.u.data.length = 0;
 +		iwe.len = IW_EV_POINT_LEN + iwe.u.data.length;
-+		current_ev = iwe_stream_add_point(info, current_ev, end_buf, &iwe, "");
++		current_ev = iwe_stream_add_point(current_ev, end_buf, &iwe, "");
 +		
 +		/* TODO: add SuppRates into BSS table */
 +		memset(&iwe, 0, sizeof(iwe));
@@ -1322,7 +1124,7 @@ index 0000000..0e28586
 +			/* Bit rate given in 500 kb/s units (+ 0x80) */
 +			iwe.u.bitrate.value = ((pos[j] & 0x7f) * 500000);
 +			current_val = iwe_stream_add_value(
-+				info, current_ev, current_val, end_buf, &iwe,
++				current_ev, current_val, end_buf, &iwe,
 +				IW_EV_PARAM_LEN);
 +		}
 +		/* Check if we added any event */
@@ -1335,7 +1137,7 @@ index 0000000..0e28586
 +		sprintf(buf, "bcn_int=%d",
 +			bssid->Configuration.BeaconPeriod);
 +		iwe.u.data.length = strlen(buf);
-+		current_ev = iwe_stream_add_point(info, current_ev, end_buf, &iwe,
++		current_ev = iwe_stream_add_point(current_ev, end_buf, &iwe,
 +						  buf);
 +
 +		if (capabilities & WLAN_CAPABILITY_IBSS) {
@@ -1343,7 +1145,7 @@ index 0000000..0e28586
 +			iwe.cmd = IWEVCUSTOM;
 +			sprintf(buf, "atim=%d", bssid->Configuration.ATIMWindow);
 +			iwe.u.data.length = strlen(buf);
-+			current_ev = iwe_stream_add_point(info, current_ev, end_buf,
++			current_ev = iwe_stream_add_point(current_ev, end_buf,
 +							  &iwe, buf);
 +		}
 +		
@@ -1353,13 +1155,13 @@ index 0000000..0e28586
 +        pVarIes = (OS_802_11_VARIABLE_IEs*)&bssid->IEs[IELen];
 +		while (IELen < bssid->IELength)
 +		{
-+			printk("IELen=%d pVarIes->ElementID=%d\n", IELen, pVarIes->ElementID);                
++//			printk("IELen=%d pVarIes->ElementID=%d\n", IELen, pVarIes->ElementID);                
 +			if (pVarIes->ElementID == MFIE_TYPE_RSN || pVarIes->ElementID == MFIE_TYPE_GENERIC) {
 +				memset(&iwe, 0, sizeof(iwe));
 +				iwe.cmd = IWEVGENIE;
 +				iwe.u.data.length = pVarIes->Length;
 +				current_ev = iwe_stream_add_point(
-+						info, current_ev, end_buf, &iwe, (char *)pVarIes);
++					current_ev, end_buf, &iwe, (char *)pVarIes);
 +			}
 +		
 +            IELen += (pVarIes->Length + 2);		
@@ -1371,7 +1173,7 @@ index 0000000..0e28586
 +			spin_unlock_bh(&lock);
 +			return -E2BIG;
 +		}
-+		printk("current_ev=%x\n", current_ev);
++//		printk("current_ev=%x\n", current_ev);
 +        bssid = (OS_802_11_BSSID_EX *) (((char *) bssid) + bssid->Length);
 +	}
 +	
@@ -2035,7 +1837,7 @@ index 0000000..0e28586
 +
 +static const iw_handler ti_handler[] =
 +{
-+	(iw_handler) iw_ioctl_commit,						/* SIOCSIWCOMMIT */
++	(iw_handler) NULL,						/* SIOCSIWCOMMIT */
 +	(iw_handler) iw_get_name,				/* SIOCGIWNAME */
 +	(iw_handler) NULL,						/* SIOCSIWNWID */
 +	(iw_handler) NULL,						/* SIOCGIWNWID */
@@ -2043,8 +1845,8 @@ index 0000000..0e28586
 +	(iw_handler) iw_ioctl_giwfreq,			/* SIOCGIWFREQ */
 +	(iw_handler) iw_ioctl_siwmode,			/* SIOCSIWMODE */
 +	(iw_handler) iw_ioctl_giwmode,			/* SIOCGIWMODE */
-+	(iw_handler) NULL,	//iw_ioctl_siwsens,			/* SIOCSIWSENS */
-+	(iw_handler) NULL,	//iw_ioctl_giwsens,			/* SIOCGIWSENS */
++	(iw_handler) iw_ioctl_siwsens,			/* SIOCSIWSENS */
++	(iw_handler) iw_ioctl_giwsens,			/* SIOCGIWSENS */
 +	(iw_handler) NULL /* not used */,		/* SIOCSIWRANGE */
 +	(iw_handler) iw_ioctl_giwrange,			/* SIOCGIWRANGE */
 +	(iw_handler) NULL /* not used */,		/* SIOCSIWPRIV */
@@ -2052,10 +1854,10 @@ index 0000000..0e28586
 +	(iw_handler) NULL /* not used */,		/* SIOCSIWSTATS */
 +	(iw_handler) NULL /* kernel code */,	/* SIOCGIWSTATS */
 +#if WIRELESS_EXT > 15
-+	iw_handler_set_thrspy,					/* SIOCSIWTHRSPY */
-+	iw_handler_get_thrspy,					/* SIOCGIWTHRSPY */
-+	iw_handler_set_spy,						/* SIOCSIWSPY */
-+	iw_handler_get_spy,						/* SIOCGIWSPY */
++	(iw_handler) NULL,						/* SIOCSIWSPY */
++	(iw_handler) NULL,						/* SIOCGIWSPY */
++	(iw_handler) NULL,						/* SIOCSIWTHRSPY */
++	(iw_handler) NULL,						/* SIOCGIWTHRSPY */
 +#else /* WIRELESS_EXT > 15 */
 +	(iw_handler) NULL,						/* SIOCSIWSPY */
 +	(iw_handler) NULL,						/* SIOCGIWSPY */
@@ -2134,20 +1936,20 @@ index 0000000..0e28586
 +
 +void tiwlan_iwhandler_init(struct net_device *dev)
 +{
-+   dev->wireless_handlers = (struct iw_handler_def *) &ti_iw_handler_def;
-+   printk("CJP: wext start :: tiwlan_iwhandler_init");
++   dev->wireless_handlers = (struct iw_handler_def *) &ti_iw_handler_def;	
 +}
 diff --git a/sta_dk_4_0_4_32/pform/linux/src/osapi.c b/sta_dk_4_0_4_32/pform/linux/src/osapi.c
 old mode 100644
 new mode 100755
-index a5a798c..3d657e7
+index a5a798c..002fd60
 --- a/sta_dk_4_0_4_32/pform/linux/src/osapi.c
 +++ b/sta_dk_4_0_4_32/pform/linux/src/osapi.c
-@@ -99,7 +99,11 @@ static int os_tl_timerHandlr(struct tiwlan_req *req);
+@@ -99,7 +99,12 @@ static int os_tl_timerHandlr(struct tiwlan_req *req);
  static void os_timerHandlr(unsigned long parm);
  static void send_frag(char* msg, int message_len, int level, int module);
  
 -BOOL use_debug_module = FALSE;
++/* linux/irq.h declerations */
 +extern void disable_irq(unsigned int);
 +extern void enable_irq(unsigned int);
 +

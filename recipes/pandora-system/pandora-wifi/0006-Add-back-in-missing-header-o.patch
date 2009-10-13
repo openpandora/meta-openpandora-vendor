@@ -1,0 +1,24 @@
+From b1c923be9d2ed598e6d468a3f05ce921bb13b122 Mon Sep 17 00:00:00 2001
+From: David-John Willis <John.Willis@Distant-earth.com>
+Date: Fri, 28 Aug 2009 15:23:35 +0100
+Subject: [PATCH 6/6] Add back in missing header :-o
+
+---
+ sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c b/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
+index a17b2f6..a975afa 100755
+--- a/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
++++ b/sta_dk_4_0_4_32/pform/linux/src/iw_ioctl.c
+@@ -37,6 +37,7 @@
+ #include "osUtil.h"
+ #include "scanMngrTypes.h"
+ #include "scanMngrTypes.h"
++#include "iw_ioctl.h"
+ 
+ #define IOCTL_DBG 1
+ 
+-- 
+1.6.3.1
+
