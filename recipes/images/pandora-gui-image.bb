@@ -1,32 +1,32 @@
-# Default matchbox image for the Pandora
+# Matchbox/GPE image for the Pandora handheld console
+
+XSERVER ?= " \
+    xserver-xorg \
+    xf86-input-evdev \
+    xf86-input-mouse \
+    xf86-video-fbdev \
+    xf86-input-keyboard \
+"
 
 IMAGE_LINGUAS = "de-de fr-fr en-gb en-us pt-br es-es kn-in ml-in ta-in"
 
-XSERVER ?= "xserver-xorg \
-           xf86-input-evdev \
-           xf86-input-mouse \
-           xf86-video-fbdev \
-           xf86-input-keyboard \
-"
-
-ANGSTROM_EXTRA_INSTALL ?= ""
+inherit image
 
 export IMAGE_BASENAME = "pandora-gui-image"
+
+SPLASH = "psplash-omap3pandora"
 
 DEPENDS = "task-base"
 
 IMAGE_INSTALL += " \
-    ${XSERVER} \
-    ${ANGSTROM_EXTRA_INSTALL} \
-	task-pandora-gui \
+    task-pandora-gui \
+    ${SPLASH} \	
 "
 
 IMAGE_PREPROCESS_COMMAND = "create_etc_timestamp"
 
 #zap root password for release images
 #ROOTFS_POSTPROCESS_COMMAND += '${@base_conditional("DISTRO_TYPE", "release", "zap_root_password; ", "",d)}'
-
-inherit image
 
 # Helper to say what image we built, include GIT tag and image name.
 PANDORA_VERSION_FILE = "${IMAGE_ROOTFS}/${sysconfdir}/op-version"
