@@ -5,22 +5,30 @@ KERNEL_IMAGETYPE = "uImage"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-#GIT HEAD for Rev2
-SRCREV = "7aeecd01683d0b1087122d442346b2945c480cf7"
+# ----- Revision 2 Boards -----
 
-#Rev2
+#GIT HEAD for Rev2 - Same as Rev3 without Batt Fuel Guage and Nub/Button changes.
+
+#SRCREV = "45dce3afbd5c2d2af899ae7e7a107d01a5c15558"
+
+#SRC_URI = " \
+#           git://git.openpandora.org/pandora-kernel.git;protocol=git;branch=rev2 \
+#"
+
+# -----------------------------
+
+
+# ----- Revision 3 > Boards -----
+
+#GIT HEAD for Rev3 > (i.e. Shipping units) - Will run on Rev2 boards without Nubs and an incorrect Start button.
+
+SRCREV = "f7b5502275bd0952c2a0935cb47e8f47b55af563"
+
 SRC_URI = " \
            git://git.openpandora.org/pandora-kernel.git;protocol=git;branch=pandora-27-omap1 \
-"
+"          
 
-
-#GIT HEAD for Rev3
-#SRCREV = "4162fb142cd8d5a435b69fa44d6b1eec349420c9"
-
-#Rev3
-#SRC_URI = " \
-#           git://git.openpandora.org/pandora-kernel.git;protocol=git;branch=rev3 \
-#"          
+# -------------------------------
 
 PV = "2.6.27-pandora+${PR}+git${SRCREV}"
 
@@ -48,10 +56,10 @@ SRC_URI_append = " \
            file://0001-Removed-resolution-check-that-prevents-scaling-when.patch;patch=1 \
            file://0001-Implement-downsampling-with-debugs.patch;patch=1 \
            file://sitecomwl168-support.diff;patch=1 \
-#	file://pvr/dispc.patch;patch=1 \
            file://musb-rxtx.patch;patch=1 \
-#	file://0001-implement-TIF_RESTORE_SIGMASK-support-and-enable-the.patch;patch=1 \
            file://0001-SDIO-patches-to-put-some-card-into-into-platform-dev.patch;patch=1 \
+           file://0002-Add-a-very-basic-platform-driver-module-to-bring-up-.patch;patch=1 \
+           file://0003-Remove-old-msm_wifi-hack-as-the-temp-platform-driver.patch;patch=1 \
 "
 	
 S = "${WORKDIR}/git"

@@ -1,0 +1,144 @@
+From d0e67607c9eba9423b65875da2c732ed690a2292 Mon Sep 17 00:00:00 2001
+From: David-John Willis <John.Willis@Distant-earth.com>
+Date: Sun, 30 Aug 2009 19:31:31 +0100
+Subject: [PATCH 2/2] Add a very basic platform driver module to bring up the SDIO WiFi so that the platform stuff is no longer hacked into the WL1251 driver (TODO: Clean up and move somewhere more mainline friendly).
+
+---
+ arch/arm/mach-omap2/Kconfig                   |    5 ++
+ arch/arm/mach-omap2/Makefile                  |    1 +
+ arch/arm/mach-omap2/board-omap3pandora-wifi.c |   89 +++++++++++++++++++++++++
+ 3 files changed, 95 insertions(+), 0 deletions(-)
+ mode change 100644 => 100755 arch/arm/mach-omap2/Kconfig
+ mode change 100644 => 100755 arch/arm/mach-omap2/Makefile
+ create mode 100755 arch/arm/mach-omap2/board-omap3pandora-wifi.c
+
+diff --git a/arch/arm/mach-omap2/Kconfig b/arch/arm/mach-omap2/Kconfig
+old mode 100644
+new mode 100755
+index fd62c7e..9f6f7a2
+--- a/arch/arm/mach-omap2/Kconfig
++++ b/arch/arm/mach-omap2/Kconfig
+@@ -130,6 +130,11 @@ config MACH_OVERO
+ config MACH_OMAP3_PANDORA
+ 	bool "OMAP3 Pandora"
+ 	depends on ARCH_OMAP3 && ARCH_OMAP34XX
++	
++config OMAP3_PANDORA_WIFI
++	depends on MACH_OMAP3_PANDORA
++	default m
++	tristate "OpenPandora Wifi GPIO driver"
+ 
+ config OMAP_TICK_GPTIMER
+ 	int "GPTIMER used for system tick timer"
+diff --git a/arch/arm/mach-omap2/Makefile b/arch/arm/mach-omap2/Makefile
+old mode 100644
+new mode 100755
+index e6e16bb..8ba0ad9
+--- a/arch/arm/mach-omap2/Makefile
++++ b/arch/arm/mach-omap2/Makefile
+@@ -83,6 +83,7 @@ obj-$(CONFIG_MACH_OMAP3_PANDORA)	+= board-omap3pandora.o \
+ 					   hsmmc.o \
+ 					   usb-musb.o \
+ 					   usb-ehci.o
++obj-$(CONFIG_OMAP3_PANDORA_WIFI)	+= board-omap3pandora-wifi.o					   
+ 
+ # TUSB 6010 chips
+ obj-$(CONFIG_MACH_OMAP2_TUSB6010)	+= usb-tusb6010.o
+diff --git a/arch/arm/mach-omap2/board-omap3pandora-wifi.c b/arch/arm/mach-omap2/board-omap3pandora-wifi.c
+new file mode 100755
+index 0000000..2968340
+--- /dev/null
++++ b/arch/arm/mach-omap2/board-omap3pandora-wifi.c
+@@ -0,0 +1,89 @@
++/*
++ * board-omap3pandora-wifi.c
++ *
++ * WiFi setup (SDIO) for Pandora handheld console
++ * Author: John Willis <John.Willis@Distant-earth.com>
++ *
++ * Based on /arch/arm/mach-msm/msm_wifi.c
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * version 2 as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
++ * 02110-1301 USA
++ *
++ */
++
++#include <linux/platform_device.h>
++#include <linux/wifi_tiwlan.h>
++
++static int wifi_probe(struct platform_device *pdev)
++{
++	struct wifi_platform_data *wifi_ctrl =
++		(struct wifi_platform_data *)(pdev->dev.platform_data);
++
++	printk(KERN_DEBUG "Pandora WiFi: Probe started\n");
++
++	if (!wifi_ctrl)
++		return -ENODEV;
++
++	if (wifi_ctrl->set_power)
++		wifi_ctrl->set_power(1);	/* Power On */
++	if (wifi_ctrl->set_reset)
++		wifi_ctrl->set_reset(0);	/* Reset clear */
++	if (wifi_ctrl->set_carddetect)
++		wifi_ctrl->set_carddetect(1);	/* CardDetect (0->1) */
++
++	printk(KERN_DEBUG "Pandora WiFi: Probe done\n");
++	return 0;
++}
++
++static int wifi_remove(struct platform_device *pdev)
++{
++	struct wifi_platform_data *wifi_ctrl =
++		(struct wifi_platform_data *)(pdev->dev.platform_data);
++
++	printk(KERN_DEBUG "Pandora WiFi: Remove started\n");
++	if (!wifi_ctrl)
++		return -ENODEV;
++
++	if (wifi_ctrl->set_carddetect)
++		wifi_ctrl->set_carddetect(0);	/* CardDetect (1->0) */
++	if (wifi_ctrl->set_reset)
++		wifi_ctrl->set_reset(1);	/* Reset active */
++	if (wifi_ctrl->set_power)
++		wifi_ctrl->set_power(0);	/* Power Off */
++
++	printk(KERN_DEBUG "Pandora WiFi: Remove finished\n");
++	return 0;
++}
++
++static struct platform_driver wifi_device = {
++	.probe		= wifi_probe,
++	.remove		= wifi_remove,
++	.driver		= {
++	.name   = "pandora_wifi",
++	},
++};
++
++static int __init pandora_wifi_sdio_init(void)
++{
++	return platform_driver_register(&wifi_device);
++}
++
++static void __exit pandora_wifi_sdio_exit(void)
++{
++	platform_driver_unregister(&wifi_device);
++}
++
++module_init(pandora_wifi_sdio_init);
++module_exit(pandora_wifi_sdio_exit);
++MODULE_LICENSE("GPL");
+-- 
+1.6.3.1
+

@@ -1,0 +1,25 @@
+From a699035527e66a280267cbfefa0498b6fd628dee Mon Sep 17 00:00:00 2001
+From: David-John Willis <John.Willis@Distant-earth.com>
+Date: Mon, 31 Aug 2009 12:06:17 +0100
+Subject: [PATCH 3/3] Remove old msm_wifi hack as the temp platform driver now abstracts this from wl1251.
+
+---
+ arch/arm/mach-omap2/board-omap3pandora.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/arch/arm/mach-omap2/board-omap3pandora.c b/arch/arm/mach-omap2/board-omap3pandora.c
+index 031ad2d..da35a62 100755
+--- a/arch/arm/mach-omap2/board-omap3pandora.c
++++ b/arch/arm/mach-omap2/board-omap3pandora.c
+@@ -486,7 +486,7 @@ struct wifi_platform_data pandora_wifi_control = {
+ };
+ 
+ static struct platform_device pandora_wifi = {
+-       .name           = "msm_wifi", /* Hack to work with hardcode in driver */
++       .name           = "pandora_wifi",
+        .id             = 1,
+        .num_resources  = 0,
+        .resource       = NULL,
+-- 
+1.6.3.1
+
