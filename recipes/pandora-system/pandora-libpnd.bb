@@ -1,7 +1,7 @@
 DESCRIPTION = "Support for the PND format in Pandora images (lib, daemon, init script etc.)"
 LICENSE = "lGPL"
 
-PR = "r1.8"
+PR = "r2"
 
 PARALLEL_MAKE = ""
 
@@ -10,7 +10,7 @@ SRC_URI = " \
           file://rc.libpnd \
 "
 
-SRCREV = "b2d3c0871614632279192ef86e5affd75312f01b"
+SRCREV = "b945d7a6b257ab73f11f7c97448dae3600a9484c"
 
 S = "${WORKDIR}/git"
 
@@ -52,11 +52,13 @@ do_install() {
           
           install -d ${D}${sysconfdir}/init.d/
           cp -pP ${WORKDIR}/rc.libpnd ${D}${sysconfdir}/init.d/libpnd-init
+          
+          install -d ${D}/home/
+          install -d ${D}${prefix}/local/share/applications/
 }
 
-#pkg_postinst() {
-##!/bin/sh
-#ln -sf /usr/lib/libpnd.so.1.0.1 /usr/lib/libpnd.so.1 
-#}
+pkg_postinst() {
+  ln -sf /usr/lib/libpnd.so.1.0.1 /usr/lib/libpnd.so.1 
+}
 
 FILES_${PN} += "${bindir} ${sbindir} ${prefix}/pandora/*"
