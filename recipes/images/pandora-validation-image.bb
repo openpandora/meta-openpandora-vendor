@@ -1,25 +1,26 @@
 # Validation image for Pandora handheld console
 # for hardware testing and flashing images to NAND if copied to the SD in the correct places.
 
-IMAGE_LINGUAS = "de-de fr-fr en-gb en-us pt-br es-es kn-in ml-in ta-in"
+XSERVER ?= " \
+    xserver-xorg \
+    xf86-input-evdev \
+    xf86-input-mouse \
+    xf86-video-fbdev \
+    xf86-input-keyboard \
+"
 
-ANGSTROM_EXTRA_INSTALL ?= ""
+inherit image
 
 export IMAGE_BASENAME = "pandora-validation-image"
 
 DEPENDS = "task-base"
 
 IMAGE_INSTALL += " \
-    ${ANGSTROM_EXTRA_INSTALL} \
-	task-pandora-validation \
+  task-pandora-core \
+  task-pandora-validation \
 "
  
 IMAGE_PREPROCESS_COMMAND = "create_etc_timestamp"
-
-#zap root password for release images
-#ROOTFS_POSTPROCESS_COMMAND += '${@base_conditional("DISTRO_TYPE", "release", "zap_root_password; ", "",d)}'
-
-inherit image
 
 # Helper to say what image we built, include GIT tag and image name.
 PANDORA_VERSION_FILE = "${IMAGE_ROOTFS}/${sysconfdir}/op-version"

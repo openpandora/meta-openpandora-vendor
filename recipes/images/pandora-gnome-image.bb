@@ -22,6 +22,7 @@ SPLASH = "psplash-omap3pandora"
 DEPENDS = "task-base"
 
 IMAGE_INSTALL += " \
+  task-pandora-core \
   task-pandora-gnome \
   ${SPLASH} \
  "

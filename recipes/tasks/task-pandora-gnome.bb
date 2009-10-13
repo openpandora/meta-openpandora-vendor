@@ -186,7 +186,7 @@ XSERVER_BASE = " \
   xvinfo \
 "
 
-RDEPENDS_${PN} = "\
+RDEPENDS_${PN} = " \
   task-pandora-core \
   ${ANGSTROM_EXTRA_INSTALL} \
   ${APPS} \

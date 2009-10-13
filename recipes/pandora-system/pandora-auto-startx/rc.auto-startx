@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# /etc/init.d/auto-startx: start/stop X windows
+#
+
+
+case $1 in
+start)
+	if [ ! -f /etc/default/autologin ] ; then
+		if [ -x /usr/sbin/first-boot-wizard.sh ] ; then
+			/usr/bin/xinit /usr/sbin/first-boot-wizard.sh 2>&1 > /var/log/first-boot-wizard.log
+		else
+			echo -n "No user specified for auto login. Creating..."
+			adduser --disabled-password "Pandora User,,," user
+			echo 'export PREFERED_USER=user' > /etc/default/autologin
+			echo "Done."
+		fi
+	fi
+
+	. /etc/default/autologin
+
+	mkdir -p /var/run/console && touch /var/run/console/$PREFERED_USER
+
+	/bin/su - $PREFERED_USER -l -c "/bin/bash --login -c startx >/dev/null 2>&1" &
+	;;
+stop)
+	killall Xorg
+	;;
+restart)
+	$0 stop
+	sleep 2
+	$0 start
+	;;
+*)
+	echo "usage: $0 [start|stop|restart]"
+	;;
+esac
+ 
+# End of file

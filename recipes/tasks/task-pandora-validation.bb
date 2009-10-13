@@ -1,0 +1,11 @@
+DESCRIPTION = "Task file for validation apps and scripts in the Pandora image"
+
+# Don't forget to bump the PR if you change it.
+
+PR = "r3.1"
+
+inherit task 
+
+RDEPENDS_${PN} = "\
+
+PACKAGE_ARCH = "${MACHINE_ARCH}"
