@@ -4,9 +4,10 @@ DESC="WL1251 MAC80211 Wireless LAN driver"
 NAME="wl1251"
 
 d_stop() {
-	if `grep -q wl12xx /proc/modules` ; then
-		rmmod wl12xx_sdio
-		rmmod wl12xx
+	if `grep -q wl1251 /proc/modules` ; then
+		rmmod wl1251_sdio
+		rmmod wl1251
+		rmmod board-omap3pandora-wifi
 	fi
 	if `grep -q mac80211 /proc/modules` ; then
 		rmmod mac80211
@@ -20,6 +21,7 @@ d_stop() {
 }
 
 d_start() {
+	insmod $(busybox find /lib/modules/$(uname -r) -name "board-omap3pandora-wifi.ko")
 	insmod $(busybox find /lib/modules/$(uname -r) -name "arc4.ko")
 	insmod $(busybox find /lib/modules/$(uname -r) -name "ecb.ko")
 	insmod $(busybox find /lib/modules/$(uname -r) -name "pcbc.ko")
@@ -30,8 +32,8 @@ d_start() {
 	insmod $(busybox find /lib/modules/$(uname -r) -name "lib80211_crypt_tkip.ko")
 	insmod $(busybox find /lib/modules/$(uname -r) -name "lib80211_crypt_wep.ko")
 	insmod $(busybox find /lib/modules/$(uname -r) -name "lib80211_crypt_ccmp.ko")
-	insmod $(busybox find /lib/modules/$(uname -r) -name "wl12xx.ko")
-	insmod $(busybox find /lib/modules/$(uname -r) -name "wl12xx_sdio.ko")
+	insmod $(busybox find /lib/modules/$(uname -r) -name "wl1251.ko")
+	insmod $(busybox find /lib/modules/$(uname -r) -name "wl1251_sdio.ko")
 }
 
 case "$1" in
