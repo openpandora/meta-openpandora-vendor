@@ -22,7 +22,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 
 #GIT HEAD for Rev3 > (i.e. Shipping units) - Will run on Rev2 boards without Nubs and an incorrect Start button.
 
-SRCREV = "f7b5502275bd0952c2a0935cb47e8f47b55af563"
+SRCREV = "e2eaf64e85e435bb2405bfe8ff6ec1c5aa39bda6"
 
 SRC_URI = " \
            git://git.openpandora.org/pandora-kernel.git;protocol=git;branch=pandora-27-omap1 \
