@@ -1,6 +1,6 @@
 DESCRIPTION = "Report the OMAP3 SoC unique ID"
 LICENSE = "GPL"
-PR ="r2"
+PR ="r1"
 
 inherit autotools
 

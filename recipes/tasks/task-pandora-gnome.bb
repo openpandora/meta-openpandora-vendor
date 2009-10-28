@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the 'gnome' Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r3.1"
+PR = "r1"
 
 inherit task
 
@@ -63,15 +63,15 @@ GNOME = " \
   gnome-panel libpanel-applet libgweather-locationdata\
   gnome-power-manager gnome-power-manager-applets \
   gnome-python \
-# gnome-python-extras \
+  gnome-python-extras \
   gnome-python-desktop \
   gnome-screensaver \
   gnome-session \
   gnome-settings-daemon \
   gnome-system-monitor \
-#  gnome-system-tools system-tools-backends\
+  gnome-system-tools system-tools-backends \
   gnome-terminal \
-#  gnome-utils \
+  gnome-utils \
   gnome-vfs \
   gnome-vfs-plugin-bzip2 \
   gnome-vfs-plugin-computer \
@@ -87,8 +87,7 @@ GNOME = " \
   gvfs \
   metacity \
   nautilus nautilus-cd-burner desktop-file-utils\
-  networkmanager network-manager-applet \
-#networkmanager-openvpn \
+  networkmanager network-manager-applet networkmanager-openvpn \
   policykit-gnome policykit \
   zenity \
 "
@@ -117,7 +116,7 @@ UIM = " \
 PERL = " \
   perl \
 #  task-perl-module-all \
-#  libnet-dbus-perl \
+  libnet-dbus-perl \
   libxml-parser-perl \
   libxml-twig-perl \
 "
@@ -155,16 +154,16 @@ THEMES = " \
 "
 
 TOTEM = " \
-#  totem \
-#  totem-browser-plugin \
-#  totem-plugin-bemused \
-#  totem-plugin-gromit \
-#  totem-plugin-media-player-keys \
-#  totem-plugin-ontop \
-#  totem-plugin-properties \
-#  totem-plugin-screensaver \
-#  totem-plugin-skipto \
-#  totem-plugin-thumbnail \
+  totem \
+  totem-browser-plugin \
+  totem-plugin-bemused \
+  totem-plugin-gromit \
+  totem-plugin-media-player-keys \
+  totem-plugin-ontop \
+  totem-plugin-properties \
+  totem-plugin-screensaver \
+  totem-plugin-skipto \
+  totem-plugin-thumbnail \
 "
 
 XSERVER_BASE = " \
@@ -175,7 +174,7 @@ XSERVER_BASE = " \
   mime-support \
   notification-daemon inotify-tools \
   xauth \
-#  xdg-utils \
+  xdg-utils \
   xhost \
   xinetd \
   xinit \

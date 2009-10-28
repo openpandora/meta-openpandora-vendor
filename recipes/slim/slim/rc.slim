@@ -10,10 +10,10 @@
 case $1 in
 start)
 	rm /var/run/slim.lock
-	/usr/bin/slim-dynwm -d
+	/usr/bin/slim -d
 	;;
 stop)
-	killall /usr/bin/slim-dynwm
+	killall /usr/bin/slim
 	;;
 restart)
 	$0 stop

@@ -2,7 +2,7 @@ DESCRIPTION="Simple Login Manager"
 HOMEPAGE="http://slim.berlios.de"
 LICENSE = "GPL"
 
-PR = "r0.4"
+PR = "r1"
 
 inherit update-rc.d
 

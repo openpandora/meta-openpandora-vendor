@@ -6,7 +6,7 @@ RDEPENDS = "pandora-auto-startx zenity dbus"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r0.3"
+PR = "r1"
 
 SRC_URI = " \
           file://first-boot-wizard.sh \

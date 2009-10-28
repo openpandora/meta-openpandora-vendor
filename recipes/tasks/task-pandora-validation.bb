@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for validation apps and scripts in the Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r3.1"
+PR = "r1"
 
 inherit task 
 

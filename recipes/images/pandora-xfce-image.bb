@@ -1,11 +1,14 @@
 # XFCE image for the Pandora handheld console
 
 XSERVER ?= " \
-    xserver-xorg \
-    xf86-input-evdev \
-    xf86-input-mouse \
-    xf86-video-fbdev \
-    xf86-input-keyboard \
+  xserver-xorg \
+  xserver-xorg-extension-glx \
+  xserver-xorg-extension-dri \
+  xf86-input-evtouch \	
+  xf86-input-evdev \
+  xf86-input-mouse \
+  xf86-input-keyboard \
+  xf86-video-omapfb \
 "
 
 IMAGE_LINGUAS = "de-de fr-fr en-gb en-us pt-br es-es kn-in ml-in ta-in"

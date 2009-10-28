@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the 'desktop' Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r1.1"
+PR = "r1"
 
 inherit task
 

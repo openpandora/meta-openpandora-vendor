@@ -7,7 +7,7 @@ RDEPENDS_${PN} = "xinit"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r0.1"
+PR = "r1"
 
 SRC_URI = " \
           file://rc.auto-startx \
