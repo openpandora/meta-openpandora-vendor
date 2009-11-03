@@ -5,53 +5,95 @@ DESCRIPTION = "Task file for default core/console apps in the Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r1"
+PR = "r2.3"
 
 inherit task 
 
-RDEPENDS_${PN} = "\
-  task-base-extended \
-  task-proper-tools \
+BLUETOOTH = " \
+  blueprobe \
+  bluez4 gst-plugin-bluez \
+  libsndfile1 libasound-module-bluez \
+"
+
+WIRELESS = " \
   pandora-firmware \
   wl1251-modules \
-#        pandora-wifi pandora-wifi-tools \
-  wpa-supplicant \
-  pandora-libpnd lsof \
-  omap3-deviceid \	
+#  pandora-wifi pandora-wifi-tools \
+  wireless-tools \
+  wpa-supplicant \  
+  networkmanager netm-cli \  
+"
+
+OPENGLES = " \
   omap3-sgx-modules devmem2 \
   libgles-omap3 libgles-omap3-demos \
-#        packagekit \
-  libsdl-gfx libsdl-net mikmod \
-  nfs-utils nfs-utils-client \
-  tslib tslib-tests tslib-calibrate pointercal \
-  fbgrab fbset fbset-modes \
-  portmap \
-  fuse sshfs-fuse ntfs-3g \
-  file \
-  aufs aufs-tools \
-  socat \
-  strace \
-  python-pygame \
-  ksymoops \
-  kexec-tools \
-  alsa-utils alsa-utils-alsactl alsa-utils-alsamixer alsa-utils-aplay \
+"
+
+PAM = " \
+  libpam pam-plugins-group pam-plugins-xauth pam-plugins-wheel \
+  pam-plugins-loginuid pam-plugins-localuser \
+"
+
+SSH = " \
   openssh-scp \
   openssh-ssh \
-  bluez4 \
-  wireless-tools \
-  rdesktop \
-  networkmanager netm-cli \
-  openssh-scp openssh-ssh \
-  mplayer \
-  \
+"
+
+PANDORA_LIBS = " \
+  pandora-libpnd lsof \
+  omap3-deviceid \  
+"
+
+TOUCHSCREEN = " \
+  tslib tslib-tests tslib-calibrate pointercal \
+"
+
+FS_SUPPORT = " \
+  nfs-utils nfs-utils-client \
+  aufs aufs-tools \
+  fuse sshfs-fuse ntfs-3g \
+"
+
+EXTRA_TOOLS = " \
+  avahi \
+  fbgrab fbset fbset-modes \
+  portmap \
+  file \
+  socat \
+  strace \
+  ksymoops \
+  kexec-tools \
   zip \        
   gzip \
   bash \
   bzip2 \  
   sudo \ 
   minicom \
-  nano \        
+  nano \
+"
+
+RDEPENDS_${PN} = "\
+  task-base-extended \
+  task-proper-tools \
+  ${WIRELESS} \
+  ${BLUETOOTH} \  
+  ${OPENGLES} \
+  ${PANDORA_LIBS} \
+  ${SSH} \
+  ${TOUCHSCREEN} \
+  ${FS_SUPPORT} \
+  ${EXTRA_TOOLS} \
+#        packagekit \
+  libsdl-gfx libsdl-net mikmod \
+  python-pygame \
+  alsa-utils alsa-utils-alsactl alsa-utils-alsamixer alsa-utils-aplay \
+  rdesktop \
+  mplayer \
   \
+  angstrom-zeroconf-audio \
+  angstrom-led-config \ 
+  \
+  ${PAM} \
 "
 
 # Make sure we install all kernel modules with the Pandora images

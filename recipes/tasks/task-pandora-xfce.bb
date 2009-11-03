@@ -2,13 +2,14 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r4"
+PR = "r6.1"
 
 inherit task
 
 ANGSTROM_EXTRA_INSTALL ?= ""
 
 APPS = " \
+  avahi-ui \
   abiword \
   claws-mail \
   swfdec swfdec-gnome swfdec-mozilla \
@@ -50,12 +51,13 @@ FONTS = " \
 "  
 
 GNOME_APPS = " \
-  epiphany epiphany-extensions \
-  evince \  
+#  epiphany epiphany-extensions \
+#  evince \  
   gnome-games \
   gnome-mplayer \
   gcalctool \ 
   gnome-bluetooth \	
+  gnome-keyring gnome-keyring-pam-plugin \
 "
 
 GNOME_GTK = " \
@@ -106,6 +108,13 @@ TOTEM = " \
   totem-plugin-screensaver \
   totem-plugin-skipto \
   totem-plugin-thumbnail \
+"
+
+TOUCHSCREEN = " \
+#  xf86-input-evtouch \
+  xf86-input-tslib \
+  gtk-touchscreen-mode-enable \
+  libgtkstylus \
 "
 
 XFCE46_BASE = " \
@@ -165,7 +174,6 @@ XFCE_THEMES = " \
 
 XSERVER_BASE = " \
   ${XSERVER} \
-  xf86-input-evtouch \
   dbus-x11 \
   desktop-file-utils \
   iso-codes \
@@ -198,6 +206,7 @@ RDEPENDS_${PN} = " \
   ${PERL} \
   ${PULSEAUDIO} \
   ${TOTEM} \
+  ${TOUCHSCREEN} \
   ${XSERVER_BASE} \
   ${XFCE46_BASE} \
   ${XFCE46_EXTRAS} \
@@ -216,8 +225,6 @@ RDEPENDS_${PN} = " \
   pango-module-basic-x \
   pango-module-basic-fc \
   xcursor-transparent-theme \	
-  angstrom-zeroconf-audio \
-  angstrom-led-config \ 	
   mime-support \
   xterm xmms \
   jaaa nmap iperf gnuplot \
