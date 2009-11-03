@@ -1,14 +1,8 @@
 # Gnome image for Pandora handheld console
 
-XSERVER ?= " \
-    xserver-xorg \
-    xf86-input-evdev \
-    xf86-input-mouse \
-    xf86-video-fbdev \
-    xf86-input-keyboard \
-"
-
 IMAGE_LINGUAS = "de-de fr-fr en-gb en-us pt-br es-es kn-in ml-in ta-in"
+
+IMAGE_LOGIN_MANAGER = "shadow"
 
 inherit image
 

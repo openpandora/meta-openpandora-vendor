@@ -2,6 +2,8 @@
 
 IMAGE_LINGUAS = "de-de fr-fr en-gb en-us pt-br es-es kn-in ml-in ta-in"
 
+IMAGE_LOGIN_MANAGER = "shadow"
+
 inherit image
 
 export IMAGE_BASENAME = "pandora-core-image"

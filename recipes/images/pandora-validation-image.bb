@@ -1,14 +1,6 @@
 # Validation image for Pandora handheld console
 # for hardware testing and flashing images to NAND if copied to the SD in the correct places.
 
-XSERVER ?= " \
-    xserver-xorg \
-    xf86-input-evdev \
-    xf86-input-mouse \
-    xf86-video-fbdev \
-    xf86-input-keyboard \
-"
-
 inherit image
 
 export IMAGE_BASENAME = "pandora-validation-image"
