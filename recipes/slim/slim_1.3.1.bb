@@ -8,7 +8,7 @@ inherit update-rc.d
 
 DEPEND="virtual/x11 libxmu libpng libjpeg libpam freetype"
 
-RDEPEND="${DEPEND} perl xauth"
+RDEPEND="${DEPEND} perl pam-plugin-xauth xauth"
     
 S = "${WORKDIR}/${PN}-${PV}/"
 
