@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Set CPU speed
+Comment=Under of overclock your pandoras cpu.
+StartupNotify=false
+Exec=/usr/pandora/scripts/op_cpuclock.sh
+Icon=Terminal
+Terminal=false
+Type=Application
+Categories=System;

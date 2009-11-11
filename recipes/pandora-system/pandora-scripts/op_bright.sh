@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #get value range
 minbright=3
 maxbright=$(cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/max_brightness)
@@ -9,6 +9,8 @@ newbright=$(DISPLAY=0:0 zenity --scale --text "set brightness" --min-value=$minb
 else
 newbright=$1
 fi
-if [ $newbright -le $minbright ]; then newbright=$minbright; fi
-if [ $newbright -ge $maxbright ]; then newbright=$maxbright; fi
+if [ $newbright ]; then
+        if [ $newbright -le $minbright ]; then newbright=$minbright; fi
+        if [ $newbright -ge $maxbright ]; then newbright=$maxbright; fi
+fi
 echo $newbright > $device
