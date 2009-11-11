@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Set Backlight Brightness
+Comment=Set the brightness of the backlight.
+StartupNotify=false
+Exec=/usr/pandora/scripts/pnd_bright.sh
+Icon=Terminal
+Terminal=false
+Type=Application
+Categories=System;
