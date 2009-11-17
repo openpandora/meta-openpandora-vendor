@@ -3,7 +3,7 @@ LICENSE = "GPLV2"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r2"
+PR = "r3"
 
 SRC_URI = " \
           file://op_bright.sh \
