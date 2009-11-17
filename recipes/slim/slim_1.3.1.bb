@@ -2,13 +2,13 @@ DESCRIPTION="Simple Login Manager"
 HOMEPAGE="http://slim.berlios.de"
 LICENSE = "GPL"
 
-PR = "r1"
+PR = "r1.1"
 
 inherit update-rc.d
 
 DEPEND="virtual/x11 libxmu libpng libjpeg libpam freetype"
 
-RDEPEND="${DEPEND} perl pam-plugin-xauth xauth"
+RDEPEND="${DEPEND} perl libpam-meta xauth"
     
 S = "${WORKDIR}/${PN}-${PV}/"
 
