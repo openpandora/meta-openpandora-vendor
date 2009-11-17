@@ -5,23 +5,6 @@ KERNEL_IMAGETYPE = "uImage"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-# ----- Revision 2 Boards -----
-
-#GIT HEAD for Rev2 - Same as Rev3 without Batt Fuel Guage and Nub/Button changes.
-
-#SRCREV = "45dce3afbd5c2d2af899ae7e7a107d01a5c15558"
-
-#SRC_URI = " \
-#           git://git.openpandora.org/pandora-kernel.git;protocol=git;branch=rev2 \
-#"
-
-# -----------------------------
-
-
-# ----- Revision 3 > Boards -----
-
-#GIT HEAD for Rev3 > (i.e. Shipping units) - Will run on Rev2 boards without Nubs and an incorrect Start button.
-
 SRCREV = "b7075725f109114e144c5534cd519ffa2b9780d9"
 
 SRC_URI = " \
@@ -61,5 +44,24 @@ SRC_URI_append = " \
            file://0002-Add-a-very-basic-platform-driver-module-to-bring-up-.patch;patch=1 \
            file://0003-Remove-old-msm_wifi-hack-as-the-temp-platform-driver.patch;patch=1 \
 "
+
+# AUFS2 Patches - Used by ausf2-27 recipe to build as a module.
+
+SRC_URI_append = " \
+           file://aufs2/aufs2-base.patch;patch=1 \
+           file://aufs2/aufs2-standalone.patch;patch=1 \
+"           
+
+# Temp Keypad Patches for FN.
+
+SRC_URI_append = " \
+           file://keypad/0001-input-remove-old-twl4030keypad-to-replace-it-with-ma.patch;patch=1 \
+           file://keypad/0002-Input-add-support-for-generic-GPIO-based-matrix-keyp.patch;patch=1 \
+           file://keypad/0003-Input-matrix_keypad-make-matrix-keymap-size-dynamic.patch;patch=1 \
+           file://keypad/0004-Input-matrix-keypad-add-function-to-build-device-key.patch;patch=1 \
+           file://keypad/0005-Input-add-twl4030_keypad-driver.patch;patch=1 \
+           file://keypad/0006-input-hacks-updates-for-mainline-twl4030-driver.patch;patch=1 \
+           file://keypad/0007-some-hackish-Fn-handling-for-testing.patch;patch=1 \           
+"       
 	
 S = "${WORKDIR}/git"
