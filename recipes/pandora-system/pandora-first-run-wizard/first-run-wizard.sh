@@ -9,12 +9,16 @@
 export LANG=en_GB.UTF-8
 export GTK2_RC_FILES=/usr/share/themes/Xfce/gtk-2.0/gtkrc
 
-# We will load up a background image here as soon as we have a tool for that :)
-WALLPAPER=`/usr/share/backgrounds/op_default.png`
+# Ensure there is a wheel group for sudoers to be put into.
+# TODO: Do this somewhere better.
+groupadd wheel
+
+# We load up a background image here
+export WALLPAPER=/usr/share/backgrounds/op_default.png
 hsetroot -center $WALLPAPER
 
 # Greet the user
-zenity --info --title="Pandoras Box has been opened." --text "Welcome. This Wizard will help you setting up your Pandora before your first use."
+zenity --info --title="Pandoras Box has been opened." --text "Welcome. This wizard will help you setting up your new OpenPandora handheld before your first use."
 
 # Should we really enable SWAP?
 #swap_part=$(sfdisk -l /dev/mmcblk? | grep swap | cut -d" " -f1)
@@ -40,8 +44,6 @@ contain only letters and numbers." --entry-text "$username_guess") || [ "x$usern
 	zenity --title="Error" --error --text="Please try again."
 done
 
-# Note: Group wheel doesn't exist in the current image! Should be created for easy sudo!
-
 while ! useradd -c "$name,,," -G adm,audio,video,netdev,wheel,plugdev "$username" ; do
 	username=$(zenity --title="Please check username" --entry --text "Please be sure that your
 username consists of only
@@ -58,7 +60,7 @@ while [ x$password = x ] ; do
 		zenity --title="Error" --error --text="Passwords don't match.
 Please try again."
 	else if [ x$password1 = x ] ; then
-		zenity --title="Error" --error --text="Password can't be blank!
+		zenity --title="Error" --error --text="Password can not be blank!
 Please try again."
 		else
 			password=$password1
@@ -66,13 +68,10 @@ Please try again."
 	fi
 done
 
-# Setting the password doesn't work yet (permission issues)
-
 passwd "$username" <<EOF
 $password
 $password
 EOF
-
 
 # Name our little baby
 
@@ -98,14 +97,13 @@ if zenity --question --title="Autologin" --text="Do you want to automatically lo
       sed -i 's/.*auto_login.*/auto_login no/g' /etc/slim.conf
 fi
 
-# I don't know yet how to setup which GUI will run as default. At the moment, it just creates a small file and puts XFCE or cpasjuste into it :)
+# Setup which GUI will run as default. At the moment, it just creates a small file and puts Xfce or PMenu into it :)
 
-if zenity --question --title="Default GUI" --text="Now you can choose whether you want to boot into a full desktop or a gaming console-like launcher as default.\n\nYou can always change that setting later." --ok-label="Full Desktop (XFCE)"  --cancel-label="Gaming 
+if zenity --question --title="Default Inteface" --text="Now you can choose whether you want to boot into a full desktop interface or a gaming console-like launcher by default.\n\nYou can always change this setting later." --ok-label="Full Desktop (Xfce)"  --cancel-label="Gaming 
 console-like Launcher"; then 
-	echo XFCE > /etc/bootup.cfg
+	echo Xfce > /etc/bootup.cfg
 	else
-	echo cpasjuste > /etc/bootup.cfg
+	echo PMenu > /etc/bootup.cfg
 fi
 
-zenity --info --title="Finished" --text "This concludes the First Boot Wizard.\nThanks for buying the Pandora. Enjoy the device!"
-
+zenity --info --title="Finished" --text "This concludes the First Boot Wizard.\nThanks for buying the OpenPandora. Enjoy the device!"

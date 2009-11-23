@@ -7,6 +7,7 @@ export LANG=en_GB.UTF-8
 if [ "x$DISPLAY" = "x" ]; then
 	export DISPLAY=:0
 fi
+
 export MB_HUNG_APP_HANDLER='/usr/bin/hd-hung-app-handler'
 export GTK2_RC_FILES=/usr/share/themes/default/gtk-2.0/gtkrc:/usr/share/themes/default/gtk-2.0/gtkrc.maemo_af_desktop
 

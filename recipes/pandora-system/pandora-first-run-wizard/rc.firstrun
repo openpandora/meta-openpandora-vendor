@@ -8,11 +8,11 @@
 # Default-Stop:      0 1 6
 ### END INIT INFO
  
-DESC="OpenPandora First Run Deamon"
+DESC="OpenPandora Startup Script Deamon"
 NAME="opruninit"
 
-PID=`pidof -o %PPID -x first-run-wizard.sh`
-OPRUNINIT='xinit /usr/pandora/first-run-wizard.sh'
+PID=`pidof -o %PPID -x op_startup.sh`
+OPRUNINIT='/usr/pandora/scripts/op_startup.sh'
 
 d_stop() {
 	if [ $PID ]
@@ -28,7 +28,7 @@ d_start() {
 	then
 		echo "$DESC: $NAME already running."
 	else
-		$OPRUNINIT -d 3
+		$OPRUNINIT
 	fi
 }
 
