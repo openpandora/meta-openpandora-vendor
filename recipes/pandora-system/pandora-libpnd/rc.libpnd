@@ -28,7 +28,7 @@ d_start() {
 	then
 		echo "$DESC: $NAME already running."
 	else
-		$PNDNOTIFY -d
+		$PNDNOTIFY -d 3
 	fi
 }
 
