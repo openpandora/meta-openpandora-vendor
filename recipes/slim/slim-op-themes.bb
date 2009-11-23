@@ -2,10 +2,10 @@ DESCRIPTION = "SLiM Themes for the OpenPandora"
 SECTION = "x11/dm"
 LICENSE = "GPL"
 
-DEPENDS = ""
-RDEPENDS += "slim"
+DEPENDS = "slim"
+RDEPENDS = "slim"
 
-PR = "r0"
+PR = "r2"
 
 SRC_URI = " \        
 "
@@ -27,7 +27,7 @@ do_install() {
 
 pkg_postinst() {
 #!/bin/sh
-sed -i -e 's/  default/  greek/' ${D}${sysconfdir}/slim.conf
+sed -i -e 's/  default/  greek/' /etc/slim.conf
 }
 		
 FILES_${PN} += "${prefix} ${sysconfdir}"
