@@ -3,7 +3,10 @@ LICENSE = "GPLV2"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r3"
+DEPENDS = "zenity dbus"
+RDEPENDS = "zenity dbus"
+
+PR = "r5"
 
 SRC_URI = " \
           file://op_bright.sh \
