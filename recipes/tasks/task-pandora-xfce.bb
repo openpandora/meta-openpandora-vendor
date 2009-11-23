@@ -1,8 +1,8 @@
-DESCRIPTION = "Task file for the XFCE Pandora image"
+DESCRI-PTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r6.1"
+PR = "r12"
 
 inherit task
 
@@ -24,6 +24,10 @@ APPS = " \
   xterm \
 "
 
+BLUETOOTH_GUI = " \
+  blueman \
+"
+
 IM_CLIENT = " \
   pidgin \
   libpurple-protocol-msn \
@@ -34,6 +38,7 @@ IM_CLIENT = " \
 
 DISPMAN = " \
   slim \
+  slim-op-themes \
 "
 
 FONTS = " \
@@ -56,7 +61,7 @@ GNOME_APPS = " \
   gnome-games \
   gnome-mplayer \
   gcalctool \ 
-  gnome-bluetooth \	
+#  gnome-bluetooth \	
   gnome-keyring gnome-keyring-pam-plugin \
 "
 
@@ -81,6 +86,12 @@ ICON_THEME = " \
   tango-icon-theme-enable \
 "
 
+PANDORA = " \
+#	pandora-auto-startx \
+  pandora-first-run-wizard hsetroot xtscal \
+  pandora-scripts \
+"
+
 PERL = " \
   perl \
   task-perl-module-all \
@@ -95,6 +106,11 @@ PULSEAUDIO = " \
   pulseaudio-module-gconf \
   libasound-module-ctl-pulse \
   libasound-module-pcm-pulse \
+"
+
+QT_SUPPORT = " \
+  qt4-x11-free \
+#  qt4-x11-free-gles \
 "
 
 TOTEM = " \
@@ -196,6 +212,7 @@ RDEPENDS_${PN} = " \
   angstrom-x11-base-depends \
   ${ANGSTROM_EXTRA_INSTALL} \
   ${APPS} \
+  ${BLUETOOTH_GUI} \
   ${IM_CLIENT} \
   ${DISPMAN} \
   ${FONTS} \
@@ -203,17 +220,16 @@ RDEPENDS_${PN} = " \
   ${GNOME_APPS} \
   ${GSTREAMER} \
   ${ICON_THEME} \
+  ${PANDORA} \
   ${PERL} \
   ${PULSEAUDIO} \
+  ${QT_SUPPORT} \
   ${TOTEM} \
   ${TOUCHSCREEN} \
   ${XSERVER_BASE} \
   ${XFCE46_BASE} \
   ${XFCE46_EXTRAS} \
   ${XFCE_THEMES} \
-  \
-#	pandora-auto-startx \
-  pandora-first-run-wizard \
   \
   rxvt-unicode \
   xst \

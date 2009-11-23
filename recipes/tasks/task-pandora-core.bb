@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps in the Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r2.3"
+PR = "r5"
 
 inherit task 
 
@@ -30,8 +30,8 @@ OPENGLES = " \
 "
 
 PAM = " \
-  libpam pam-plugins-group pam-plugins-xauth pam-plugins-wheel \
-  pam-plugins-loginuid pam-plugins-localuser \
+  libpam \
+  libpam-meta \
 "
 
 SSH = " \
@@ -41,7 +41,7 @@ SSH = " \
 
 PANDORA_LIBS = " \
   pandora-libpnd lsof \
-  omap3-deviceid \  
+  omap3-deviceid \
 "
 
 TOUCHSCREEN = " \
@@ -50,7 +50,7 @@ TOUCHSCREEN = " \
 
 FS_SUPPORT = " \
   nfs-utils nfs-utils-client \
-  aufs aufs-tools \
+  aufs2-27 aufs2-util \
   fuse sshfs-fuse ntfs-3g \
 "
 
@@ -67,7 +67,7 @@ EXTRA_TOOLS = " \
   gzip \
   bash \
   bzip2 \  
-  sudo \ 
+  sudo sudo-enable-wheel-group \ 
   minicom \
   nano \
 "
