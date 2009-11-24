@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps in the Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r5"
+PR = "r6"
 
 inherit task 
 
@@ -42,6 +42,7 @@ SSH = " \
 PANDORA_LIBS = " \
   pandora-libpnd lsof \
   omap3-deviceid \
+  pandora-skel \
 "
 
 TOUCHSCREEN = " \
