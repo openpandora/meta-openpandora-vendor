@@ -1,6 +1,6 @@
 DESCRIPTION = "Wallpapers created by the community for the OpenPandora, thanks go to the community for the graphics"
 
-PR = "r0"
+PR = "r2"
 
 SRC_URI = " \
   file://community/* \
@@ -10,13 +10,13 @@ SRC_URI = " \
 PACKAGES = "${PN}-community ${PN}-official"
 
 do_install() {         
-  install -d ${D}${prefix}/xfce4/backdrops/
-  install -m 0644 ${WORKDIR}/community/* ${D}${prefix}/xfce4/backdrops/
-  install -m 0644 ${WORKDIR}/official/* ${D}${prefix}/xfce4/backdrops/
+  install -d ${D}${datadir}/xfce4/backdrops/
+  install -m 0644 ${WORKDIR}/community/* ${D}${datadir}/xfce4/backdrops/
+  install -m 0644 ${WORKDIR}/official/* ${D}${datadir}/xfce4/backdrops/
 }
 
 
 PACKAGE_ARCH = "all"
 
-FILES_${PN}-community = "${prefix}/xfce4/backdrops/community*"
-FILES_${PN}-official = "${prefix}/xfce4/backdrops/op*"
+FILES_${PN}-community = "${datadir}/xfce4/backdrops/community*"
+FILES_${PN}-official = "${datadir}/xfce4/backdrops/op*"
