@@ -9,6 +9,9 @@ RPSRC = "http://www.rpsys.net/openzaurus/patches/archive"
 # Enable OABI compat for people stuck with obsolete userspace
 ARM_KEEP_OABI ?= "1"
 
+# Quirk for udev greater or equal 141
+UDEV_GE_141 ?= "0"
+
 # Specify the commandline for your device
 
 # Boot from mmc
@@ -18,7 +21,7 @@ CMDLINE_at91sam9263ek = "mem=64M console=ttyS0,115200 root=/dev/mmcblk0p1 rootfs
 
 # Set the verbosity of kernel messages during runtime
 # You can define CMDLINE_DEBUG in your local.conf or distro.conf to override this behaviour  
-CMDLINE_DEBUG ?= '${@base_conditional("DISTRO_TYPE", "release", "quiet", "debug",d)}'
+CMDLINE_DEBUG ?= '${@base_conditional("DISTRO_TYPE", "release", "quiet", "debug", d)}'
 CMDLINE_append = " ${CMDLINE_DEBUG} "
 
 # Support for binary device tree generation
@@ -26,12 +29,15 @@ CMDLINE_append = " ${CMDLINE_DEBUG} "
 FILES_kernel-devicetree = "/boot/devicetree*"
 
 KERNEL_DEVICETREE_boc01 = "${WORKDIR}/boc01.dts"
+KERNEL_DEVICETREE_calamari = "arch/${ARCH}/boot/dts/mpc8536ds.dts"
+KERNEL_DEVICETREE_canyonlands = "arch/${ARCH}/boot/dts/canyonlands.dts"
+KERNEL_DEVICETREE_kilauea = "arch/${ARCH}/boot/dts/kilauea.dts"
+KERNEL_DEVICETREE_lsppchd = "arch/${ARCH}/boot/dts/kuroboxHD.dts"
+KERNEL_DEVICETREE_lsppchg = "arch/${ARCH}/boot/dts/kuroboxHG.dts"
 KERNEL_DEVICETREE_mpc8313e-rdb = "arch/${ARCH}/boot/dts/mpc8313erdb.dts"
 KERNEL_DEVICETREE_mpc8315e-rdb = "arch/${ARCH}/boot/dts/mpc8315erdb.dts"
 KERNEL_DEVICETREE_mpc8323e-rdb = "arch/${ARCH}/boot/dts/mpc832x_rdb.dts"
-KERNEL_DEVICETREE_kilauea = "arch/${ARCH}/boot/dts/kilauea.dts"
 KERNEL_DEVICETREE_sequoia = "arch/${ARCH}/boot/dts/sequoia.dts"
-KERNEL_DEVICETREE_canyonlands = "arch/${ARCH}/boot/dts/canyonlands.dts"
 
 KERNEL_DEVICETREE_FLAGS = "-R 8 -S 0x3000"
 
@@ -62,7 +68,7 @@ do_configure_prepend() {
         #
         # oabi / eabi support
         #
-        if [ "${TARGET_OS}" = "linux-gnueabi" -o  "${TARGET_OS}" = "linux-uclibcgnueabi" ]; then
+        if [ "${TARGET_OS}" = "linux-gnueabi" -o  "${TARGET_OS}" = "linux-uclibceabi" ]; then
                 echo "CONFIG_AEABI=y"                   >> ${S}/.config
                 if [ "${ARM_KEEP_OABI}" = "1" ] ; then
                         echo "CONFIG_OABI_COMPAT=y"             >> ${S}/.config
@@ -96,7 +102,24 @@ do_configure_prepend() {
             -e '/CONFIG_LOGO=/d' \
             -e '/CONFIG_LOGO_LINUX_CLUT224=/d' \
             -e '/CONFIG_LOCALVERSION/d' \
+            -e '/CONFIG_LOCALVERSION_AUTO/d' \
 	    < '${WORKDIR}/defconfig' >>'${S}/.config'
+
+        echo 'CONFIG_LOCALVERSION=""' >>${S}/.config
+        echo '# CONFIG_LOCALVERSION_AUTO is not set' >>${S}/.config
+
+        #
+        # Udev quirks
+        #
+
+        # Newer versions of udev mandate that sysfs doesn't have deprecated entries
+        if [ "${UDEV_GE_141}" = "1" ] ; then
+            sed -e /CONFIG_SYSFS_DEPRECATED/d \
+                -e /CONFIG_SYSFS_DEPRECATED_V2/d \
+                -i '${S}/.config'
+            echo '# CONFIG_SYSFS_DEPRECATED is not set' >> ${S}/.config
+            echo '# CONFIG_SYSFS_DEPRECATED_V2 is not set' >> ${S}/.config
+        fi
 
         #
         # root-over-nfs-over-usb-eth support. Limited, but should cover some cases.
@@ -122,33 +145,24 @@ do_configure_prepend() {
                 echo "CONFIG_ROOT_NFS=y"                 >> ${S}/.config
                 echo "CONFIG_CMDLINE=\"${CMDLINE_NFSROOT_USB}\"" >> ${S}/.config
         fi
-        yes '' | oe_runmake oldconfig
+		yes '' | oe_runmake oldconfig
 }
 
 do_configure_append_avr32() {
         sed -i -e s:-mno-pic::g arch/avr32/Makefile
 }
 
-do_compile_append() {
-    if test "x${KERNEL_IMAGETYPE}" = "xuImage" ; then 
-        if test -e arch/${ARCH}/boot/compressed/vmlinux ; then
-            ${OBJCOPY} -O binary -R .note -R .comment -S arch/${ARCH}/boot/compressed/vmlinux linux.bin
-            uboot-mkimage -A ${UBOOT_ARCH} -O linux -T kernel -C none -a ${UBOOT_LOADADDRESS} -e ${UBOOT_ENTRYPOINT} -n "${DISTRO_NAME}/${PV}/${MACHINE}" -d linux.bin arch/${ARCH}/boot/uImage
-            rm -f linux.bin
-        else
-            ${OBJCOPY} -O binary -R .note -R .comment -S vmlinux linux.bin
-            rm -f linux.bin.gz
-            gzip -9 linux.bin
-            uboot-mkimage -A ${UBOOT_ARCH} -O linux -T kernel -C gzip -a ${UBOOT_LOADADDRESS} -e ${UBOOT_ENTRYPOINT} -n "${DISTRO_NAME}/${PV}/${MACHINE}" -d linux.bin.gz arch/${ARCH}/boot/uImage
-            rm -f linux.bin.gz
-        fi
-    fi
+do_configure_append() {
+        if test -e scripts/Makefile.fwinst ; then
+		sed -i -e "s:-m0644:-m 0644:g" scripts/Makefile.fwinst
+	fi
 }
 
 do_devicetree_image() {
     if test -n "${KERNEL_DEVICETREE}" ; then
         dtc -I dts -O dtb ${KERNEL_DEVICETREE_FLAGS} -o devicetree ${KERNEL_DEVICETREE}
         install -m 0644 devicetree ${D}/boot/devicetree-${KERNEL_VERSION}
+        install -d ${DEPLOY_DIR_IMAGE}
         install -m 0644 devicetree ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGE_BASE_NAME}.dtb
         cd ${DEPLOY_DIR_IMAGE}
         rm -f ${KERNEL_IMAGE_SYMLINK_NAME}.dtb
@@ -156,7 +170,7 @@ do_devicetree_image() {
     fi
 }
 
-addtask devicetree_image after do_deploy before do_package
+addtask devicetree_image after do_install before do_package do_deploy
 
 pkg_postinst_kernel-devicetree () {
 	cd /${KERNEL_IMAGEDEST}; update-alternatives --install /${KERNEL_IMAGEDEST}/devicetree devicetree devicetree-${KERNEL_VERSION} ${KERNEL_PRIORITY} || true

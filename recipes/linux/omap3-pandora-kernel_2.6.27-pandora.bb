@@ -5,7 +5,7 @@ KERNEL_IMAGETYPE = "uImage"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-SRCREV = "b7075725f109114e144c5534cd519ffa2b9780d9"
+SRCREV = "0887623ea5736f6d438f5ac0c1ca8f33cdcd6988"
 
 SRC_URI = " \
            git://git.openpandora.org/pandora-kernel.git;protocol=git;branch=pandora-27-omap1 \
@@ -24,17 +24,17 @@ SRC_URI_append = " \
            file://no-cortex-deadlock.patch;patch=1 \
            file://read_die_ids.patch;patch=1 \
            file://fix-install.patch;patch=1 \
-           file://musb-dma-iso-in.eml;patch=1 \
-           file://musb-support-high-bandwidth.patch.eml;patch=1 \
+#           file://musb-dma-iso-in.eml;patch=1 \
+#           file://musb-support-high-bandwidth.patch.eml;patch=1 \
            file://mru-fix-timings.diff;patch=1 \
            file://mru-fix-display-panning.diff;patch=1 \
            file://mru-make-dpll4-m4-ck-programmable.diff;patch=1 \
            file://mru-improve-pixclock-config.diff;patch=1 \
            file://mru-make-video-timings-selectable.diff;patch=1 \
            file://mru-enable-overlay-optimalization.diff;patch=1 \
-           file://musb-fix-ISO-in-unlink.diff;patch=1 \
-           file://musb-fix-multiple-bulk-transfers.diff;patch=1 \
-           file://musb-fix-endpoints.diff;patch=1 \
+#           file://musb-fix-ISO-in-unlink.diff;patch=1 \
+#           file://musb-fix-multiple-bulk-transfers.diff;patch=1 \
+#           file://musb-fix-endpoints.diff;patch=1 \
            file://dvb-fix-dma.diff;patch=1 \
            file://0001-Removed-resolution-check-that-prevents-scaling-when.patch;patch=1 \
            file://0001-Implement-downsampling-with-debugs.patch;patch=1 \
