@@ -2,7 +2,7 @@ DESCRI-PTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r12"
+PR = "r18"
 
 inherit task
 
@@ -25,7 +25,8 @@ APPS = " \
 "
 
 BLUETOOTH_GUI = " \
-  blueman \
+#  blueman \
+  gnome-bluetooth \
 "
 
 IM_CLIENT = " \
@@ -55,13 +56,17 @@ FONTS = " \
   xorg-minimal-fonts \
 "  
 
+# Any default games we want to ship.
+GAMES = " \
+  scummvm \
+"
+
 GNOME_APPS = " \
 #  epiphany epiphany-extensions \
 #  evince \  
   gnome-games \
   gnome-mplayer \
   gcalctool \ 
-#  gnome-bluetooth \	
   gnome-keyring gnome-keyring-pam-plugin \
 "
 
@@ -82,14 +87,15 @@ GSTREAMER = " \
 "
 
 ICON_THEME = " \
-  tango-icon-theme \
-  tango-icon-theme-enable \
+  elementary-icon-theme \
+  elementary-icon-theme-enable \
 "
 
 PANDORA = " \
-#	pandora-auto-startx \
   pandora-first-run-wizard hsetroot xtscal \
   pandora-scripts \
+  pandora-wallpaper-official pandora-wallpaper-community \
+  pandora-xfce-defaults \
 "
 
 PERL = " \
@@ -127,7 +133,6 @@ TOTEM = " \
 "
 
 TOUCHSCREEN = " \
-#  xf86-input-evtouch \
   xf86-input-tslib \
   gtk-touchscreen-mode-enable \
   libgtkstylus \
@@ -205,6 +210,7 @@ XSERVER_BASE = " \
   xrefresh \
   xset \
   xvinfo \
+  devilspie \
 "
 
 RDEPENDS_${PN} = " \
@@ -216,6 +222,7 @@ RDEPENDS_${PN} = " \
   ${IM_CLIENT} \
   ${DISPMAN} \
   ${FONTS} \
+  ${GAMES} \  
   ${GNOME_GTK} \
   ${GNOME_APPS} \
   ${GSTREAMER} \
