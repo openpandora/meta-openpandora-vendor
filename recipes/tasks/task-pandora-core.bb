@@ -5,9 +5,14 @@ DESCRIPTION = "Task file for default core/console apps in the Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r6"
+PR = "r7"
 
 inherit task 
+
+AUFS = " \
+  aufs2-27 \
+  aufs2-util \
+"
 
 BLUETOOTH = " \
   blueprobe \
@@ -51,7 +56,6 @@ TOUCHSCREEN = " \
 
 FS_SUPPORT = " \
   nfs-utils nfs-utils-client \
-  aufs2-27 aufs2-util \
   fuse sshfs-fuse ntfs-3g \
 "
 
@@ -76,6 +80,7 @@ EXTRA_TOOLS = " \
 RDEPENDS_${PN} = "\
   task-base-extended \
   task-proper-tools \
+  ${AUFS} \
   ${WIRELESS} \
   ${BLUETOOTH} \  
   ${OPENGLES} \
