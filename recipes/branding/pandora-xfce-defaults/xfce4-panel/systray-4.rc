@@ -1,0 +1,12 @@
+[Global]
+ShowFrame=false
+Rows=1
+
+[Applications]
+bluetooth applet=false
+gigolo=false
+gnome-mplayer=false
+networkmanager applet=false
+orage=false
+pidgin=false
+
