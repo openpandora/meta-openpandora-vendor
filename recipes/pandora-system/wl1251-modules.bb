@@ -2,7 +2,9 @@ DESCRIPTION = "Kernel drivers for the TI WL1251 WiFi chip found on the Pandora -
 LICENSE = "GPLv2"
 
 SRC_URI += " \
-	http://djwillis.openpandora.org/pandora/wifi/wl1251-wireless-2009-10-08-rev2.zip \
+#	http://djwillis.openpandora.org/pandora/wifi/wl1251-wireless-2009-10-08-rev2.zip \
+#	http://djwillis.openpandora.org/pandora/wifi/wl1251-wireless-2009-10-28-take2.zip \
+	http://djwillis.openpandora.org/pandora/wifi/wl1251-wireless-2009-10-28-take3.zip \	
 	file://rc.wl1251 \
 "
 
@@ -11,7 +13,8 @@ inherit update-rc.d
 INITSCRIPT_NAME = "wl1251-init"
 INITSCRIPT_PARAMS = "start 30 5 2 . stop 40 0 1 6 ."
 
-S = "${WORKDIR}/compat-wireless-2009-08-30"
+#S = "${WORKDIR}/compat-wireless-2009-08-30"
+S = "${WORKDIR}/compat-wireless-2009-10-28"
 
 inherit module
 
