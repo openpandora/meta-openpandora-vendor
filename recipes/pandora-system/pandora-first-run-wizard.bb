@@ -2,17 +2,16 @@ DESCRIPTION = "Scripts to support the first run wizard on the OpenPandora."
 LICENSE = "GPLV2"
 
 DEPENDS = "hsetroot zenity dbus"
-RDEPENDS = "hsetroot zenity dbus"
+RDEPENDS = "hsetroot zenity dbus pandora-wallpaper-official tslib"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r5"
+PR = "r7"
 
 SRC_URI = " \
           file://first-run-wizard.sh \
           file://op_startup.sh \
-          file://rc.firstrun \
-          file://op_default.png \          
+          file://rc.firstrun \          
 "
 
 inherit update-rc.d
@@ -27,9 +26,6 @@ do_install() {
 
           install -d ${D}${sysconfdir}/init.d/
           install -m 0755 ${WORKDIR}/rc.firstrun ${D}${sysconfdir}/init.d/oprun-init
-
-          install -d ${D}${datadir}/backgrounds/
-          install -m 0666 ${WORKDIR}/op_default.png ${D}${datadir}/backgrounds/
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"

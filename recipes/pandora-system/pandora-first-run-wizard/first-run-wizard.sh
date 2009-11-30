@@ -14,11 +14,19 @@ export GTK2_RC_FILES=/usr/share/themes/Xfce/gtk-2.0/gtkrc
 groupadd wheel
 
 # We load up a background image here
-export WALLPAPER=/usr/share/backgrounds/op_default.png
+export WALLPAPER=/usr/share/xfce4/backdrops/op-firstrun.png
 hsetroot -center $WALLPAPER
 
 # Greet the user
-zenity --info --title="Pandoras Box has been opened." --text "Welcome. This wizard will help you setting up your new OpenPandora handheld before your first use."
+zenity --info --title="Pandoras Box has been opened." --text "Welcome. This wizard will help you setting up your new OpenPandora handheld before the first use."
+
+# Calibrate touchscreen?
+if zenity --question --title="Touchscreen calibration" --text="It is recommended to calibrate the devices touchscreen./nDo you wish to calibrate your touchscreen now?" --ok-label="Calibrate"  --cancel-label="Do not calibrate"; then 
+	# Make sure we have a sane environment as this script will be run long before any /etc/profile stuff.
+	. /etc/profile.d/tslib.sh
+	# rm /etc/pointercal
+	/usr/bin/ts_calibrate
+fi
 
 # Should we really enable SWAP?
 #swap_part=$(sfdisk -l /dev/mmcblk? | grep swap | cut -d" " -f1)
@@ -49,6 +57,8 @@ while ! useradd -c "$name,,," -G adm,audio,video,netdev,wheel,plugdev "$username
 username consists of only
 letters and numbers." --entry-text "$username")
 done
+
+sed -i "s/.*default_user.*/default_user $username/g" /etc/slim.conf
 
 # Password setup.
 
@@ -91,7 +101,6 @@ hostname -F /etc/hostname
 
 if zenity --question --title="Autologin" --text="Do you want to automatically login on startup?\n\nSecurity warning: This skips the password check on startup" --ok-label="Yes, enable Autologin" --cancel-label="Do not enable Autologin"; then      	
      # echo "PREFERED_USER=$username" > /etc/default/autologin
-      sed -i "s/.*default_user.*/default_user $username/g" /etc/slim.conf
       sed -i 's/.*auto_login.*/auto_login yes/g' /etc/slim.conf
       else
       sed -i 's/.*auto_login.*/auto_login no/g' /etc/slim.conf
@@ -99,8 +108,7 @@ fi
 
 # Setup which GUI will run as default. At the moment, it just creates a small file and puts Xfce or PMenu into it :)
 
-if zenity --question --title="Default Inteface" --text="Now you can choose whether you want to boot into a full desktop interface or a gaming console-like launcher by default.\n\nYou can always change this setting later." --ok-label="Full Desktop (Xfce)"  --cancel-label="Gaming 
-console-like Launcher"; then 
+if zenity --question --title="Default Inteface" --text="Now you can choose whether you want to boot into a full desktop interface or a gaming console-like launcher by default.\n\nYou can always change this setting later." --ok-label="Full Desktop (Xfce)"  --cancel-label="Games console like Launcher (PMenu)"; then 
 	echo Xfce > /etc/bootup.cfg
 	else
 	echo PMenu > /etc/bootup.cfg
