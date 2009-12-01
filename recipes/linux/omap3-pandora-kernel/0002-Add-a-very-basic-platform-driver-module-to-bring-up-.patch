@@ -1,7 +1,7 @@
-From d0e67607c9eba9423b65875da2c732ed690a2292 Mon Sep 17 00:00:00 2001
+From b245ef5af21a973bda2f8496fd493fac0a771455 Mon Sep 17 00:00:00 2001
 From: David-John Willis <John.Willis@Distant-earth.com>
 Date: Sun, 30 Aug 2009 19:31:31 +0100
-Subject: [PATCH 2/2] Add a very basic platform driver module to bring up the SDIO WiFi so that the platform stuff is no longer hacked into the WL1251 driver (TODO: Clean up and move somewhere more mainline friendly).
+Subject: [PATCH 2/4] Add a very basic platform driver module to bring up the SDIO WiFi so that the platform stuff is no longer hacked into the WL1251 driver (TODO: Clean up and move somewhere more mainline friendly).
 
 ---
  arch/arm/mach-omap2/Kconfig                   |    5 ++

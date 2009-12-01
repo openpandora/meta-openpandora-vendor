@@ -1,4 +1,4 @@
-From 7d5ae8daa2289378ba9c9321f6c9659cae20bcdd Mon Sep 17 00:00:00 2001
+From a070a7c121ae1885a6c0354598efc12b3d98beab Mon Sep 17 00:00:00 2001
 From: David-John Willis <John.Willis@Distant-earth.com>
 Date: Tue, 1 Sep 2009 18:24:15 +0100
 Subject: [PATCH 4/4] Add back in 80us delay into the WiFi module init.
@@ -78,10 +78,10 @@ index 2968340..591cc6c 100755
  }
  
 diff --git a/arch/arm/mach-omap2/board-omap3pandora.c b/arch/arm/mach-omap2/board-omap3pandora.c
-index da35a62..3fe3447 100755
+index 1d95fae..aec5fec 100755
 --- a/arch/arm/mach-omap2/board-omap3pandora.c
 +++ b/arch/arm/mach-omap2/board-omap3pandora.c
-@@ -460,10 +460,8 @@ int pandora_wifi_power(int on)
+@@ -503,10 +503,8 @@ int pandora_wifi_power(int on)
  
  	if (on) {
  		gpio_set_value(PANDORA_WIFI_GPIO, 1);
