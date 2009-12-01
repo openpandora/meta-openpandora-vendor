@@ -6,19 +6,22 @@ PR = "r1"
 SRC_URI = " \
         file://brf6300.bin \
         file://wl1251-fw.bin \
-        file://wl1251-nvs.bin \
+        file://wl1251-nvs.bin \        
+        file://bluetooth-conf \        
 "
 
 SUMMARY = "This is required to support the Bluetooth and WiFi modules on the Pandora"
 S = "${WORKDIR}"
 
 do_install() {
-        install -d ${D}/lib/firmware
-        install -m 0644 ${S}/brf6300.bin ${S}/wl1251-fw.bin ${S}/wl1251-nvs.bin ${D}/lib/firmware/
+        install -d ${D}${base_libdir}/firmware
+        install -m 0644 ${S}/brf6300.bin ${S}/wl1251-fw.bin ${S}/wl1251-nvs.bin ${D}${base_libdir}/firmware/
+        install -d ${D}${sysconfdir}/sysconfig
+        install -m 0755 ${S}/bluetooth-conf ${D}${sysconfdir}/sysconfig/bluetooth     
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-FILES_${PN} += "/lib/firmware"
+FILES_${PN} += "${base_libdir}/firmware ${sysconfdir}/sysconfig"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
