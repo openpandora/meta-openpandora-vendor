@@ -106,12 +106,14 @@ if zenity --question --title="Autologin" --text="Do you want to automatically lo
       sed -i 's/.*auto_login.*/auto_login no/g' /etc/slim.conf
 fi
 
-# Setup which GUI will run as default. At the moment, it just creates a small file and puts Xfce or PMenu into it :)
+# Change the default session in SLiM.
 
 if zenity --question --title="Default Inteface" --text="Now you can choose whether you want to boot into a full desktop interface or a gaming console-like launcher by default.\n\nYou can always change this setting later." --ok-label="Full Desktop (Xfce)"  --cancel-label="Games console like Launcher (PMenu)"; then 
-	echo Xfce > /etc/bootup.cfg
-	else
+	echo Xfce4 > /etc/bootup.cfg
+	sed -i 's/.*sessions.*/sessions xfce4,pmenu/g' /etc/slim.conf
+	 else
 	echo PMenu > /etc/bootup.cfg
+	sed -i 's/.*sessions.*/sessions pmenu,xfce4/g' /etc/slim.conf
 fi
 
 zenity --info --title="Finished" --text "This concludes the First Boot Wizard.\nThanks for buying the OpenPandora. Enjoy the device!"
