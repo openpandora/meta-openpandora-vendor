@@ -1,8 +1,8 @@
-DESCRI-PTION = "Task file for the XFCE Pandora image"
+DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r18"
+PR = "r2"
 
 inherit task
 
@@ -20,8 +20,8 @@ APPS = " \
   synergy \
   vnc \
   x11vnc angstrom-x11vnc-xinit \
-  xmms \
   xterm \
+  xchat \
 "
 
 BLUETOOTH_GUI = " \
@@ -92,10 +92,11 @@ ICON_THEME = " \
 "
 
 PANDORA = " \
-  pandora-first-run-wizard hsetroot xtscal \
+  pandora-first-run-wizard hsetroot \
   pandora-scripts \
   pandora-wallpaper-official pandora-wallpaper-community \
   pandora-xfce-defaults \
+  pandora-xmms-defaults xmms \
 "
 
 PERL = " \

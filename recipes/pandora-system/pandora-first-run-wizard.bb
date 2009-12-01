@@ -2,11 +2,11 @@ DESCRIPTION = "Scripts to support the first run wizard on the OpenPandora."
 LICENSE = "GPLV2"
 
 DEPENDS = "hsetroot zenity dbus"
-RDEPENDS = "hsetroot zenity dbus pandora-wallpaper-official tslib"
+RDEPENDS = "hsetroot zenity dbus pandora-wallpaper-official tslib tslib-calibrate "
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r7"
+PR = "r1"
 
 SRC_URI = " \
           file://first-run-wizard.sh \

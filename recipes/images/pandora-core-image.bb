@@ -1,6 +1,6 @@
 # Console image for the Pandora handheld console
 
-IMAGE_LINGUAS = "de-de fr-fr en-gb en-us pt-br es-es kn-in ml-in ta-in"
+IMAGE_LINGUAS = "de-de fr-fr en-gb en-us es-es tr-tr"
 
 IMAGE_LOGIN_MANAGER = "shadow"
 

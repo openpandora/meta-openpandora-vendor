@@ -1,7 +1,7 @@
 DESCRIPTION = "Support for the PND format in Pandora images (lib, daemon, init script etc.)"
 LICENSE = "lGPL"
 
-PR = "r5"
+PR = "r1"
 
 PARALLEL_MAKE = ""
 
@@ -45,7 +45,6 @@ do_install() {
                    
           install -d ${D}${prefix}/pandora/
           install -d ${D}${prefix}/pandora/apps/
-          cp -pP ${S}/deployment/usr/pandora/apps/* ${D}${prefix}/pandora/apps
           install -d ${D}${prefix}/pandora/scripts/
           cp -pP ${S}/deployment/usr/pandora/scripts/* ${D}${prefix}/pandora/scripts
           

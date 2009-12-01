@@ -5,7 +5,7 @@ LICENSE = "GPL"
 DEPENDS = "slim"
 RDEPENDS = "slim"
 
-PR = "r2"
+PR = "r1"
 
 SRC_URI = " \        
 "

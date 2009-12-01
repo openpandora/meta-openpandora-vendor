@@ -41,7 +41,7 @@ do_install() {
           cp ${S}/drivers/net/wireless/wl12xx/wl1251.ko ${D}/lib/modules/${KERNEL_VERSION}/kernel/drivers/net/wireless/wl12xx
           cp ${S}/drivers/net/wireless/wl12xx/wl1251_sdio.ko ${D}/lib/modules/${KERNEL_VERSION}/kernel/drivers/net/wireless/wl12xx
           install -d ${D}${sysconfdir}/init.d/
-          cp -pP ${WORKDIR}/rc.wl1251 ${D}${sysconfdir}/init.d/wl1251-init
+          install -m 0755 ${WORKDIR}/rc.wl1251 ${D}${sysconfdir}/init.d/wl1251-init
 }
 
 FILES_${PN} += "/lib/modules/${KERNEL_VERSION}/kernel/net/mac80211/*.ko.*"

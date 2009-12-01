@@ -1,6 +1,6 @@
 DESCRIPTION = "Wallpapers created by the community for the OpenPandora, thanks go to the community for the graphics"
 
-PR = "r2"
+PR = "r1"
 
 SRC_URI = " \
   file://community/* \

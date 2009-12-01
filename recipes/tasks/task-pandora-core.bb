@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps in the Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r7"
+PR = "r1"
 
 inherit task 
 
@@ -31,7 +31,8 @@ WIRELESS = " \
 
 OPENGLES = " \
   omap3-sgx-modules devmem2 \
-  libgles-omap3 libgles-omap3-demos \
+  libgles-omap3 \
+#  libgles-omap3-demos \
 "
 
 PAM = " \
