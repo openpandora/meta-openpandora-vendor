@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xbel PUBLIC "+//IDN python.org//DTD XML Bookmark Exchange Language 1.0//EN//XML" "http://www.python.org/topics/xml/dtds/xbel-1.0.dtd">
+<xbel version="1.0" xmlns:midori="http://www.twotoasts.de">
+<bookmark href="http://www.openpandora.org">
+<title>OpenPandora.org</title>
+<desc>Official OpenPandora Website</desc>
+</bookmark>
+<bookmark href="http://www.gp32x.com">
+<title>GP32xtreme</title>
+<desc>English Community</desc>
+</bookmark>
+<bookmark href="http://forum.gp2x.de">
+<title>GP2X.de Forum</title>
+<desc>German Community</desc>
+</bookmark>
+<bookmark href="http://www.pandoratr.com/forum.php">
+<title>PandoraTR Forum</title>
+<desc>Turkish Community</desc>
+</bookmark>
+<bookmark href="http://dl.openhandhelds.org/pandora.htm">
+<title>OpenPandora File Archive</title>
+<desc>Get new software for your OpenPandora</desc>
+</bookmark>
+</xbel>
