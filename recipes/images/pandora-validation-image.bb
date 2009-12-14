@@ -3,6 +3,8 @@
 
 inherit image
 
+PR = "r0"
+
 export IMAGE_BASENAME = "pandora-validation-image"
 
 DEPENDS = "task-base"

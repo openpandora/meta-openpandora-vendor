@@ -6,6 +6,8 @@ IMAGE_LOGIN_MANAGER = "shadow"
 
 inherit image
 
+PR = "r0"
+
 export IMAGE_BASENAME = "pandora-gui-image"
 
 SPLASH = "psplash-omap3pandora"

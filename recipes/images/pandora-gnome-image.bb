@@ -6,6 +6,8 @@ IMAGE_LOGIN_MANAGER = "shadow"
 
 inherit image
 
+PR = "r0"
+
 export IMAGE_BASENAME = "pandora-gnome-image"
 
 #IMAGE_INIT_MANAGER = "upstart upstart-sysvcompat"

@@ -1,10 +1,12 @@
 # Console image for the Pandora handheld console
 
-IMAGE_LINGUAS = "de-de fr-fr en-gb en-us es-es tr-tr"
+IMAGE_LINGUAS = "de-de fr-fr en-gb en-us es-es"
 
 IMAGE_LOGIN_MANAGER = "shadow"
 
 inherit image
+
+PR = "r0"
 
 export IMAGE_BASENAME = "pandora-core-image"
 
