@@ -2,14 +2,16 @@ DESCRIPTION = "Helper uboot boot scripts for the OpenPandora"
 
 DEPENDS = "u-boot-mkimage-native"
 
-SRC_URI = "file://*.cmd"
+SRC_URI = "file://boot*"
+
+PR = "r1"
 
 do_configure() {
-	cp ${WORKDIR}/*.cmd ${S}
+	cp ${WORKDIR}/boot* ${S}
 }
 
 do_compile() {
-	for i in *.cmd ; do
+	for i in boot* ; do
 		uboot-mkimage -A ${TARGET_ARCH} -O linux -T script -C none -a 0 -e 0 -n "OpenPandora $i" -d $i $i.scr
 	done
 }
