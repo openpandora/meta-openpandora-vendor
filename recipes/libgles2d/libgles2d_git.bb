@@ -3,7 +3,7 @@ LICENSE = "GPL"
 
 DEPENDS = "virtual/libsdl libgles-omap3"
 
-PR = "r3"
+PR = "r4"
 
 PARALLEL_MAKE = ""
 
@@ -11,12 +11,14 @@ SRC_URI = " \
   git://github.com/Cpasjuste/GLES2D.git;protocol=git;branch=master \
 "
 
-SRCREV = "42280c1013f5815277104ed57622fbec075f3d12"
+SRCREV = "0abc732054cbe3cc3da38a6a7503d9d37b02d164"
 
 S = "${WORKDIR}/git/src"
 
 TARGET_CC_ARCH += "${LDFLAGS}"
 TARGET_CFLAGS += "-Wall -I./include"
+
+CFLAGS += "-D_PANDORA_"
 
 do_compile_prepend() {
           cd ${S}/
