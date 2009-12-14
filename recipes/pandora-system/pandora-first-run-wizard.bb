@@ -6,7 +6,7 @@ RDEPENDS = "hsetroot zenity dbus pandora-wallpaper-official tslib tslib-calibrat
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r2"
+PR = "r5"
 
 SRC_URI = " \
           file://first-run-wizard.sh \
@@ -26,6 +26,8 @@ do_install() {
 
           install -d ${D}${sysconfdir}/init.d/
           install -m 0755 ${WORKDIR}/rc.firstrun ${D}${sysconfdir}/init.d/oprun-init
+
+          install -d ${D}${sysconfdir}/pandora/          
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
