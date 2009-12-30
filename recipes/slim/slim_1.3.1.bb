@@ -2,11 +2,11 @@ DESCRIPTION="Simple Login Manager"
 HOMEPAGE="http://slim.berlios.de"
 LICENSE = "GPL"
 
-PR = "r1"
+PR = "r2"
 
 inherit update-rc.d
 
-DEPEND="virtual/x11 libxmu libpng libjpeg libpam freetype"
+DEPEND="virtual/x11 libxmu libpng libjpeg libpam freetype sessreg"
 
 RDEPEND="${DEPEND} perl libpam-meta xauth"
     
@@ -15,7 +15,6 @@ S = "${WORKDIR}/${PN}-${PV}/"
 SRC_URI=" \
   http://download.berlios.de/${PN}/${P}.tar.gz \
   file://fix-manpage.patch;patch=1 \
-#  file://slim-conf.patch;patch=1 \
   file://ftbfs_gcc_4.4.patch;patch=1 \
   file://Makefile.patch;patch=1 \
   file://xauth_secret_support.patch;patch=1 \
@@ -52,26 +51,9 @@ EXTRA_OEMAKE += " \
   LDFLAGS+=-lpam \
 "
 
-#EXTRA_OEMAKE += "-I${STAGING_INCDIR}/freetype2"
-#EXTRA_OEMAKE += 'EXTRA_CFLAGS="-I${STAGING_INCDIR}/freetype2"'
-
-#do_compile_prepend() {
-#  # respect C[XX]FLAGS, fix crosscompile,
-#  # fix linking order for --as-needed"
-#  sed -i -e "s:^CXX=.*:CXX=$(CXX) ${CXXFLAGS}:" \
-#    -e "s:^CC=.*:CC=$(CC) ${CFLAGS}:" \
-#    -e "s:^MANDIR=.*:MANDIR=/usr/share/man:" \
-#    -e "s:^\t\(.*\)\ \$(LDFLAGS)\ \(.*\):\t\1\ \2\ \$(LDFLAGS):g" \
-#    -r -e "s:^LDFLAGS=(.*):LDFLAGS=\1 ${LDFLAGS}:" \
-#    Makefile"
-#}
-
 do_compile_prepend() {
   cp -pP ${WORKDIR}/Makefile.oe ${S}/Makefile
 }
-
-#  USE_PAM=1 ARCH=${TARGET_ARCH} CROSS_COMPILE=${TARGET_PREFIX} CC=${TARGET_CC} \
-#               CXX=${TARGET_CXX} DESTDIR=${D} MANDIR=${mandir} PREFIX=${prefix} CFGDIR=${sysconfdir}
 
 do_install() {
   oe_runmake install 
@@ -81,7 +63,10 @@ do_install() {
   install -d ${D}${sysconfdir}/pam.d/  
   install -m 0644 ${WORKDIR}/slim.pamd ${D}${sysconfdir}/pam.d/slim
   install -d ${D}${sysconfdir}/init.d/
-  cp -pP ${WORKDIR}/rc.slim ${D}${sysconfdir}/init.d/slim-init
+  install -m 0755 ${WORKDIR}/rc.slim ${D}${sysconfdir}/init.d/slim-init
+
+  echo 'sessionstart_cmd    /usr/bin/sessreg -a -l $DISPLAY %user' >> ${D}${sysconfdir}/slim.conf
+  echo 'sessionstop_cmd     /usr/bin/sessreg -d -l $DISPLAY %user' >> ${D}${sysconfdir}/slim.conf
 }
 
 INITSCRIPT_NAME = "slim-init"
