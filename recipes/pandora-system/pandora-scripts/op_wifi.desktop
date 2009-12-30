@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Toggle WiFi
+Comment=Toggle the status of the WiFi chip.
+StartupNotify=false
+Exec=/usr/pandora/scripts/op_wifi.sh
+Icon=Terminal
+Terminal=false
+Type=Application
+Categories=System;
