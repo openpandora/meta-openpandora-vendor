@@ -4,7 +4,7 @@ DEPENDS = "u-boot-mkimage-native"
 
 SRC_URI = "file://boot*"
 
-PR = "r1"
+PR = "r2"
 
 do_configure() {
 	cp ${WORKDIR}/boot* ${S}
