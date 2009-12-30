@@ -3,7 +3,7 @@ LICENSE = "GPL"
 
 DEPENDS = "virtual/libsdl libgles-omap3"
 
-PR = "r4"
+PR = "r5"
 
 PARALLEL_MAKE = ""
 
@@ -11,7 +11,7 @@ SRC_URI = " \
   git://github.com/Cpasjuste/GLES2D.git;protocol=git;branch=master \
 "
 
-SRCREV = "0abc732054cbe3cc3da38a6a7503d9d37b02d164"
+SRCREV = "6a53330c8826c8aca2acd3f578468f30e61c1ddb"
 
 S = "${WORKDIR}/git/src"
 
