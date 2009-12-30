@@ -45,13 +45,6 @@ SRC_URI_append = " \
            file://0003-Remove-old-msm_wifi-hack-as-the-temp-platform-driver.patch;patch=1 \
 "
 
-# AUFS2 Patches - Used by ausf2-27 recipe to build as a module.
-
-SRC_URI_append = " \
-           file://aufs2/aufs2-base.patch;patch=1 \
-           file://aufs2/aufs2-standalone.patch;patch=1 \
-"           
-
 # Temp Keypad Patches for FN.
 
 SRC_URI_append = " \
@@ -63,5 +56,17 @@ SRC_URI_append = " \
            file://keypad/0006-input-hacks-updates-for-mainline-twl4030-driver.patch;patch=1 \
            file://keypad/0007-some-hackish-Fn-handling-for-testing.patch;patch=1 \           
 "       
-	
+
+# SquashFS 4 Patches
+
+SRC_URI_append = " \
+           file://squashfs/0006-SquashFS-Backport-SquashFS4-to-our-2.6.27-tree.patch;patch=1 \
+"           
+
+# AUFS2 Patches - Used by ausf2-27 recipe to build as a module.
+
+SRC_URI_append = " \
+           file://aufs2/0007-AUFS2-Add-latest-AUFS2-in-tree-code-for-2.6.27.patch;patch=1 \
+"           
+
 S = "${WORKDIR}/git"
