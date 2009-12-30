@@ -2,7 +2,7 @@
 
 ### BEGIN INIT INFO
 # Provides:          pndnotifyd
-# Required-Start:    #adjust
+# Required-Start:    udev
 # Required-Stop:     #adjust
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Run PND Application
+Comment=Start a PND application.
+StartupNotify=false
+Exec=pnd_run %F
+Icon=Terminal
+Terminal=false
+Type=Application
+Categories=System;
