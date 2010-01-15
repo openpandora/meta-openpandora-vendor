@@ -2,7 +2,7 @@ DESCRIPTION = "Default OpenPandora settings for Xfce4"
 HOMEPAGE = "http://www.openpandora.org"
 SECTION = "x11/xfce"
 
-PR = "r7"
+PR = "r9"
 
 SRC_URI = " \
   file://xfce4-conf.zip \
@@ -18,7 +18,9 @@ do_install() {
   
   install -d ${D}${sysconfdir}/xdg/op/xfce4/
   install -m 0666 ${WORKDIR}/xfce4/helpers.rc ${D}${sysconfdir}/xdg/op/xfce4/
-
+  install -m 0666 ${WORKDIR}/xfce4/Xcursor.xrdb ${D}${sysconfdir}/xdg/op/xfce4/
+  install -m 0666 ${WORKDIR}/xfce4/Xft.xrdb ${D}${sysconfdir}/xdg/op/xfce4/
+  
   install -d ${D}${sysconfdir}/xdg/op/xfce4/panel/
   install -m 0666 ${WORKDIR}/xfce4/panel/* ${D}${sysconfdir}/xdg/op/xfce4/panel/
   
