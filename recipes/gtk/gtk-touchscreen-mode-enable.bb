@@ -9,8 +9,14 @@ PACKAGE_ARCH = "all"
 
 pkg_postinst() {
 #!/bin/sh
-mkdir -p $D${sysconfdir}/gtk-2.0
-touch $D${sysconfdir}/gtk-2.0/gtkrc
-sed -i /gtk-touchscreen-mode = 1/d $D${sysconfdir}/gtk-2.0/gtkrc
-echo 'gtk-touchscreen-mode = 1' >> $D${sysconfdir}/gtk-2.0/gtkrc
+mkdir -p ${sysconfdir}/gtk-2.0
+touch ${sysconfdir}/gtk-2.0/gtkrc
+sed -i /gtk-touchscreen-mode = 1/d ${sysconfdir}/gtk-2.0/gtkrc
+echo 'gtk-touchscreen-mode = 1' >> ${sysconfdir}/gtk-2.0/gtkrc
 }
+
+pkg_postrm() {
+#!/bin/sh
+sed -i /gtk-touchscreen-mode = 1/d ${sysconfdir}/gtk-2.0/gtkrc
+}
+
