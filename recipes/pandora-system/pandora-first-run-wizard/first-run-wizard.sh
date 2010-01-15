@@ -45,19 +45,19 @@ fi
 
 # Ask the user to calibrate the touchscreen.
 
-if zenity --question --title="Touchscreen calibration" --text="It is recommended to calibrate and test the device touchscreen.\n\nDo you wish to calibrate the touchscreen now?" --ok-label="Yes" --cancel-label="No"; then 
-	# Make sure we have a sane environment as this script will be run long before any /etc/profile stuff.
-	. /etc/profile.d/tslib.sh
-	# Delete the pointercal file (do we want to do that?)
-	# rm /etc/pointercal
-	# Spawn the ts_* tools as subprocesses that will return to the script.
-	echo Running ts_calibrate	
-	/usr/bin/ts_calibrate
-	wait
-	echo Running ts_test
-	/usr/bin/ts_test
-	wait
-fi
+#if zenity --question --title="Touchscreen calibration" --text="It is recommended to calibrate and test the device touchscreen.\n\nDo you wish to calibrate the touchscreen now?" --ok-label="Yes" --cancel-label="No"; then 
+#	# Make sure we have a sane environment as this script will be run long before any /etc/profile stuff.
+#	. /etc/profile.d/tslib.sh
+#	# Delete the pointercal file (do we want to do that?)
+#	# rm /etc/pointercal
+#	# Spawn the ts_* tools as subprocesses that will return to the script.
+#	echo Running ts_calibrate	
+#	/usr/bin/ts_calibrate
+#	wait
+#	echo Running ts_test
+#	/usr/bin/ts_test
+#	wait
+#fi
 
 # ----
 
@@ -151,10 +151,10 @@ while ! launcher=$(zenity --list --title="Default User Interface" --text="Please
 done
 
 if [ $launcher == "xfce" ]; then 
-	sed -i 's/.*sessions.*/sessions xfce4,pmenu/g' /etc/slim.conf
+	sed -i 's/.*sessions .*/sessions xfce4,pmenu/g' /etc/slim.conf
 	echo Xfce selected as default interface
 else
-	sed -i 's/.*sessions.*/sessions pmenu,xfce4/g' /etc/slim.conf
+	sed -i 's/.*sessions .*/sessions pmenu,xfce4/g' /etc/slim.conf
 	echo PMenu selected as default interface
 fi
 
