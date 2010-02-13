@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Select Default GUI
+Comment=Change the default OpenPandora GUI
+StartupNotify=false
+Exec=gksudo /usr/pandora/scripts/op_defaultgui.sh
+Icon=Terminal
+Terminal=false
+Type=Application
+Categories=System;

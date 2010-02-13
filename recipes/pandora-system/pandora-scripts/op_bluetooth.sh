@@ -13,7 +13,7 @@ done
 INTERFACE=`hciconfig | grep "^hci" | cut -d ':' -f 1`
 pgrep bluetoothd
 if [ $? = 1 ]; then
-	notify-send "Bluetooth" "The bluetooth interface is being set up..." -i /usr/share/icons/hicolor/32x32/apps/st_bluetooth.png
+	notify-send "Bluetooth" "The bluetooth interface is being set up..." -i /usr/share/icons/hicolor/32x32/apps/blueman.png
 	sudo /usr/sbin/hciconfig ${INTERFACE} down
 	sudo /usr/sbin/hciconfig ${INTERFACE} up pscan
 	sudo /usr/sbin/bluetoothd
