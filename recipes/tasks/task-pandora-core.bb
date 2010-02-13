@@ -1,16 +1,16 @@
-DESCRIPTION = "Task file for default core/console apps in the Pandora image"
+DESCRIPTION = "Task file for default core/console apps and libs in the Pandora image"
 
 # Use this task as a base to ship all kernel modules and make sure firmware and drivers are installed for BT and WiFi.
 # Please see metadata/openpandora.oe.git/packages/pandora-system/pandora-firmware/pandora-firmware/readme.txt for info on the hacks for firmware.
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r1"
+PR = "r13"
 
 inherit task 
 
 AUFS = " \
-  aufs2-27 \
+#  aufs2-27 \
   aufs2-util \
 "
 
@@ -18,6 +18,12 @@ BLUETOOTH = " \
   blueprobe \
   bluez4 gst-plugin-bluez \
   libsndfile1 libasound-module-bluez \
+"
+
+# Package up the boot scripts and bootchart to help us work to drop the startup time.
+BOOT = " \
+  pandora-uboot-scripts \
+  bootchart \
 "
 
 WIRELESS = " \
@@ -29,6 +35,14 @@ WIRELESS = " \
   networkmanager netm-cli \  
 "
 
+MEDIA_LIBS = " \
+  libmodplug \
+  libsdl-x11 libsdl-mixer libsdl-image \
+  libsdl-gfx libsdl-net libsdl-ttf \
+  mikmod \
+  speex \  
+  
+"
 OPENGLES = " \
   omap3-sgx-modules devmem2 \
   libgles-omap3 \
@@ -40,15 +54,20 @@ PAM = " \
   libpam-meta \
 "
 
-SSH = " \
-  openssh-scp \
-  openssh-ssh \
-"
-
 PANDORA_LIBS = " \
   pandora-libpnd lsof \
   omap3-deviceid \
   pandora-skel \
+"
+
+SUDO = " \
+  sudo sudo-enable-wheel-group \ 
+  pandora-sudoers \
+"
+
+SSH = " \
+  openssh-scp \
+  openssh-ssh \
 "
 
 TOUCHSCREEN = " \
@@ -56,8 +75,12 @@ TOUCHSCREEN = " \
 "
 
 FS_SUPPORT = " \
-  nfs-utils nfs-utils-client \
-  fuse sshfs-fuse ntfs-3g \
+#  nfs-utils \
+  nfs-utils-client \
+  fuse fuse-utils \
+  sshfs-fuse gmailfs curlftpfs \
+  ntfs-3g \
+  squashfs-tools \
 "
 
 EXTRA_TOOLS = " \
@@ -73,31 +96,42 @@ EXTRA_TOOLS = " \
   gzip \
   bash \
   bzip2 \  
-  sudo sudo-enable-wheel-group \ 
   minicom \
   nano \
+  gdb \
+  sessreg \
 "
 
+# Add extra util-linux-ng utils to image. 
+# TODO: Fix util-linux-ng to meta depend on all subpackages.
+UTIL_LINUX_NG_EXTRAS = " \
+  util-linux-ng-losetup util-linux-ng-mountall \
+  util-linux-ng-swaponoff \
+"
+  
 RDEPENDS_${PN} = "\
   task-base-extended \
   task-proper-tools \
   ${AUFS} \
   ${WIRELESS} \
   ${BLUETOOTH} \  
+  ${BOOT} \
+  ${MEDIA_LIBS} \
   ${OPENGLES} \
   ${PANDORA_LIBS} \
   ${SSH} \
+  ${SUDO} \
   ${TOUCHSCREEN} \
   ${FS_SUPPORT} \
   ${EXTRA_TOOLS} \
+  ${UTIL_LINUX_NG_EXTRAS} \
 #        packagekit \
-  libsdl-gfx libsdl-net mikmod \
   python-pygame \
   alsa-utils alsa-utils-alsactl alsa-utils-alsamixer alsa-utils-aplay \
   rdesktop \
   mplayer \
   \
-  angstrom-zeroconf-audio \
+#  angstrom-zeroconf-audio \
   angstrom-led-config \ 
   \
   ${PAM} \
@@ -109,6 +143,6 @@ RRECOMMENDS_${PN} += "kernel-modules"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 RRECOMMENDS_${PN}_append_armv7a = " \
-	gnash gnash-browser-plugin \
+#	gnash gnash-browser-plugin \
 	omapfbplay \
 "

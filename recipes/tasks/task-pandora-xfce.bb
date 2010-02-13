@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r2"
+PR = "r28"
 
 inherit task
 
@@ -14,18 +14,17 @@ APPS = " \
   claws-mail \
   swfdec swfdec-gnome swfdec-mozilla \
   firefox \
-  gnumeric \   
-  gimp \
+#  gnumeric \   
+#  gimp \
   networkmanager network-manager-applet \ 
-  synergy \
-  vnc \
-  x11vnc angstrom-x11vnc-xinit \
-  xterm \
-  xchat \
+#  synergy \
+  vnc x11vnc angstrom-x11vnc-xinit \
+#  xchat \
+  xournal \
 "
 
 BLUETOOTH_GUI = " \
-#  blueman \
+  blueman \
   gnome-bluetooth \
 "
 
@@ -59,36 +58,41 @@ FONTS = " \
 # Any default games we want to ship.
 GAMES = " \
   scummvm \
+#  frozen-bubble \
+  gnome-games \  
 "
 
 GNOME_APPS = " \
-#  epiphany epiphany-extensions \
-#  evince \  
-  gnome-games \
   gnome-mplayer \
-  gcalctool \ 
+#  gcalctool \ 
   gnome-keyring gnome-keyring-pam-plugin \
+  gksu \
 "
 
 GNOME_GTK = " \
-#  hicolor-icon-theme \
 #  gnome-icon-theme \
 #  angstrom-gnome-icon-theme-enable \
 "
 
 GSTREAMER = " \
+#  gstreamer-ti \
   gst-ffmpeg \
   gst-omapfb \
-  gst-plugin-pulse \
+#  gst-plugin-pulse \
+  gst-plugin-xvimagesink \
   gst-plugins-base-meta \
-#  gst-plugins-good-meta \
-  gst-plugins-bad-meta \
+  gst-plugins-good-meta gst-plugins-bad-meta \
 #  gst-plugins-ugly-meta \
 "
 
 ICON_THEME = " \
+  hicolor-icon-theme \
   elementary-icon-theme \
   elementary-icon-theme-enable \
+"
+
+LAUNCHERS = " \
+  netbook-launcher-efl \
 "
 
 PANDORA = " \
@@ -97,6 +101,8 @@ PANDORA = " \
   pandora-wallpaper-official pandora-wallpaper-community \
   pandora-xfce-defaults \
   pandora-xmms-defaults xmms \
+  pandora-midori-defaults midori \
+  pandora-pmenu libgles2d \
 "
 
 PERL = " \
@@ -108,16 +114,24 @@ PERL = " \
 "
 
 PULSEAUDIO = " \
-  pulseaudio-alsa-wrapper \
-  pulseaudio-esd-wrapper \
-  pulseaudio-module-gconf \
-  libasound-module-ctl-pulse \
-  libasound-module-pcm-pulse \
+#  pulseaudio-alsa-wrapper \
+#  pulseaudio-esd-wrapper \
+#  pulseaudio-module-gconf \
+#  libasound-module-ctl-pulse \
+#  libasound-module-pcm-pulse \
 "
 
-QT_SUPPORT = " \
-  qt4-x11-free \
+QT_SELECTED = "qt4-x11-free"
 #  qt4-x11-free-gles \
+
+QT_SUPPORT = " \
+  ${QT_SELECTED} \
+"
+
+# We want all of the Qt metapackage (for dev use) without the demos/examples.
+BAD_RRECOMMENDS += " \
+  ${QT_SELECTED}-demos \
+  ${QT_SELECTED}-examples \
 "
 
 TOTEM = " \
@@ -134,9 +148,9 @@ TOTEM = " \
 "
 
 TOUCHSCREEN = " \
-  xf86-input-tslib \
   gtk-touchscreen-mode-enable \
   libgtkstylus \
+  xinput-calibrator \
 "
 
 XFCE46_BASE = " \
@@ -148,6 +162,7 @@ XFCE46_BASE = " \
   xfconf \
   xfdesktop \
   xfce4-panel \
+  xfce4-power-manager \
   \
   gtk-xfce-engine \
   \
@@ -171,7 +186,6 @@ XFCE46_EXTRAS = " \
   xfce4-mixer \
   xfce4-appfinder \
   xfprint \    
-  midori \
   orage \
   squeeze \
   ristretto \
@@ -182,16 +196,16 @@ XFCE46_EXTRAS = " \
 XFCE_THEMES = " \
   xfwm4-theme-daloa \
   xfwm4-theme-moheli \
-  xfwm4-theme-default-4.0 \
-  xfwm4-theme-default-4.2 \
-  xfwm4-theme-default-4.4 \
+#  xfwm4-theme-default-4.0 \
+#  xfwm4-theme-default-4.2 \
+#  xfwm4-theme-default-4.4 \
   xfwm4-theme-kokodi \
-  xfwm4-theme-moheli \
   xfwm4-theme-sassandra \
-  xfwm4-theme-stoneage \
-  xfwm4-theme-therapy \
-  xfwm4-theme-tyrex \
-  xfwm4-theme-wallis \  
+#  xfwm4-theme-stoneage \
+#  xfwm4-theme-therapy \
+#  xfwm4-theme-tyrex \
+#  xfwm4-theme-wallis \  
+  xfwm4-themes \
 "
 
 XSERVER_BASE = " \
@@ -212,6 +226,8 @@ XSERVER_BASE = " \
   xset \
   xvinfo \
   devilspie \
+  encodings \
+  xterm \
 "
 
 RDEPENDS_${PN} = " \
@@ -228,6 +244,7 @@ RDEPENDS_${PN} = " \
   ${GNOME_APPS} \
   ${GSTREAMER} \
   ${ICON_THEME} \
+  ${LAUNCHERS} \
   ${PANDORA} \
   ${PERL} \
   ${PULSEAUDIO} \
@@ -240,17 +257,16 @@ RDEPENDS_${PN} = " \
   ${XFCE_THEMES} \
   \
   rxvt-unicode \
-  xst \
-  suspend-desktop \
-  teleport \
+#  xst \
+#  suspend-desktop \
+#  teleport \
   gdk-pixbuf-loader-png \
   gdk-pixbuf-loader-xpm \
   gdk-pixbuf-loader-jpeg \
   pango-module-basic-x \
   pango-module-basic-fc \
   xcursor-transparent-theme \	
-  mime-support \
   xterm xmms \
-  jaaa nmap iperf gnuplot \
-  x11vnc angstrom-x11vnc-xinit \
+  jaaa nmap iperf \
+#  gnuplot \
 "
