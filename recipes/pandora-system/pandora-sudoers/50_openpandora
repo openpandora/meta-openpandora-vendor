@@ -1,0 +1,16 @@
+%wheel ALL=(ALL) NOPASSWD: /sbin/halt
+%wheel ALL=(ALL) NOPASSWD: /sbin/ifconfig
+%wheel ALL=(ALL) NOPASSWD: /sbin/iwconfig
+%wheel ALL=(ALL) NOPASSWD: /sbin/iwlist
+%wheel ALL=(ALL) NOPASSWD: /sbin/lsusb
+%wheel ALL=(ALL) NOPASSWD: /sbin/poweroff
+%wheel ALL=(ALL) NOPASSWD: /sbin/reboot
+%wheel ALL=(ALL) NOPASSWD: /sbin/shutdown
+%wheel ALL=(ALL) NOPASSWD: /usr/bin/chvt
+%wheel ALL=(ALL) NOPASSWD: /usr/bin/gnome-cups-manager
+%wheel ALL=(ALL) NOPASSWD: /usr/bin/showkey
+%wheel ALL=(ALL) NOPASSWD: /usr/bin/traceroute
+%wheel ALL=(ALL) NOPASSWD: /usr/bin/uniqueid.sh
+%wheel ALL=(ALL) NOPASSWD: /usr/sbin/bluetoothd
+%wheel ALL=(ALL) NOPASSWD: /usr/sbin/hciconfig
+
