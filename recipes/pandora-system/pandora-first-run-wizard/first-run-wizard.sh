@@ -86,7 +86,7 @@ while ! username=$(zenity --title="Enter your username" --entry --text "Please c
 	zenity --title="Error" --error --text="Please try again." --timeout 6
 done
 
-while ! useradd -c "$name,,," -G adm,audio,video,netdev,wheel,plugdev "$username" ; do
+while ! useradd -c "$name,,," -G adm,audio,video,netdev,wheel,plugdev,users "$username" ; do
 	username=$(zenity --title="Please check username" --entry --text "Please ensure that your username consists of only\nletters and numbers and is not already in use on the system." --entry-text "$username")
 done
 
@@ -151,10 +151,12 @@ while ! launcher=$(zenity --list --title="Default User Interface" --text="Please
 done
 
 if [ $launcher == "xfce" ]; then 
-	sed -i 's/.*sessions .*/sessions xfce4,pmenu/g' /etc/slim.conf
+#	sed -i 's/.*sessions .*/sessions xfce4,pmenu/g' /etc/slim.conf
+	sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=startxfce4/g' /home/$username/.xinitrc
 	echo Xfce selected as default interface
 else
-	sed -i 's/.*sessions .*/sessions pmenu,xfce4/g' /etc/slim.conf
+#	sed -i 's/.*sessions .*/sessions pmenu,xfce4/g' /etc/slim.conf
+	sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=pmenu/g' /home/$username/.xinitrc
 	echo PMenu selected as default interface
 fi
 
@@ -162,10 +164,10 @@ fi
 
 # Set the timezone and date/time
 
-while ! timezone=$(zenity --list --title "Select your timezone" --text="Please select your timezone" --column="Select your timezone" --print-column=1 "GMT" "GMT+1" "GMT+2" "GMT+3" "GMT+4" "GMT+5" "GMT+6" "GMT+7" "GMT+8" "GMT+9" "GMT+10" "GMT+11" "GMT+12" "GMT-1" "GMT-2" "GMT-3" "GMT-4" "GMT-5" "GMT-6" "GMT-7" "GMT-8" "GMT-9" "GMT-10" "GMT-11" "GMT-12" "GMT-13" "GMT-14" "UCT" "UTC" "Universal" --width=250 --height=450) || [ "x$timezone" = "x" ] ; do
+while ! timezone=$(zenity --list --title "Select your timezone" --text="Please select your timezone" --column="Select your timezone" --print-column=1 "GMT (London, Lisbon, Portugal, Casablanca, Morocco)" "GMT+1 (Paris, Berlin, Amsterdam, Bern, Stockholm)" "GMT+2 (Athens, Helsinki, Istanbul)" "GMT+3 (Kuwait, Nairobi, Riyadh, Moscow)" "GMT+4 (Abu Dhabi, Iraq, Muscat, Kabul)" "GMT+5 (Calcutta, Colombo, Islamabad, Madras, New Delhi)" "GMT+6 (Almaty, Dhakar, Kathmandu)" "GMT+7 (Bangkok, Hanoi, Jakarta)" "GMT+8 (Beijing, Hong Kong, Kuala Lumpar, Singapore, Taipei)" "GMT+9 (Osaka, Seoul, Sapporo, Tokyo, Yakutsk)" "GMT+10 (Brisbane, Melbourne, Sydney, Vladivostok)" "GMT+11 (Magadan, New Caledonia, Solomon Is)" "GMT+12 (Auckland, Fiji, Kamchatka, Marshall Is., Wellington, Suva)" "GMT-1 (Azores, Cape Verde Is.)" "GMT-2 (Mid-Atlantic)" "GMT-3 (Brasilia, Buenos Aires, Georgetown)" "GMT-4 (Atlantic Time, Caracas)" "GMT-5 (Bogota, Lima, New York)" "GMT-6 (Mexico City, Saskatchewan, Chicago, Guatamala)" "GMT-7 (Denver, Edmonton, Mountain Time, Phoenix, Salt Lake City)" "GMT-8 (Anchorage, Los Angeles, San Francisco, Seattle)" "GMT-9 (Alaska)" "GMT-10 (Hawaii, Honolulu)" "GMT-11 (Midway Island, Samoa)" "GMT-12 (Eniwetok, Kwaialein)" "UTC" "Universal" --width=500 --height=450) || [ "x$timezone" = "x" ] ; do
 	zenity --title="Error" --error --text="Please select a timezone." --timeout=6
 done
-
+timezone=`echo $timezone | sed  's/(.*)//g'`
 echo $timezone
 echo rm /etc/localtime && ln -s /usr/share/zoneinfo/Etc/$timezone /etc/localtime
 
