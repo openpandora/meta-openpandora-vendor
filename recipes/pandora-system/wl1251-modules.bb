@@ -1,17 +1,22 @@
 DESCRIPTION = "Kernel drivers for the TI WL1251 WiFi chip found on the Pandora - Connected via SDIO"
 LICENSE = "GPLv2"
 
+PR = "r1"
+
 SRC_URI += " \
-	http://djwillis.openpandora.org/pandora/wifi/wl1251-wireless-2009-10-28-take3.zip \	
+	http://djwillis.openpandora.org/pandora/wifi/compat-wireless-2010-01-20.zip;name=compat-wireless \
 	file://rc.wl1251 \
 "
+
+SRC_URI[compat-wireless.md5sum] = "110a808b15384bff0809ae90017f85aa"
+SRC_URI[compat-wireless.sha256sum] = "0b6680956601b169d1e2d664f2b0ecfbff11746ca95effd324f7e29580286a68"
 
 inherit update-rc.d
 
 INITSCRIPT_NAME = "wl1251-init"
 INITSCRIPT_PARAMS = "start 30 5 2 . stop 40 0 1 6 ."
 
-S = "${WORKDIR}/compat-wireless-2009-10-28"
+S = "${WORKDIR}/compat-wireless-2010-01-20"
 
 inherit module
 
@@ -28,6 +33,8 @@ do_compile_prepend() {
 }
 
 do_install() {
+          install -d ${D}/lib/modules/${KERNEL_VERSION}/updates/compat
+          install -m 0644 ${S}/compat/*.ko ${D}/lib/modules/${KERNEL_VERSION}/updates/compat
           install -d ${D}/lib/modules/${KERNEL_VERSION}/updates/kernel/net/mac80211
           install -m 0644 ${S}/net/mac80211/*.ko ${D}/lib/modules/${KERNEL_VERSION}/updates/kernel/net/mac80211
           install -d ${D}/lib/modules/${KERNEL_VERSION}/updates/kernel/net/wireless
@@ -42,6 +49,7 @@ do_install() {
           install -m 0755 ${WORKDIR}/rc.wl1251 ${D}${sysconfdir}/init.d/wl1251-init
 }
 
+FILES_${PN} += "/lib/modules/${KERNEL_VERSION}/updates/compat/*.ko.*"
 FILES_${PN} += "/lib/modules/${KERNEL_VERSION}/updates/kernel/net/mac80211/*.ko.*"
 FILES_${PN} += "/lib/modules/${KERNEL_VERSION}/updates/kernel/net/wireless/*.ko.*"
 FILES_${PN} += "/lib/modules/${KERNEL_VERSION}/updates/kernel/net/rfkill/*.ko.*"

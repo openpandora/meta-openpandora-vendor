@@ -16,6 +16,7 @@ d_start() {
 	insmod $(busybox find /lib/modules/$(uname -r) -name "arc4.ko")
 	insmod $(busybox find /lib/modules/$(uname -r) -name "ecb.ko")
 	insmod $(busybox find /lib/modules/$(uname -r) -name "pcbc.ko")
+	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "compat.ko")	
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "rfkill_backport.ko")
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "cfg80211.ko")
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "mac80211.ko")
