@@ -5,7 +5,7 @@ KERNEL_IMAGETYPE = "uImage"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-SRCREV = "abd422d7c820719eb12123ba08fab925e6f9b40c"
+SRCREV = "f80e5911826245ba934f97aba72276c5156057fb"
 
 SRC_URI = " \
            git://git.openpandora.org/pandora-kernel.git;protocol=git;branch=pandora-27-omap1 \
@@ -44,18 +44,6 @@ SRC_URI_append = " \
            file://0002-Add-a-very-basic-platform-driver-module-to-bring-up-.patch;patch=1 \
            file://0003-Remove-old-msm_wifi-hack-as-the-temp-platform-driver.patch;patch=1 \
 "
-
-# Temp Keypad Patches for FN.
-
-SRC_URI_append = " \
-           file://keypad/0001-input-remove-old-twl4030keypad-to-replace-it-with-ma.patch;patch=1 \
-           file://keypad/0002-Input-add-support-for-generic-GPIO-based-matrix-keyp.patch;patch=1 \
-           file://keypad/0003-Input-matrix_keypad-make-matrix-keymap-size-dynamic.patch;patch=1 \
-           file://keypad/0004-Input-matrix-keypad-add-function-to-build-device-key.patch;patch=1 \
-           file://keypad/0005-Input-add-twl4030_keypad-driver.patch;patch=1 \
-           file://keypad/0006-input-hacks-updates-for-mainline-twl4030-driver.patch;patch=1 \
-           file://keypad/0007-some-hackish-Fn-handling-for-testing.patch;patch=1 \           
-"       
 
 # SquashFS 4 Patches
 
