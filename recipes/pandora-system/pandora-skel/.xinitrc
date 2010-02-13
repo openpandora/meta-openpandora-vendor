@@ -39,7 +39,11 @@ if [ -d /etc/X11/Xsession.d ]; then
 fi
 
 # HUP pndnotifyd to make sure it picks up the users home.
-kill -1 pndnotifyd 
+kill -1 pndnotifyd &
+
+
+# Bring up the Bluetooth hardware. No point starting it before login.
+/usr/pandora/scripts/op_bluetooth.sh &
 
 # The following variable defines the session which is started if the user
 # doesn't explicitely select a session in SLiM.
