@@ -2,7 +2,7 @@ DESCRIPTION="Simple Login Manager"
 HOMEPAGE="http://slim.berlios.de"
 LICENSE = "GPL"
 
-PR = "r2"
+PR = "r4"
 
 inherit update-rc.d
 
@@ -75,9 +75,9 @@ INITSCRIPT_PARAMS = "start 99 5 2 . stop 20 0 1 6 ."
 pkg_postinst_${PN} () {
 # Register SLiM as default DM
 mkdir -p ${sysconfdir}/X11/
-echo "${bindir}/slim-dynwm" > ${sysconfdir}/X11/default-display-manager
+echo "${bindir}/slim" > ${sysconfdir}/X11/default-display-manager
 }
 
 pkg_postrm_${PN} () {
-sed -i /slim-dynwm/d ${sysconfdir}/X11/default-display-manager || true
+sed -i /slim/d ${sysconfdir}/X11/default-display-manager || true
 }

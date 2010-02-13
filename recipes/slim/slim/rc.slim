@@ -9,8 +9,7 @@
 
 case $1 in
 start)
-	rm /var/run/slim.lock
-	/usr/bin/slim -d
+	/usr/bin/slim -d &
 	;;
 stop)
 	killall /usr/bin/slim
