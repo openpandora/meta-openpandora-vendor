@@ -1,9 +1,9 @@
 DESCRIPTION = "An openGL-ES 2D library for OMAP3 SGX based systems"
 LICENSE = "GPL"
 
-DEPENDS = "virtual/libsdl libgles-omap3"
+DEPENDS = "virtual/libsdl libsdl-ttf libsdl-image libgles-omap3"
 
-PR = "r5"
+PR = "r6"
 
 PARALLEL_MAKE = ""
 

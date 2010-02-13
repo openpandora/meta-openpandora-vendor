@@ -3,7 +3,7 @@ LICENSE = "GPL"
 
 DEPENDS = "virtual/libsdl libgles-omap3 libgles2d pandora-libpnd libconfig"
 
-PR = "r6"
+PR = "r8"
 
 PARALLEL_MAKE = ""
 
@@ -12,7 +12,7 @@ SRC_URI = " \
   file://remove-libconfig-from-makefile.patch;patch=1 \
 "
 
-SRCREV = "c1dc3a4e893dd0a11d2ad9795436c1051316ce19"
+SRCREV = "025802f4bfda82c75ed67ad1c91e7c4ef0517d84"
 
 S = "${WORKDIR}/git"
 
