@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r4"
+PR = "r5"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -19,6 +19,9 @@ SRC_URI = " \
           file://op_bluetooth.desktop \
           file://op_defaultgui.sh \
           file://op_defaultgui.desktop \
+          file://op_switchgui.sh \
+          file://op_switchgui.desktop \
+          file://startnetbooklauncher \
 "
 
 do_install() {
@@ -26,12 +29,20 @@ do_install() {
           install -m 0755 ${WORKDIR}/op_bright.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_cpuspeed.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_wifi.sh ${D}${prefix}/pandora/scripts/
-          install -m 0755 ${WORKDIR}/op_bluetooth.sh ${D}${prefix}/pandora/scripts/          
+          install -m 0755 ${WORKDIR}/op_bluetooth.sh ${D}${prefix}/pandora/scripts/
+          install -m 0755 ${WORKDIR}/op_defaultgui.sh ${D}${prefix}/pandora/scripts/
+          install -m 0755 ${WORKDIR}/op_switchgui.sh ${D}${prefix}/pandora/scripts/
+          
           install -d ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_bright.desktop ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_cpuspeed.desktop ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_wifi.desktop ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_bluetooth.desktop ${D}${datadir}/applications/
+          install -m 0644 ${WORKDIR}/op_defaultgui.desktop ${D}${datadir}/applications/
+          install -m 0644 ${WORKDIR}/op_switchgui.desktop ${D}${datadir}/applications/          
+
+          install -d ${D}${bindir}/
+          install -m 0755 ${WORKDIR}/startnetbooklauncher ${D}${bindir}/
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
