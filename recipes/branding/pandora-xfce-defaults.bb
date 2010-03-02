@@ -16,6 +16,9 @@ do_install() {
   install -d ${D}${sysconfdir}/xdg/op/applications/
   install -m 0666 ${WORKDIR}/applications/defaults.list ${D}${sysconfdir}/xdg/op/applications/
   
+  install -d ${D}${sysconfdir}/xdg/op/menus/
+  install -m 0666 ${WORKDIR}/menus/* ${D}${sysconfdir}/xdg/op/menus/
+    
   install -d ${D}${sysconfdir}/xdg/op/xfce4/
   install -m 0666 ${WORKDIR}/xfce4/helpers.rc ${D}${sysconfdir}/xdg/op/xfce4/
   install -m 0666 ${WORKDIR}/xfce4/Xcursor.xrdb ${D}${sysconfdir}/xdg/op/xfce4/
