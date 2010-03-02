@@ -38,26 +38,51 @@ if [ -d /etc/X11/Xsession.d ]; then
     done
 fi
 
+#Load up the proper keymap for X
+xmodmap ~/.pndXmodmap
+
 # HUP pndnotifyd to make sure it picks up the users home.
 kill -1 pndnotifyd &
-
-
-# Bring up the Bluetooth hardware. No point starting it before login.
-/usr/pandora/scripts/op_bluetooth.sh &
 
 # The following variable defines the session which is started if the user
 # doesn't explicitely select a session in SLiM.
 
 DEFAULT_SESSION=startxfce4
 
-case $1 in
-xfce4)
-	exec startxfce4
-	;;
-pmenu)
-	exec pmenu
-	;;
-*)
-	exec $DEFAULT_SESSION
-	;;
-esac
+# Write the default session into a temporary file.
+# This way, we can easily add new sessions in the future by just
+# setting the DEFAULT_SESSION to the executable or script.
+
+echo $DEFAULT_SESSION > /tmp/gui.load
+
+# If SLiM does pass a variable, use that. Otherwise use our DEFAULT_SESSION.
+
+SESSION=$1
+
+if [ "$SESSION" == "" ]
+
+	then
+	SESSION=$(cat /tmp/gui.load)
+fi
+
+# Starts our session and checks if a new session should be loaded
+# after the old one is quit by simply executing the command that's in /tmp/gui.load
+
+# This way, we can easily do a quick switch from any session to the next one by simply
+# echo'ing the new session executable into /tmp/gui.load and exiting.
+
+while true
+do
+	rm /tmp/gui.load
+
+	if [ "$SESSION" == "" ]
+
+	then
+		exit 0;
+	fi
+
+	$SESSION
+
+	SESSION=$(cat /tmp/gui.load)
+
+done

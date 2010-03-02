@@ -1,0 +1,47 @@
+pcm.dmixed {
+    type dmix
+    ipc_key 1234
+    slave {
+         pcm "hw:0"
+         buffer_size 8192
+         period_size 2048
+         #periods 128
+         period_time 0
+         buffer_time 0
+         rate 44100
+    }
+}
+
+
+pcm.softvol {
+    type softvol
+    slave {
+          pcm      "dmixed"
+    }
+    control {
+          name     "Master"
+          card 0
+    }
+}
+
+pcm.!default {
+    type     plug
+    slave.pcm   "softvol"
+}
+
+pcm.dsp0 {
+    type plug
+    slave {
+          pcm "hw:0"
+    }
+}
+
+ctl.dsp0 {
+    type plug
+    slave.pcm "hw:0"
+}
+
+ctl.mixer0 {
+    type plug
+    slave.pcm "hw:0"
+}
