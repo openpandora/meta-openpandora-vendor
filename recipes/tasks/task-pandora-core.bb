@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps and libs in the Pandora i
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r13"
+PR = "r18"
 
 inherit task 
 
@@ -32,7 +32,7 @@ WIRELESS = " \
 #  pandora-wifi pandora-wifi-tools \
   wireless-tools \
   wpa-supplicant \  
-  networkmanager netm-cli \  
+  networkmanager netm-cli \
 "
 
 MEDIA_LIBS = " \
@@ -46,7 +46,7 @@ MEDIA_LIBS = " \
 OPENGLES = " \
   omap3-sgx-modules devmem2 \
   libgles-omap3 \
-#  libgles-omap3-demos \
+  libgles-omap3-rawdemos \
 "
 
 PAM = " \
