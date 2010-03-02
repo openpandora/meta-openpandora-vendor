@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r28"
+PR = "r1"
 
 inherit task
 
@@ -14,7 +14,7 @@ APPS = " \
   claws-mail \
   swfdec swfdec-gnome swfdec-mozilla \
   firefox \
-#  gnumeric \   
+  gnumeric \   
 #  gimp \
   networkmanager network-manager-applet \ 
 #  synergy \
@@ -57,9 +57,9 @@ FONTS = " \
 
 # Any default games we want to ship.
 GAMES = " \
-  scummvm \
+#  scummvm \
 #  frozen-bubble \
-  gnome-games \  
+#  gnome-games \  
 "
 
 GNOME_APPS = " \
@@ -103,6 +103,7 @@ PANDORA = " \
   pandora-xmms-defaults xmms \
   pandora-midori-defaults midori \
   pandora-pmenu libgles2d \
+  libgles-omap3-x11demos \  
 "
 
 PERL = " \
@@ -185,6 +186,7 @@ XFCE46_EXTRAS = " \
   xfce4-notifyd \
   xfce4-mixer \
   xfce4-appfinder \
+  xfce4-battery-plugin \
   xfprint \    
   orage \
   squeeze \
@@ -228,6 +230,7 @@ XSERVER_BASE = " \
   devilspie \
   encodings \
   xterm \
+  xmodmap \
 "
 
 RDEPENDS_${PN} = " \
