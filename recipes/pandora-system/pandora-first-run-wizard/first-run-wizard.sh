@@ -7,6 +7,7 @@
 
 export LANG=en_GB.UTF-8
 export GTK2_RC_FILES=/usr/share/themes/Xfce/gtk-2.0/gtkrc
+xmodmap /etc/skel/.pndXmodmap
 
 # Ensure there is a wheel group for sudoers to be put into.
 # TODO: Do this somewhere better.
@@ -146,7 +147,7 @@ fi
 
 # Select the default interface and setup SLiM to pass that as a sesion to ~./.xinitrc
 
-while ! launcher=$(zenity --list --title="Default User Interface" --text="Please choose your default application launcher.\n\nYou can always change this setting later." --column "return" --print-column=1 --hide-column=1 --column "Pick a launcher" "xfce" "Desktop environment (Xfce)" "pmenu" "Gaming-console like launcher (PMenu)") || [ "x$launcher" = "x" ]; do 
+while ! launcher=$(zenity --height 250 --list --title="Default User Interface" --text="Please choose your default application launcher.\n\nYou can always change this setting later." --column "return" --print-column=1 --hide-column=1 --column "Pick a launcher" "xfce" "Desktop environment (Xfce)" "pmenu" "Gaming-console like launcher (PMenu)" "netbooklauncher" "Netbook Launcher") || [ "x$launcher" = "x" ]; do 
 	zenity --title="Error" --error --text="Please select a default launcher." --timeout 6
 done
 
@@ -154,10 +155,12 @@ if [ $launcher == "xfce" ]; then
 #	sed -i 's/.*sessions .*/sessions xfce4,pmenu/g' /etc/slim.conf
 	sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=startxfce4/g' /home/$username/.xinitrc
 	echo Xfce selected as default interface
-else
+elif [ $launcher == "pmenu" ]; then
 #	sed -i 's/.*sessions .*/sessions pmenu,xfce4/g' /etc/slim.conf
 	sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=pmenu/g' /home/$username/.xinitrc
 	echo PMenu selected as default interface
+elif [ $launcher == "netbooklauncher" ]; then
+	sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=startnetbooklauncher/g' /home/$username/.xinitrc
 fi
 
 # ----
