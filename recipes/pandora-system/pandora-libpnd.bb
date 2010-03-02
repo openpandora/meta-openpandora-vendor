@@ -1,7 +1,7 @@
 DESCRIPTION = "Support for the PND format in Pandora images (lib, daemon, init script etc.)"
 LICENSE = "lGPL"
 
-PR = "r16"
+PR = "r1"
 
 PARALLEL_MAKE = ""
 
@@ -12,7 +12,7 @@ SRC_URI = " \
           file://op_pnd_run.desktop \
 "
 
-SRCREV = "9e728273fb455df55b1536ef5fb80f997dc6e2d7"
+SRCREV = "f03bf767b821f2f8e0a22e5d3422f4e5dfae8a2d"
 
 S = "${WORKDIR}/git"
 
@@ -59,6 +59,7 @@ do_install() {
           install -m 0755 ${S}/deployment/usr/bin/pndnotifyd ${D}${bindir}/pndnotifyd
           install -m 0755 ${S}/deployment/usr/bin/pndevmapperd ${D}${bindir}/pndevmapperd 
           install -m 0755 ${S}/deployment/usr/bin/pnd_run ${D}${bindir}/pnd_run 
+          install -m 0755 ${S}/deployment/usr/bin/pnd_info ${D}${bindir}/pnd_info
                    
           install -d ${D}${prefix}/pandora/
           install -d ${D}${prefix}/pandora/apps/
@@ -68,7 +69,7 @@ do_install() {
           
           install -d ${D}${sysconfdir}/init.d/
           install -m 0755 ${WORKDIR}/rc.pndnotifyd ${D}${sysconfdir}/init.d/pndnotifyd-init
-          install -m 0755 ${WORKDIR}/rc.pndevmapperd ${D}${sysconfdir}/init.d/pndevmapperd-init          
+          install -m 0755 ${WORKDIR}/rc.pndevmapperd ${D}${sysconfdir}/init.d/pndevmapperd-init
           
           install -d ${D}${prefix}/local/share/applications/
           
@@ -79,7 +80,7 @@ do_install() {
           install -m 440 ${S}/testdata/sh/sudoers ${D}${sysconfdir}/sudoers.d/99_libpnd
           
           install -d ${D}${datadir}/applications/
-          install -m 0644 ${WORKDIR}/op_pnd_run.desktop ${D}${datadir}/applications/          
+          install -m 0644 ${WORKDIR}/op_pnd_run.desktop ${D}${datadir}/applications/
 }
 
 FILES_${PN} += "${bindir} ${sbindir} ${prefix}/pandora/*"
