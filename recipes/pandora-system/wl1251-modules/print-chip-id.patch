@@ -1,0 +1,18 @@
+diff --git a/drivers/net/wireless/wl12xx/wl1251_main.c b/drivers/net/wireless/wl12xx/wl1251_main.c
+index 7a8e489..0e1ae21 100644
+--- a/drivers/net/wireless/wl12xx/wl1251_main.c
++++ b/drivers/net/wireless/wl12xx/wl1251_main.c
+@@ -184,11 +184,11 @@ static int wl1251_chip_wakeup(struct wl1251 *wl)
+ 
+ 	switch (wl->chip_id) {
+ 	case CHIP_ID_1251_PG12:
+-		wl1251_debug(DEBUG_BOOT, "chip id 0x%x (1251 PG12)",
++		wl1251_info("chip id 0x%x (1251 PG12)",
+ 			     wl->chip_id);
+ 		break;
+ 	case CHIP_ID_1251_PG11:
+-		wl1251_debug(DEBUG_BOOT, "chip id 0x%x (1251 PG11)",
++		wl1251_info("chip id 0x%x (1251 PG11)",
+ 			     wl->chip_id);
+ 		break;
+ 	case CHIP_ID_1251_PG10:

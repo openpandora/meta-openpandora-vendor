@@ -8,6 +8,8 @@ SRC_URI += " \
 	file://0003-wl1251-reduce-eeprom-read-wait-time.patch;patch=1 \
 	file://0004-wl1251-fix-potential-crash.patch;patch=1 \
 	file://0005-pandora-hacks.patch;patch=1 \
+	file://no-scan-while-connected.patch;patch=1 \
+	file://print-chip-id.patch;patch=1 \
 	file://rc.wl1251 \
 	file://50-compat_firmware.rules \
 	file://compat_firmware.sh \
