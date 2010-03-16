@@ -1,0 +1,40 @@
+From c1ebe9a959ce72f42da36930f5959a52ecff3b15 Mon Sep 17 00:00:00 2001
+From: David-John Willis <John.Willis@Distant-earth.com>
+Date: Fri, 5 Mar 2010 12:32:18 +0000
+Subject: [PATCH] Remove libconfig from Makefile.
+
+---
+ Makefile |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 5e52865..d618140 100755
+--- a/Makefile
++++ b/Makefile
+@@ -11,11 +11,11 @@ STRIP = ${CROSSCOMPILE}strip
+ RM = rm
+ 
+ # environment
+-LDFLAGS = -L$(PNDSDK)/usr/lib -lSDL -lSDL_image -lSDL_ttf -lfreetype -lGLES2D \
++EXTRALDFLAGS = -L$(PNDSDK)/usr/lib -lSDL -lSDL_image -lSDL_ttf -lfreetype -lGLES2D \
+ 		-lGLES_CM -lIMGegl -lsrv_um -lXau -lXdmcp -lXi -lXext -lX11 \
+-		-lpnd -lconfig -lts-1.0 -lstdc++
++		-lpnd -lconfig -lstdc++
+ 
+-CFLAGS = -Wall -Werror -g -Ilibpnd -I$(PNDSDK)/usr/include
++CFLAGS += -Wall -Werror -g -I$(PNDSDK)/usr/include
+ CFLAGS += -O3 -march=armv7-a -mcpu=cortex-a8 -mtune=cortex-a8 -mfloat-abi=softfp \
+ 		-mfpu=neon -ftree-vectorize -ffast-math -fomit-frame-pointer \
+ 		-fno-strict-aliasing -fsingle-precision-constant
+@@ -41,7 +41,7 @@ clean:
+ #
+ 
+ pmenu:	${ALLOBJ}
+-	${CC} ${ALLOBJ} ${LDFLAGS} -o ${TARGET}
++	${CC} ${ALLOBJ} ${EXTRALDFLAGS} -o ${TARGET}
+ 	${STRIP} ${TARGET}
+ 
+ # deployment and assembly components
+-- 
+1.6.3.1
+

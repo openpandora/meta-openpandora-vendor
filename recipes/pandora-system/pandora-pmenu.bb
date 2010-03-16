@@ -3,16 +3,16 @@ LICENSE = "GPL"
 
 DEPENDS = "virtual/libsdl libgles-omap3 libgles2d pandora-libpnd libconfig"
 
-PR = "r8"
+PR = "r11"
 
 PARALLEL_MAKE = ""
 
 SRC_URI = " \
   git://github.com/Cpasjuste/pmenu.git;protocol=git;branch=master \
-  file://remove-libconfig-from-makefile.patch;patch=1 \
+  file://0001-Remove-libconfig-from-Makefile.patch;patch=1 \
 "
 
-SRCREV = "025802f4bfda82c75ed67ad1c91e7c4ef0517d84"
+SRCREV = "ba590077b168f25b3d18e31c5efc644846ff53ee"
 
 S = "${WORKDIR}/git"
 
