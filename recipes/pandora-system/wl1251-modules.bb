@@ -2,7 +2,7 @@ DESCRIPTION = "Kernel drivers for the TI WL1251 WiFi chip found on the Pandora -
 LICENSE = "GPLv2"
 
 SRC_URI += " \
-	http://www.orbit-lab.org/kernel/compat-wireless-2.6/compat-wireless-2010-03-10.tar.bz2;name=compat-wireless \
+	http://www.orbit-lab.org/kernel/compat-wireless-2.6/2010/03/compat-wireless-2010-03-10.tar.bz2;name=compat-wireless \
 	file://0001-wl1251-make-local-symbols-static.patch;patch=1 \
 	file://0002-wl1251-fix-ELP_CTRL-register-accesses-when-using-SDI.patch;patch=1 \
 	file://0003-wl1251-reduce-eeprom-read-wait-time.patch;patch=1 \
