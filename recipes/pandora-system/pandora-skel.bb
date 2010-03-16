@@ -16,6 +16,7 @@ SRC_URI = " \
   file://xsettings.xml \
   file://pndXmodmap \
   file://asoundrc \
+  file://op_btenabled \
 "
 
 # xsettings.xml is a hack until I can figure out why XDG configs are not setting the icon theme for Xfce/GTK+
@@ -28,6 +29,7 @@ do_install() {
   install -m 0644 ${WORKDIR}/pam_environment ${D}${sysconfdir}/skel/.pam_environment
   install -m 0644 ${WORKDIR}/pndXmodmap ${D}${sysconfdir}/skel/.pndXmodmap
   install -m 0644 ${WORKDIR}/asoundrc ${D}${sysconfdir}/skel/.asoundrc
+  install -m 0644 ${WORKDIR}/op_btenabled ${D}${sysconfdir}/skel/.op_btenabled
   
   install -d ${D}${sysconfdir}/skel/Applications/Settings/xfce4/xfconf/xfce-perchannel-xml
   install -m 0644 ${WORKDIR}/xsettings.xml ${D}${sysconfdir}/skel/Applications/Settings/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
