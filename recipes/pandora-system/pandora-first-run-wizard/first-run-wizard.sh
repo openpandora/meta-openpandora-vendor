@@ -147,7 +147,7 @@ fi
 
 # Select the default interface and setup SLiM to pass that as a sesion to ~./.xinitrc
 
-while ! launcher=$(zenity --height 250 --list --title="Default User Interface" --text="Please choose your default application launcher.\n\nYou can always change this setting later." --column "return" --print-column=1 --hide-column=1 --column "Pick a launcher" "xfce" "Desktop environment (Xfce)" "pmenu" "Gaming-console like launcher (PMenu)" "netbooklauncher" "Netbook Launcher") || [ "x$launcher" = "x" ]; do 
+while ! launcher=$(zenity --height 260 --list --title="Default User Interface" --text="Please choose your default application launcher.\n\nYou can always change this setting later." --column "return" --print-column=1 --hide-column=1 --column "Pick a launcher" "xfce" "Desktop environment (Xfce)" "mmenu" "Very basic GUI (MiniMenu)" "pmenu" "Gaming-console like launcher (PMenu)" "netbooklauncher" "Netbook Launcher") || [ "x$launcher" = "x" ]; do 
 	zenity --title="Error" --error --text="Please select a default launcher." --timeout 6
 done
 
@@ -161,6 +161,8 @@ elif [ $launcher == "pmenu" ]; then
 	echo PMenu selected as default interface
 elif [ $launcher == "netbooklauncher" ]; then
 	sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=startnetbooklauncher/g' /home/$username/.xinitrc
+elif [ $launcher == "mmenu" ]; then
+	sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=startmmenu/g' /home/$username/.xinitrc
 fi
 
 # ----
