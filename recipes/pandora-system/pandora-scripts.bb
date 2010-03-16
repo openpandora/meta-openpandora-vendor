@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r5"
+PR = "r9"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -16,7 +16,8 @@ SRC_URI = " \
           file://op_wifi.sh \
           file://op_wifi.desktop \          
           file://op_bluetooth.sh \
-          file://op_bluetooth.desktop \
+          file://op_bluetooth-check.desktop \
+          file://op_bluetooth.desktop \          
           file://op_defaultgui.sh \
           file://op_defaultgui.desktop \
           file://op_switchgui.sh \
@@ -40,6 +41,9 @@ do_install() {
           install -m 0644 ${WORKDIR}/op_bluetooth.desktop ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_defaultgui.desktop ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_switchgui.desktop ${D}${datadir}/applications/          
+
+          install -d ${D}${sysconfdir}/xdg/autostart/
+          install -m 0644 ${WORKDIR}/op_bluetooth-check.desktop ${D}${sysconfdir}/xdg/autostart/op_bluetooth-check.desktop
 
           install -d ${D}${bindir}/
           install -m 0755 ${WORKDIR}/startnetbooklauncher ${D}${bindir}/
