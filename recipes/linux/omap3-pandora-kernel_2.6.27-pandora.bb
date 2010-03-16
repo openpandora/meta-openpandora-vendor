@@ -5,7 +5,7 @@ KERNEL_IMAGETYPE = "uImage"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-SRCREV = "94926d9aa0c23089583e32b0373568dd622b3975"
+SRCREV = "2d920f233bfc2b835be0f8354c5df4878c0affd0"
 
 SRC_URI = " \
            git://git.openpandora.org/pandora-kernel.git;protocol=git;branch=pandora-27-omap1 \
@@ -45,13 +45,13 @@ SRC_URI_append = " \
            file://0003-Remove-old-msm_wifi-hack-as-the-temp-platform-driver.patch;patch=1 \
 "
 
-# SquashFS 4 Patches
+# SquashFS 4 Patches.
 
 SRC_URI_append = " \
            file://squashfs/0006-SquashFS-Backport-SquashFS4-to-our-2.6.27-tree.patch;patch=1 \
 "           
 
-# AUFS2 Patches - Used by ausf2-27 recipe to build as a module.
+# AUFS2 Patches.
 
 SRC_URI_append = " \
            file://aufs2/0007-AUFS2-Add-latest-AUFS2-in-tree-code-for-2.6.27.patch;patch=1 \
