@@ -26,6 +26,7 @@ d_start() {
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "lib80211_crypt_ccmp.ko")
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "wl1251.ko")
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "wl1251_sdio.ko")
+	iwconfig wlan0 power off
 }
 
 case "$1" in

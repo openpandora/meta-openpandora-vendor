@@ -1,0 +1,168 @@
+From 41489f2e50030ba25d07d918b61911ea0b0b81fa Mon Sep 17 00:00:00 2001
+From: Grazvydas Ignotas <notasas@gmail.com>
+Date: Mon, 8 Mar 2010 17:37:01 +0200
+Subject: [PATCH 2/5] wl1251: fix ELP_CTRL register accesses when using SDIO
+
+For some unknown reason ELP_CTRL can't be accesed using
+sdio_memcpy_* functions (any attemts to do so result in timeouts):
+
+ wl1251: ERROR sdio write failed (-110)
+ wl1251: ERROR sdio read failed (-110)
+ wl1251: WARNING WLAN not ready
+
+To fix this, add special IO functions for ELP_CTRL access that are
+using sdio_readb/sdio_writeb. Similar handling is done in TI
+reference driver from Android code drop.
+
+Signed-off-by: Grazvydas Ignotas <notasas@gmail.com>
+Cc: Bob Copeland <me@bobcopeland.com>
+---
+ drivers/net/wireless/wl12xx/wl1251.h      |    2 ++
+ drivers/net/wireless/wl12xx/wl1251_io.h   |   20 ++++++++++++++++++++
+ drivers/net/wireless/wl12xx/wl1251_main.c |    4 ++--
+ drivers/net/wireless/wl12xx/wl1251_ps.c   |    8 ++++----
+ drivers/net/wireless/wl12xx/wl1251_sdio.c |   28 ++++++++++++++++++++++++++++
+ 5 files changed, 56 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/wireless/wl12xx/wl1251.h b/drivers/net/wireless/wl12xx/wl1251.h
+index 37c61c1..4f5f02a 100644
+--- a/drivers/net/wireless/wl12xx/wl1251.h
++++ b/drivers/net/wireless/wl12xx/wl1251.h
+@@ -256,6 +256,8 @@ struct wl1251_debugfs {
+ struct wl1251_if_operations {
+ 	void (*read)(struct wl1251 *wl, int addr, void *buf, size_t len);
+ 	void (*write)(struct wl1251 *wl, int addr, void *buf, size_t len);
++	void (*read_elp)(struct wl1251 *wl, int addr, u32 *val);
++	void (*write_elp)(struct wl1251 *wl, int addr, u32 val);
+ 	void (*reset)(struct wl1251 *wl);
+ 	void (*enable_irq)(struct wl1251 *wl);
+ 	void (*disable_irq)(struct wl1251 *wl);
+diff --git a/drivers/net/wireless/wl12xx/wl1251_io.h b/drivers/net/wireless/wl12xx/wl1251_io.h
+index b89d2ac..c545e9d 100644
+--- a/drivers/net/wireless/wl12xx/wl1251_io.h
++++ b/drivers/net/wireless/wl12xx/wl1251_io.h
+@@ -48,6 +48,26 @@ static inline void wl1251_write32(struct wl1251 *wl, int addr, u32 val)
+ 	wl->if_ops->write(wl, addr, &val, sizeof(u32));
+ }
+ 
++static inline u32 wl1251_read_elp(struct wl1251 *wl, int addr)
++{
++	u32 response;
++
++	if (wl->if_ops->read_elp)
++		wl->if_ops->read_elp(wl, addr, &response);
++	else
++		wl->if_ops->read(wl, addr, &response, sizeof(u32));
++
++	return response;
++}
++
++static inline void wl1251_write_elp(struct wl1251 *wl, int addr, u32 val)
++{
++	if (wl->if_ops->write_elp)
++		wl->if_ops->write_elp(wl, addr, val);
++	else
++		wl->if_ops->write(wl, addr, &val, sizeof(u32));
++}
++
+ /* Memory target IO, address is translated to partition 0 */
+ void wl1251_mem_read(struct wl1251 *wl, int addr, void *buf, size_t len);
+ void wl1251_mem_write(struct wl1251 *wl, int addr, void *buf, size_t len);
+diff --git a/drivers/net/wireless/wl12xx/wl1251_main.c b/drivers/net/wireless/wl12xx/wl1251_main.c
+index 0ef2d9c..7a8e489 100644
+--- a/drivers/net/wireless/wl12xx/wl1251_main.c
++++ b/drivers/net/wireless/wl12xx/wl1251_main.c
+@@ -149,8 +149,8 @@ static void wl1251_fw_wakeup(struct wl1251 *wl)
+ 	u32 elp_reg;
+ 
+ 	elp_reg = ELPCTRL_WAKE_UP;
+-	wl1251_write32(wl, HW_ACCESS_ELP_CTRL_REG_ADDR, elp_reg);
+-	elp_reg = wl1251_read32(wl, HW_ACCESS_ELP_CTRL_REG_ADDR);
++	wl1251_write_elp(wl, HW_ACCESS_ELP_CTRL_REG_ADDR, elp_reg);
++	elp_reg = wl1251_read_elp(wl, HW_ACCESS_ELP_CTRL_REG_ADDR);
+ 
+ 	if (!(elp_reg & ELPCTRL_WLAN_READY))
+ 		wl1251_warning("WLAN not ready");
+diff --git a/drivers/net/wireless/wl12xx/wl1251_ps.c b/drivers/net/wireless/wl12xx/wl1251_ps.c
+index 851dfb6..b55cb2b 100644
+--- a/drivers/net/wireless/wl12xx/wl1251_ps.c
++++ b/drivers/net/wireless/wl12xx/wl1251_ps.c
+@@ -45,7 +45,7 @@ void wl1251_elp_work(struct work_struct *work)
+ 		goto out;
+ 
+ 	wl1251_debug(DEBUG_PSM, "chip to elp");
+-	wl1251_write32(wl, HW_ACCESS_ELP_CTRL_REG_ADDR, ELPCTRL_SLEEP);
++	wl1251_write_elp(wl, HW_ACCESS_ELP_CTRL_REG_ADDR, ELPCTRL_SLEEP);
+ 	wl->elp = true;
+ 
+ out:
+@@ -79,9 +79,9 @@ int wl1251_ps_elp_wakeup(struct wl1251 *wl)
+ 	start = jiffies;
+ 	timeout = jiffies + msecs_to_jiffies(WL1251_WAKEUP_TIMEOUT);
+ 
+-	wl1251_write32(wl, HW_ACCESS_ELP_CTRL_REG_ADDR, ELPCTRL_WAKE_UP);
++	wl1251_write_elp(wl, HW_ACCESS_ELP_CTRL_REG_ADDR, ELPCTRL_WAKE_UP);
+ 
+-	elp_reg = wl1251_read32(wl, HW_ACCESS_ELP_CTRL_REG_ADDR);
++	elp_reg = wl1251_read_elp(wl, HW_ACCESS_ELP_CTRL_REG_ADDR);
+ 
+ 	/*
+ 	 * FIXME: we should wait for irq from chip but, as a temporary
+@@ -93,7 +93,7 @@ int wl1251_ps_elp_wakeup(struct wl1251 *wl)
+ 			return -ETIMEDOUT;
+ 		}
+ 		msleep(1);
+-		elp_reg = wl1251_read32(wl, HW_ACCESS_ELP_CTRL_REG_ADDR);
++		elp_reg = wl1251_read_elp(wl, HW_ACCESS_ELP_CTRL_REG_ADDR);
+ 	}
+ 
+ 	wl1251_debug(DEBUG_PSM, "wakeup time: %u ms",
+diff --git a/drivers/net/wireless/wl12xx/wl1251_sdio.c b/drivers/net/wireless/wl12xx/wl1251_sdio.c
+index 0aceb91..4df1a20 100644
+--- a/drivers/net/wireless/wl12xx/wl1251_sdio.c
++++ b/drivers/net/wireless/wl12xx/wl1251_sdio.c
+@@ -81,6 +81,32 @@ static void wl1251_sdio_write(struct wl1251 *wl, int addr,
+ 	sdio_release_host(func);
+ }
+ 
++static void wl1251_sdio_read_elp(struct wl1251 *wl, int addr, u32 *val)
++{
++	int ret = 0;
++	struct sdio_func *func = wl_to_func(wl);
++
++	sdio_claim_host(func);
++	*val = sdio_readb(func, addr, &ret);
++	sdio_release_host(func);
++
++	if (ret)
++		wl1251_error("sdio_readb failed (%d)", ret);
++}
++
++static void wl1251_sdio_write_elp(struct wl1251 *wl, int addr, u32 val)
++{
++	int ret = 0;
++	struct sdio_func *func = wl_to_func(wl);
++
++	sdio_claim_host(func);
++	sdio_writeb(func, val, addr, &ret);
++	sdio_release_host(func);
++
++	if (ret)
++		wl1251_error("sdio_writeb failed (%d)", ret);
++}
++
+ static void wl1251_sdio_reset(struct wl1251 *wl)
+ {
+ }
+@@ -110,6 +136,8 @@ static void wl1251_sdio_set_power(bool enable)
+ static const struct wl1251_if_operations wl1251_sdio_ops = {
+ 	.read = wl1251_sdio_read,
+ 	.write = wl1251_sdio_write,
++	.write_elp = wl1251_sdio_write_elp,
++	.read_elp = wl1251_sdio_read_elp,
+ 	.reset = wl1251_sdio_reset,
+ 	.enable_irq = wl1251_sdio_enable_irq,
+ 	.disable_irq = wl1251_sdio_disable_irq,
+-- 
+1.6.3.3
+
