@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r1"
+PR = "r9"
 
 inherit task
 
@@ -19,7 +19,7 @@ APPS = " \
   networkmanager network-manager-applet \ 
 #  synergy \
   vnc x11vnc angstrom-x11vnc-xinit \
-#  xchat \
+  xchat \
   xournal \
 "
 
@@ -83,6 +83,7 @@ GSTREAMER = " \
   gst-plugins-base-meta \
   gst-plugins-good-meta gst-plugins-bad-meta \
 #  gst-plugins-ugly-meta \
+  gst-plugin-gles \
 "
 
 ICON_THEME = " \
@@ -102,8 +103,9 @@ PANDORA = " \
   pandora-xfce-defaults \
   pandora-xmms-defaults xmms \
   pandora-midori-defaults midori \
-  pandora-pmenu libgles2d \
-  libgles-omap3-x11demos \  
+  pandora-libpnd-minimenu \
+  pandora-pmenu \
+  libgles2d \
 "
 
 PERL = " \
@@ -122,8 +124,8 @@ PULSEAUDIO = " \
 #  libasound-module-pcm-pulse \
 "
 
-QT_SELECTED = "qt4-x11-free"
-#  qt4-x11-free-gles \
+QT_SELECTED = "qt4-x11-free-gles"
+#  qt4-x11-free \
 
 QT_SUPPORT = " \
   ${QT_SELECTED} \
