@@ -2,7 +2,7 @@
 Name=Set CPU speed
 Comment=Under or overclock your OpenPandora CPU.
 StartupNotify=false
-Exec=/usr/pandora/scripts/op_cpuspeed.sh
+Exec=sudo /usr/pandora/scripts/op_cpuspeed.sh
 Icon=Terminal
 Terminal=false
 Type=Application
