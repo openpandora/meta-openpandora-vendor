@@ -26,6 +26,7 @@ SRC_URI = " \
           file://op_calibrate.desktop \
           file://op_datetime.sh \
           file://op_datetime.desktop \
+          file://gui.conf \
 "
 
 do_install() {
@@ -52,6 +53,10 @@ do_install() {
 
           install -d ${D}${sysconfdir}/xdg/autostart/
           install -m 0644 ${WORKDIR}/op_bluetooth-check.desktop ${D}${sysconfdir}/xdg/autostart/op_bluetooth-check.desktop
+
+	  install -d ${D}${sysconfdir}/pandora/conf/
+          install -m 0644 ${WORKDIR}/gui.conf ${D}${sysconfdir}/pandora/conf/gui.conf
+
 
           install -d ${D}${bindir}/
           install -m 0755 ${WORKDIR}/startnetbooklauncher ${D}${bindir}/
