@@ -48,6 +48,7 @@ kill -1 pndnotifyd &
 # doesn't explicitely select a session in SLiM.
 
 DEFAULT_SESSION=startxfce4
+STOP_SESSION="xfce4-session-logout --logout"
 
 # Write the default session into a temporary file.
 # This way, we can easily add new sessions in the future by just
@@ -64,6 +65,10 @@ if [ "$SESSION" == "" ]
 	then
 	SESSION=$(cat /tmp/gui.load)
 fi
+
+STOP_SESSION=$(grep $SESSION /etc/pandora/conf/gui.conf | awk -F\; '{print $4}')
+echo $STOP_SESSION > /tmp/gui.stop
+chmod +x /tmp/gui.stop
 
 # Starts our session and checks if a new session should be loaded
 # after the old one is quit by simply executing the command that's in /tmp/gui.load
@@ -82,7 +87,9 @@ do
 	fi
 
 	$SESSION
-
+        
 	SESSION=$(cat /tmp/gui.load)
-
+	STOP_SESSION=$(grep $SESSION /etc/pandora/conf/gui.conf | awk -F\; '{print $4}')
+        echo $STOP_SESSION > /tmp/gui.stop
+        chmod +x /tmp/gui.stop
 done

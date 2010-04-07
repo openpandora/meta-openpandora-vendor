@@ -147,22 +147,20 @@ fi
 
 # Select the default interface and setup SLiM to pass that as a sesion to ~./.xinitrc
 
-while ! launcher=$(zenity --height 260 --list --title="Default User Interface" --text="Please choose your default application launcher.\n\nYou can always change this setting later." --column "return" --print-column=1 --hide-column=1 --column "Pick a launcher" "xfce" "Desktop environment (Xfce)" "mmenu" "Very basic GUI (MiniMenu)" "pmenu" "Gaming-console like launcher (PMenu)" "netbooklauncher" "Netbook Launcher") || [ "x$launcher" = "x" ]; do 
-	zenity --title="Error" --error --text="Please select a default launcher." --timeout 6
-done
+selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity --title="Select the Default GUI" --list --multiple --column "name" --column "description" --text "select defaultgui" )
+echo $selection
 
-if [ $launcher == "xfce" ]; then 
-#	sed -i 's/.*sessions .*/sessions xfce4,pmenu/g' /etc/slim.conf
-	sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=startxfce4/g' /home/$username/.xinitrc
-	echo Xfce selected as default interface
-elif [ $launcher == "pmenu" ]; then
-#	sed -i 's/.*sessions .*/sessions pmenu,xfce4/g' /etc/slim.conf
-	sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=pmenu/g' /home/$username/.xinitrc
-	echo PMenu selected as default interface
-elif [ $launcher == "netbooklauncher" ]; then
-	sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=startnetbooklauncher/g' /home/$username/.xinitrc
-elif [ $launcher == "mmenu" ]; then
-	sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=startmmenu/g' /home/$username/.xinitrc
+gui=$(grep $selection /etc/pandora/conf/gui.conf | awk -F\; '{print $3}')
+stopcommand=$(grep $selection /etc/pandora/conf/gui.conf | awk -F\; '{print $4}')
+
+echo $gui
+
+if [ $gui ]; then 
+  sed -i "s/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=$gui/g" /home/$username/.xinitrc
+  echo $selection selected as default interface
+  zenity --info --title="Selected session" --text "You selected $selection as default setting. You can always change your default GUI later." --timeout 6
+else
+  sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=startxfce4/g' /home/$username/.xinitrc
 fi
 
 # ----

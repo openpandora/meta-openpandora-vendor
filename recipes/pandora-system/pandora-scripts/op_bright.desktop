@@ -2,7 +2,7 @@
 Name=Set Backlight Brightness
 Comment=Set the brightness of the backlight.
 StartupNotify=false
-Exec=/usr/pandora/scripts/op_bright.sh
+Exec=sudo /usr/pandora/scripts/op_bright.sh
 Icon=Terminal
 Terminal=false
 Type=Application

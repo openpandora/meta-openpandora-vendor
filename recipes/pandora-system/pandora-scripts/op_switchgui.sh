@@ -1,14 +1,18 @@
-#!/bin/sh
-launcher=$(zenity --height 240 --list --title="Switch to a different GUI" --text="Please select the GUI you want to switch to.\nNote: All running applications will be terminated!" --column "return" --print-column=1 --hide-column=1 --column "Pick a launcher" "startxfce4" "Switch to Xfce" "startmmenu" "Switch to MiniMenu" "pmenu" "Switch to PMenu" "startnetbooklauncher" "Switch to Netbook Launcher")
+#!/bin/bash
 
-if [ "$launcher" == "" ]; then 
-    exit 0
+selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity --width=500 --height=300 --title="Switch to a different GUI" --list --multiple --column "name" --column "description" --text "Select a GUI you want to switch to" )
+echo $selection
+
+gui=$(grep $selection /etc/pandora/conf/gui.conf | awk -F\; '{print $3}')
+stopnew=$(grep $selection /etc/pandora/conf/gui.conf | awk -F\; '{print $4}')
+
+echo $gui
+
+if [ $gui ]; then 
+  echo "$gui" > /tmp/gui.load
+  echo "$stopnew" > /tmp/gui.stopnew
+  echo $selection will be started
+  /tmp/gui.stop
 else
-    echo "$launcher" > /tmp/gui.load
-    if [ "$(pidof xfce4-session)" ] 
-      then
-	xfce4-session-logout --logout
-      else
-	killall netbook-launcher-efl
-     fi
+  exit 0
 fi

@@ -10,7 +10,6 @@ PR = "r10"
 
 SRC_URI = " \
           file://op_bright.sh \
-          file://op_bright.desktop \
           file://op_cpuspeed.sh \
           file://op_cpuspeed.desktop \          
           file://op_wifi.sh \
@@ -24,6 +23,11 @@ SRC_URI = " \
           file://op_switchgui.desktop \
           file://startnetbooklauncher \
           file://startmmenu \          
+          file://op_calibrate.sh \
+          file://op_calibrate.desktop \
+          file://op_datetime.sh \
+          file://op_datetime.desktop \
+          file://gui.conf \
 "
 
 do_install() {
@@ -34,17 +38,23 @@ do_install() {
           install -m 0755 ${WORKDIR}/op_bluetooth.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_defaultgui.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_switchgui.sh ${D}${prefix}/pandora/scripts/
+          install -m 0755 ${WORKDIR}/op_calibrate.sh ${D}${prefix}/pandora/scripts/
+          install -m 0755 ${WORKDIR}/op_datetime.sh ${D}${prefix}/pandora/scripts/
           
           install -d ${D}${datadir}/applications/
-          install -m 0644 ${WORKDIR}/op_bright.desktop ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_cpuspeed.desktop ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_wifi.desktop ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_bluetooth.desktop ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_defaultgui.desktop ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_switchgui.desktop ${D}${datadir}/applications/          
-
+          install -m 0644 ${WORKDIR}/op_calibrate.desktop ${D}${datadir}/applications/
+          install -m 0644 ${WORKDIR}/op_datetime.desktop ${D}${datadir}/applications/
+          
           install -d ${D}${sysconfdir}/xdg/autostart/
           install -m 0644 ${WORKDIR}/op_bluetooth-check.desktop ${D}${sysconfdir}/xdg/autostart/op_bluetooth-check.desktop
+
+          install -d ${D}${sysconfdir}/pandora/conf/
+          install -m 0644 ${WORKDIR}/gui.conf ${D}${sysconfdir}/pandora/conf/gui.conf
 
           install -d ${D}${bindir}/
           install -m 0755 ${WORKDIR}/startnetbooklauncher ${D}${bindir}/
