@@ -2,15 +2,9 @@
 #
 # Released under the GPL
 
-STARTUP=0
-
-if [ ${1} = startup ]; then
- STARTUP=1
-fi
-
 INTERFACE="`hciconfig | grep "^hci" | cut -d ':' -f 1`"
 
-if [ ${STARTUP} = 1 ]; then
+if [ ${1} = "startup" ]; then
 	[ -f ~/.op_btenabled ] && sudo /usr/sbin/hciconfig ${INTERFACE} up pscan && sudo /usr/sbin/bluetoothd ||echo "Bluetooth: User has not enabled Bluetooth." 
 else
 
