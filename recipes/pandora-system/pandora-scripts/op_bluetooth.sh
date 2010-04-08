@@ -2,12 +2,6 @@
 #
 # Released under the GPL
 
-#if [ $1 ]; then
-# startup = "$1"
-# echo $
-# echo $1
-#fi
-
 INTERFACE="`hciconfig | grep "^hci" | cut -d ':' -f 1`"
 
 if [ ${1} = "startup" ]; then
