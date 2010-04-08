@@ -22,6 +22,7 @@ SRC_URI = " \
           file://op_switchgui.sh \
           file://op_switchgui.desktop \
           file://startnetbooklauncher \
+          file://startmmenu \
           file://op_calibrate.sh \
           file://op_calibrate.desktop \
           file://op_datetime.sh \
@@ -60,6 +61,7 @@ do_install() {
 
           install -d ${D}${bindir}/
           install -m 0755 ${WORKDIR}/startnetbooklauncher ${D}${bindir}/
+          install -m 0755 ${WORKDIR}/startmmenu ${D}${bindir}/
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
