@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r9"
+PR = "r20"
 
 inherit task
 
@@ -13,7 +13,7 @@ APPS = " \
   abiword \
   claws-mail \
   swfdec swfdec-gnome swfdec-mozilla \
-  firefox \
+#  firefox \
   gnumeric \   
 #  gimp \
   networkmanager network-manager-applet \ 
@@ -21,6 +21,7 @@ APPS = " \
   vnc x11vnc angstrom-x11vnc-xinit \
   xchat \
   xournal \
+  arora \
 "
 
 BLUETOOTH_GUI = " \
@@ -60,6 +61,7 @@ GAMES = " \
 #  scummvm \
 #  frozen-bubble \
 #  gnome-games \  
+  numptyphysics \
 "
 
 GNOME_APPS = " \
@@ -81,7 +83,8 @@ GSTREAMER = " \
 #  gst-plugin-pulse \
   gst-plugin-xvimagesink \
   gst-plugins-base-meta \
-  gst-plugins-good-meta gst-plugins-bad-meta \
+  gst-plugins-good-meta \
+  gst-plugins-bad-meta \
 #  gst-plugins-ugly-meta \
   gst-plugin-gles \
 "
@@ -93,7 +96,9 @@ ICON_THEME = " \
 "
 
 LAUNCHERS = " \
-  netbook-launcher-efl \
+#  netbook-launcher-efl \
+  pandora-libpnd-minimenu \
+  pandora-pmenu \
 "
 
 PANDORA = " \
@@ -102,9 +107,7 @@ PANDORA = " \
   pandora-wallpaper-official pandora-wallpaper-community \
   pandora-xfce-defaults \
   pandora-xmms-defaults xmms \
-  pandora-midori-defaults midori \
-  pandora-libpnd-minimenu \
-  pandora-pmenu \
+#  pandora-midori-defaults midori \
   libgles2d \
 "
 
@@ -124,11 +127,18 @@ PULSEAUDIO = " \
 #  libasound-module-pcm-pulse \
 "
 
-QT_SELECTED = "qt4-x11-free-gles"
-#  qt4-x11-free \
+QT_SELECTED = " qt4-x11-free \
+"
+# qt4-x11-free"
+# qt4-x11-free-gles"
+
+#PREFERRED_PROVIDER_qt4-x11-free = "${QT_SELECTED}"
 
 QT_SUPPORT = " \
   ${QT_SELECTED} \
+  qt4-plugin-imageformat-png \
+  qt4-plugin-imageformat-jpeg \
+  qt4-plugin-imageformat-gif \
 "
 
 # We want all of the Qt metapackage (for dev use) without the demos/examples.

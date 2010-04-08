@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps and libs in the Pandora i
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r19"
+PR = "r20"
 
 inherit task 
 
@@ -40,6 +40,7 @@ MEDIA_LIBS = " \
   libsdl-x11 libsdl-mixer libsdl-image \
   libsdl-gfx libsdl-net libsdl-ttf \
   libpng libpng12 libpng3 \
+  faad2 \
   mikmod \
   speex \  
   
