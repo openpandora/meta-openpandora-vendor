@@ -42,7 +42,7 @@ fi
 xmodmap ~/.pndXmodmap
 
 # HUP pndnotifyd to make sure it picks up the users home.
-kill -1 pndnotifyd &
+killall -1 pndnotifyd &
 
 # The following variable defines the session which is started if the user
 # doesn't explicitely select a session in SLiM.
