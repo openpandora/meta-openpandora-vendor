@@ -58,7 +58,7 @@ do_install() {
 
           install -d ${D}${bindir}/
           install -m 0755 ${WORKDIR}/startnetbooklauncher ${D}${bindir}/
-          install -m 0755 ${WORKDIR}/startmmenu ${D}${bindir}/          
+          install -m 0755 ${WORKDIR}/startmmenu ${D}${bindir}/
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
