@@ -17,4 +17,5 @@
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_tvout.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_calibrate.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_datetime.sh
+%wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_wifi.sh
 
