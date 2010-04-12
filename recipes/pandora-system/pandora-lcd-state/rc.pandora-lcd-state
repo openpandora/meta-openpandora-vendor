@@ -1,0 +1,55 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          pandora-lcd-state
+# Required-Start:    #adjust
+# Required-Stop:     #adjust
+# Default-Start:     S
+# Default-Stop:      0 1 6
+### END INIT INFO
+ 
+DESC="OpenPandora Save and Restore LCD Settings"
+NAME="pandora-lcd-state"
+
+d_stop() {
+	echo "Saving LCD-Settings"
+	cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness > /etc/pandora/conf/brightness.state
+	cat /sys/devices/platform/omap2_mcspi.1/spi1.1/gamma > /etc/pandora/conf/gamma.state
+}
+
+d_start() {
+	echo "Restoring LCD-Settings"
+	cat /etc/pandora/conf/brightness.state > /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness 
+	cat /etc/pandora/conf/gamma.state > /sys/devices/platform/omap2_mcspi.1/spi1.1/gamma
+}
+
+case "$1" in
+  start)
+	echo -n "Starting $DESC: $NAME - "
+	d_start
+	echo "."
+	;;
+  stop)
+	echo -n "Stopping $DESC: $NAME - "
+	d_stop
+	echo "."
+	;;
+  reload)
+	echo -n "Reloading $DESC: $NAME - "
+	d_start
+	echo "."
+	;;	
+  restart|force-reload)
+	echo -n "Restarting $DESC: $NAME - "
+	d_stop
+	sleep 1
+	d_start
+	echo "."
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart|reload|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0
