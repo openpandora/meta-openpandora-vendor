@@ -1,6 +1,6 @@
 #!/bin/bash
 
-selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity ---width=500 --height=300 --title="Change he Default GUI" --list --multiple --column "Name" --column "Description" --text "Please select the GUI you want to run as default startup" )
+selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity ---width=500 --height=300 --title="Change he Default GUI" --list --column "Name" --column "Description" --text "Please select the GUI you want to run as default startup" )
 echo $selection
 
 gui=$(grep $selection /etc/pandora/conf/gui.conf | awk -F\; '{print $3}')

@@ -104,6 +104,7 @@ LAUNCHERS = " \
 PANDORA = " \
   pandora-first-run-wizard hsetroot \
   pandora-scripts \
+  pandora-lcd-state \
   pandora-wallpaper-official pandora-wallpaper-community \
   pandora-xfce-defaults \
   pandora-xmms-defaults xmms \

@@ -6,7 +6,7 @@ RDEPENDS = "hsetroot zenity dbus pandora-wallpaper-official tslib tslib-calibrat
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r11"
+PR = "r12"
 
 SRC_URI = " \
           file://first-run-wizard.sh \
