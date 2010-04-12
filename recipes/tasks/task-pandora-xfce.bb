@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r20"
+PR = "r22"
 
 inherit task
 
@@ -20,7 +20,7 @@ APPS = " \
 #  synergy \
   vnc x11vnc angstrom-x11vnc-xinit \
   xchat \
-  xournal \
+#  xournal \
   arora \
 "
 
@@ -136,7 +136,6 @@ QT_SELECTED = " qt4-x11-free \
 
 QT_SUPPORT = " \
   ${QT_SELECTED} \
-  qt4-plugin-imageformat-png \
   qt4-plugin-imageformat-jpeg \
   qt4-plugin-imageformat-gif \
 "
