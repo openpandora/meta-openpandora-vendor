@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r11"
+PR = "r12"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -27,6 +27,8 @@ SRC_URI = " \
           file://op_calibrate.desktop \
           file://op_datetime.sh \
           file://op_datetime.desktop \
+	  file://op_usermanager.sh \
+          file://op_usermanager.desktop \
           file://gui.conf \
 "
 
@@ -40,6 +42,7 @@ do_install() {
           install -m 0755 ${WORKDIR}/op_switchgui.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_calibrate.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_datetime.sh ${D}${prefix}/pandora/scripts/
+	  install -m 0755 ${WORKDIR}/op_usermanager.sh ${D}${prefix}/pandora/scripts/
           
           install -d ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_cpuspeed.desktop ${D}${datadir}/applications/
@@ -49,6 +52,7 @@ do_install() {
           install -m 0644 ${WORKDIR}/op_switchgui.desktop ${D}${datadir}/applications/          
           install -m 0644 ${WORKDIR}/op_calibrate.desktop ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_datetime.desktop ${D}${datadir}/applications/
+	  install -m 0644 ${WORKDIR}/op_usermanager.desktop ${D}${datadir}/applications/
           
           install -d ${D}${sysconfdir}/xdg/autostart/
           install -m 0644 ${WORKDIR}/op_bluetooth-check.desktop ${D}${sysconfdir}/xdg/autostart/op_bluetooth-check.desktop
