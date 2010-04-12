@@ -147,7 +147,7 @@ fi
 
 # Select the default interface and setup SLiM to pass that as a sesion to ~./.xinitrc
 
-selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity --width=500 --height=300 --title="Select the Default GUI" --list --multiple --column "name" --column "description" --text "select defaultgui" )
+selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity --width=500 --height=300 --title="Select the Default GUI" --list --column "name" --column "description" --text "select defaultgui" )
 echo $selection
 
 gui=$(grep $selection /etc/pandora/conf/gui.conf | awk -F\; '{print $3}')
