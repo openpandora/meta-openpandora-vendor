@@ -6,4 +6,4 @@ Exec=/usr/pandora/scripts/op_defaultgui.sh
 Icon=Terminal
 Terminal=false
 Type=Application
-Categories=System;
+Categories=Settings;

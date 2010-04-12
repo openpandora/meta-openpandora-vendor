@@ -6,4 +6,4 @@ Exec=sudo /usr/pandora/scripts/op_datetime.sh
 Icon=Terminal
 Terminal=false
 Type=Application
-Categories=System;
+Categories=Settings;
