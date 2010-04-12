@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r20"
+PR = "r21"
 
 inherit task
 
@@ -104,6 +104,7 @@ LAUNCHERS = " \
 PANDORA = " \
   pandora-first-run-wizard hsetroot \
   pandora-scripts \
+  pandora-lcd-state \
   pandora-wallpaper-official pandora-wallpaper-community \
   pandora-xfce-defaults \
   pandora-xmms-defaults xmms \
