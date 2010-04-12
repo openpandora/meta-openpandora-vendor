@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps and libs in the Pandora i
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r20"
+PR = "r21"
 
 inherit task 
 
@@ -60,6 +60,7 @@ PANDORA_LIBS = " \
   pandora-libpnd lsof \
   omap3-deviceid \
   pandora-skel \
+  pandora-lcd-state \
 "
 
 SUDO = " \
