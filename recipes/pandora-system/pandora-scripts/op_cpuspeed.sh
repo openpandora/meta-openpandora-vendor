@@ -29,6 +29,6 @@ if [ $newmhz ]; then
  
         if [ $newmhz -le $minmhz ]; then newmhz=$minmhz; fi
         if [ $newmhz -ge $maxmhz ]; then newmhz=$maxmhz; fi
+	echo $newmhz > $device
+	echo cpu_mhz_max set to $(cat /proc/pandora/cpu_mhz_max)
 fi
-echo $newmhz > $device
-echo cpu_mhz_max set to $(cat /proc/pandora/cpu_mhz_max)
