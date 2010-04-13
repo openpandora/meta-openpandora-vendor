@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=LCD Gamma Manager
+Comment=Load, create and save LCD Gamma profiles.
+StartupNotify=false
+Exec=sudo /usr/pandora/scripts/op_gammamanager.sh
+Icon=package_graphics
+Terminal=false
+Type=Application
+Categories=Settings;
