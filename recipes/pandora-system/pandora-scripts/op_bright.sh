@@ -12,5 +12,5 @@ fi
 if [ $newbright ]; then
         if [ $newbright -le $minbright ]; then newbright=$minbright; fi
         if [ $newbright -ge $maxbright ]; then newbright=$maxbright; fi
+	echo $newbright > $device
 fi
-echo $newbright > $device
