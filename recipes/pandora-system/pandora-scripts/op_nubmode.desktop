@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Set Nub mode
+Comment=You can set the nubs to use them as mouse, scrollwheel or stick.
+StartupNotify=false
+Exec=/usr/pandora/scripts/op_nubmode.sh
+Icon=gnome-dev-mouse-optical
+Terminal=false
+Type=Application
+Categories=Settings;
