@@ -24,7 +24,7 @@ RESET_ROOT="yes"
 
 # Greet the user.
 
-zenity --info --title="Pandoras Box has been opened." --text="Welcome!\n\nPandora's Box has been opened.\n\nThis wizard will help you setting up your new OpenPandora handheld before the first use.\n\nYou will be asked a few simple questions to personalise and configure your device for use." --timeout 45
+if zenity --question --title="Pandoras Box has been opened." --text="Welcome!\n\nPandora's Box has been opened.\n\nThis wizard will help you setting up your new OpenPandora handheld before the first use.\n\nYou will be asked a few simple questions to personalise and configure your device for use.\n\nDo you want to setup your unit now or shutdown the unit and do it later?" --ok-label="Start now" --cancel-label="Shutdown" ; then
 
 # ----
 
@@ -215,3 +215,6 @@ touch /etc/pandora/first-boot
 chmod 0666 /etc/pandora/first-boot
 
 # ----
+else
+poweroff
+fi
