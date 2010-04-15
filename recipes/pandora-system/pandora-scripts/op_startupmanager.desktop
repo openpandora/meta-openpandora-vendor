@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=Select the default GUI
-Comment=Change the default OpenPandora GUI.
+Name=Startup Manager
+Comment=Change startup settings of your Pandora.
 StartupNotify=false
-Exec=/usr/pandora/scripts/op_defaultgui.sh
+Exec=/usr/pandora/scripts/op_startupmanager.sh
 Icon=krfb
 Terminal=false
 Type=Application
