@@ -1,0 +1,3 @@
+#!/bin/sh
+xfwm4&
+pmenu
