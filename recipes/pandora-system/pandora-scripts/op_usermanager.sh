@@ -27,9 +27,9 @@ while selection=$(zenity --title="Usermanager" --list --column "id" --column "Pl
 	      fi
 	    done
 
-	    passwd "$username" <<EOF
-	    $password
-	    $password
+passwd "$username" <<EOF
+$password
+$password
 EOF
 	    if zenity --question --title="User created" --text="The user $username has been successfully created.\n\nDo you want to set this user as default user for the login?" --ok-label="Yes, please!" --cancel-label="No, keep the old user as default"; then
 	      sed -i "s/.*default_user.*/default_user $username/g" /etc/slim.conf
