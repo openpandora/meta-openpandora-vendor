@@ -107,7 +107,7 @@ PANDORA = " \
   pandora-wallpaper-official pandora-wallpaper-community \
   pandora-xfce-defaults \
   pandora-xmms-defaults xmms \
-#  pandora-midori-defaults midori \
+  pandora-midori-defaults midori \
   libgles2d \
 "
 
