@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r16"
+PR = "r17"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -24,21 +24,21 @@ SRC_URI = " \
 #          file://op_switchgui.desktop \
           file://startnetbooklauncher \
           file://startmmenu \    
-	  file://startpmenu \ 
+          file://startpmenu \ 
           file://op_calibrate.sh \
 #          file://op_calibrate.desktop \
           file://op_datetime.sh \
 #          file://op_datetime.desktop \
-	  file://op_usermanager.sh \
+          file://op_usermanager.sh \
 #          file://op_usermanager.desktop \
           file://op_gammamanager.sh \
 #          file://op_gammamanager.desktop \
-	  file://op_nubmode.sh \
+          file://op_nubmode.sh \
 #	  file://op_nubmode.desktop \
           file://gui.conf \
           file://gamma.conf \
-	  file://op_env.sh \
-	  file://pandorascripts.pnd \
+          file://op_env.sh \
+          file://pandorascripts.pnd \
 "
 
 do_install() {
@@ -56,7 +56,7 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_nubmode.sh ${D}${prefix}/pandora/scripts/
 
           install -d ${D}${prefix}/pandora/apps/
-	  install -m 0755 ${WORKDIR}/pandorascripts.pnd ${D}${prefix}/pandora/apps/
+          install -m 0755 ${WORKDIR}/pandorascripts.pnd ${D}${prefix}/pandora/apps/
 
           install -d ${D}${datadir}/applications/
 #	  install -m 0644 ${WORKDIR}/op_bright.desktop ${D}${datadir}/applications/
@@ -67,7 +67,7 @@ do_install() {
 #          install -m 0644 ${WORKDIR}/op_switchgui.desktop ${D}${datadir}/applications/          
 #          install -m 0644 ${WORKDIR}/op_calibrate.desktop ${D}${datadir}/applications/
 #          install -m 0644 ${WORKDIR}/op_datetime.desktop ${D}${datadir}/applications/
-#	  install -m 0644 ${WORKDIR}/op_usermanager.desktop ${D}${datadir}/applications/
+#          install -m 0644 ${WORKDIR}/op_usermanager.desktop ${D}${datadir}/applications/
 #          install -m 0644 ${WORKDIR}/op_gammamanager.desktop ${D}${datadir}/applications/
 #	  install -m 0644 ${WORKDIR}/op_nubmode.desktop ${D}${datadir}/applications/
           
@@ -77,14 +77,14 @@ do_install() {
           install -d ${D}${sysconfdir}/pandora/conf/
           install -m 0644 ${WORKDIR}/gui.conf ${D}${sysconfdir}/pandora/conf/gui.conf
           install -m 0644 ${WORKDIR}/gamma.conf ${D}${sysconfdir}/pandora/conf/gamma.conf
-	
-	  install -d ${D}${sysconfdir}/profile.d/
-	  install -m 0755 ${WORKDIR}/op_env.sh {D}${sysconfdir}/profile.d/
+
+          install -d ${D}${sysconfdir}/profile.d/
+          install -m 0755 ${WORKDIR}/op_env.sh ${D}${sysconfdir}/profile.d/
 
           install -d ${D}${bindir}/
           install -m 0755 ${WORKDIR}/startnetbooklauncher ${D}${bindir}/
           install -m 0755 ${WORKDIR}/startmmenu ${D}${bindir}/
-	  install -m 0755 ${WORKDIR}/startpmenu ${D}${bindir}/
+          install -m 0755 ${WORKDIR}/startpmenu ${D}${bindir}/
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
