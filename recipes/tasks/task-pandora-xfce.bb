@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r22"
+PR = "r23"
 
 inherit task
 
@@ -109,6 +109,7 @@ PANDORA = " \
   pandora-xmms-defaults xmms \
   pandora-midori-defaults midori \
   libgles2d \
+  pandora-misc \
 "
 
 PERL = " \
