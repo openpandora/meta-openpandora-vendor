@@ -1,6 +1,6 @@
 DESCRIPTION = "Miscellaneous OpenPandora utilities"
 
-PR = "r1"
+PR = "r2"
 
 PARALLEL_MAKE = ""
 
@@ -20,5 +20,7 @@ do_install() {
           install -d ${D}${bindir}/
           install -m 0755 ${S}/op_runfbapp ${D}${bindir}/op_runfbapp
           install -m 0755 ${S}/op_gammatool ${D}${bindir}/op_gammatool_bin 
+          install -m 0755 ${S}/op_test_inputs ${D}${bindir}/op_test_inputs_bin 
           install -m 0755 ${S}/scripts/op_gammatool ${D}${bindir}/op_gammatool
+          install -m 0755 ${S}/scripts/op_test_inputs ${D}${bindir}/op_test_inputs
 }
