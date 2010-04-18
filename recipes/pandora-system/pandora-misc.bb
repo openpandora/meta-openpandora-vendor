@@ -1,6 +1,6 @@
 DESCRIPTION = "Miscellaneous OpenPandora utilities"
 
-PR = "r0"
+PR = "r1"
 
 PARALLEL_MAKE = ""
 
@@ -12,7 +12,7 @@ SRC_URI = " \
 
 TARGET_LDFLAGS += "-lpthread -lX11"
 
-SRCREV = "ef1736dc4fa9679f76f795bbef6139e3ea96797e"
+SRCREV = "84815134b3dbba81f930ab2476568e7ba1a783d9"
 
 S = "${WORKDIR}/git"
 
