@@ -1,16 +1,16 @@
 DESCRIPTION = "Miscellaneous OpenPandora utilities"
 
-PR = "r2"
+PR = "r3"
 
 PARALLEL_MAKE = ""
 
-DEPENDS = "virtual/libx11"
+DEPENDS = "virtual/libx11 tslib"
 
 SRC_URI = " \
           git://openpandora.org/pandora-misc.git;protocol=git;branch=master \
 "
 
-TARGET_LDFLAGS += "-lpthread -lX11"
+TARGET_LDFLAGS += "-lpthread -lX11 -lts"
 
 SRCREV = "84815134b3dbba81f930ab2476568e7ba1a783d9"
 
