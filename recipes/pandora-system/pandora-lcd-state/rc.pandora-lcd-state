@@ -15,8 +15,8 @@ d_stop() {
 	echo "Saving LCD and Nub-Settings"
 	cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness > /etc/pandora/conf/brightness.state
 	cat /sys/devices/platform/omap2_mcspi.1/spi1.1/gamma > /etc/pandora/conf/gamma.state
-        cat /proc/pandora/vsense66 > /etc/pandora/conf/nubs.state
-	cat /proc/pandora/vsense67 >> /etc/pandora/conf/nubs.state
+        cat cat -v /proc/pandora/vsense66 | sed -n '1p' > /etc/pandora/conf/nubs.state
+	cat cat -v /proc/pandora/vsense67 | sed -n '1p' >> /etc/pandora/conf/nubs.state
 }
 
 d_start() {

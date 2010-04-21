@@ -3,7 +3,7 @@ LICENSE = "GPLv2"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r1"
+PR = "r2"
 inherit update-rc.d
 
 INITSCRIPT_NAME = "pandora-lcd-state"
@@ -22,7 +22,7 @@ do_install() {
 	  install -d ${D}${sysconfdir}/pandora/conf/
           install -m 0644 ${WORKDIR}/gamma.state ${D}${sysconfdir}/pandora/conf/gamma.state
           install -m 0644 ${WORKDIR}/brightness.state ${D}${sysconfdir}/pandora/conf/brightness.state
-	  install -m 0644 ${WORKDIR}/brightness.state ${D}${sysconfdir}/pandora/conf/nubs.state
+	  install -m 0644 ${WORKDIR}/nubs.state ${D}${sysconfdir}/pandora/conf/nubs.state
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
