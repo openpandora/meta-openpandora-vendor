@@ -41,6 +41,9 @@ fi
 #Load up the proper keymap for X
 xmodmap ~/.pndXmodmap
 
+#Write the current user into /tmp/currentuser for any scripts or programs who want to make use of it
+whoami > /tmp/currentuser
+
 # HUP pndnotifyd to make sure it picks up the users home.
 killall -1 pndnotifyd &
 
