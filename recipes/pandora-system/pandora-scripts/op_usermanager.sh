@@ -38,13 +38,13 @@ EOF
 	  fi
 	fi
   elif [ ${selection} = "remove" ]; then
-        xfceuser=$(ps u -C xfce4-session | tail -n1 | awk '{print $1}')
+        user2=$(cat /tmp/currentuser)
         echo "Remove User"
 	amount=$(cat /etc/passwd | grep /home/ | grep -v root | awk -F\: '{print $1 }' | wc -l)
 	if [ ${amount} = "1" ]; then
 	      zenity --title="Error" --error --text="Sorry! You can't remove the last normal user!" --timeout 6
 	else
-	      if selection=$(cat /etc/passwd | grep /home/ | grep -v root | grep -v $xfceuser | awk -F\: '{print $1 }' | zenity --width=100 --height=200 --title="Select the user to delete" --list  --column "Username"  --text "Select the user to delete\n\nPlease note: You can't remove the user that is currently logged in.") ; then
+	      if selection=$(cat /etc/passwd | grep /home/ | grep -v root | grep -v $user2 | awk -F\: '{print $1 }' | zenity --width=100 --height=200 --title="Select the user to delete" --list  --column "Username"  --text "Select the user to delete\n\nPlease note: You can't remove the user that is currently logged in.") ; then
 	        if zenity --question --title="Confirm User Removal" --text="Are you REALLY sure you want to remove the user $selection?\n\nThere will be NO other confirmation and this can NOT be undone!" --ok-label="Yes, remove user!" --cancel-label="Don't remove the user"; then
 		  echo "Really remove $selection"
 		  userdel -fr $selection
