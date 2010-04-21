@@ -134,7 +134,7 @@ if zenity --question --title="Autologin" --text="Do you wish to automatically lo
 	sed -i "s/.*default_user.*/default_user $username/g" /etc/slim.conf
 	sed -i 's/.*auto_login.*/auto_login yes/g' /etc/slim.conf
 else
-	if zenity --question --title="User" --text="Do you wish to have your username automatically populated in the login screen?\n\nNote: This is ideal if your the only user of the OpenPandora but wish to disable autologin and use a password." --ok-label="Yes" --cancel-label="No"; then 
+	if zenity --question --title="User" --text="Do you wish to have your username automatically populated in the login screen?\n\nNote: This is ideal if you're the only user of the OpenPandora but wish to disable autologin and use a password." --ok-label="Yes" --cancel-label="No"; then 
 		sed -i "s/.*default_user.*/default_user $username/g" /etc/slim.conf
 		sed -i 's/.*auto_login.*/auto_login no/g' /etc/slim.conf
 	else
