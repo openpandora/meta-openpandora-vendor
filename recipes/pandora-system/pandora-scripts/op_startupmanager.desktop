@@ -2,7 +2,7 @@
 Name=Startup Manager
 Comment=Change startup settings of your Pandora.
 StartupNotify=false
-Exec=/usr/pandora/scripts/op_startupmanager.sh
+Exec=gksudo /usr/pandora/scripts/op_startupmanager.sh
 Icon=krfb
 Terminal=false
 Type=Application
