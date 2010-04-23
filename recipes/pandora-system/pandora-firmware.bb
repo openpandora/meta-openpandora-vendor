@@ -1,12 +1,11 @@
 DESCRIPTION = "Install binary firmware for Bluetooth and WiFi into the image."
 LICENSE = "proprietary-binary"
 RRECOMMENDS_${PN} = "kernel-module-firmware-class"
-PR = "r2"
+PR = "r3"
 
 SRC_URI = " \
         file://brf6300.bin \
         file://wl1251-fw.bin \
-        file://wl1251-nvs.bin \        
         file://bluetooth-conf \        
 "
 
@@ -15,7 +14,7 @@ S = "${WORKDIR}"
 
 do_install() {
         install -d ${D}${base_libdir}/firmware
-        install -m 0644 ${S}/brf6300.bin ${S}/wl1251-fw.bin ${S}/wl1251-nvs.bin ${D}${base_libdir}/firmware/
+        install -m 0644 ${S}/brf6300.bin ${S}/wl1251-fw.bin ${D}${base_libdir}/firmware/
         install -d ${D}${sysconfdir}/sysconfig
         install -m 0755 ${S}/bluetooth-conf ${D}${sysconfdir}/sysconfig/bluetooth     
 }
