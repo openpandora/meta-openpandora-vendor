@@ -15,16 +15,36 @@ d_stop() {
 	echo "Saving LCD and Nub-Settings"
 	cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness > /etc/pandora/conf/brightness.state
 	cat /sys/devices/platform/omap2_mcspi.1/spi1.1/gamma > /etc/pandora/conf/gamma.state
-        cat cat -v /proc/pandora/vsense66 | sed -n '1p' > /etc/pandora/conf/nubs.state
-	cat cat -v /proc/pandora/vsense67 | sed -n '1p' >> /etc/pandora/conf/nubs.state
+        cat -v /proc/pandora/nub0/mode | sed -n '1p' > /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub0/mouse_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub0/scrollx_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub0/scrolly_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub0/scroll_rate| sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub0/mbutton_threshold | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub1/mode | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub1/mouse_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub1/scrollx_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub1/scrolly_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub1/scroll_rate | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub1/mbutton_threshold | sed -n '1p' >> /etc/pandora/conf/nubs.state
 }
 
 d_start() {
 	echo "Restoring LCD and Nub-Settings"
 	cat /etc/pandora/conf/brightness.state > /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness 
 	cat /etc/pandora/conf/gamma.state > /sys/devices/platform/omap2_mcspi.1/spi1.1/gamma
-	sed -n '1p' /etc/pandora/conf/nubs.state > /proc/pandora/vsense66
-	sed -n '2p' /etc/pandora/conf/nubs.state > /proc/pandora/vsense67
+	sed -n '1p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mode
+	sed -n '2p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mouse_sensitivity
+	sed -n '3p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/scrollx_sensitivity
+	sed -n '4p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/scrolly_sensitivity
+	sed -n '5p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/scroll_rate
+	sed -n '6p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mbutton_threshold
+	sed -n '7p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/mode
+	sed -n '8p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/mouse_sensitivity
+	sed -n '9p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/scrollx_sensitivity
+	sed -n '10p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/scrolly_sensitivity
+	sed -n '11p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/scroll_rate
+	sed -n '12p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/mbutton_threshold
 }
 
 case "$1" in
