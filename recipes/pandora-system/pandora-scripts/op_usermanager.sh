@@ -1,4 +1,9 @@
 #!/bin/bash
+# Released under the GPL
+# User-Manager, v1.0, written by Michael Mrozek aka EvilDragon 2010.
+# Partly based on the scripts by JohnX/Mer Project - http://wiki.maemo.org/Mer/
+# Reworked for the OpenPandora - John Willis/Michael Mrozek
+# This scripts allows you to create and remove users from the Pandora system.
 
 while selection=$(zenity --title="Usermanager" --list --column "id" --column "Please select" --hide-column=1 --text="What do you want to do?" "add" "Add a user" "remove" "Remove a user" ); do
   if [ ${selection} = "add" ]; then

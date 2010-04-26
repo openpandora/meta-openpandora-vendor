@@ -1,4 +1,7 @@
 #!/bin/bash
+# Released under the GPL
+# LCD-Settings, v1.0, written by Michael Mrozek aka EvilDragon 2010. Brightness-Settings-Part written by vimacs.
+# This scripts allows you to create, load and save Gamma-Settings and to change the LCD Brightness.
 
 while mainsel=$(zenity --title="LCD-Settings" --width="300" --height="180" --list --column "id" --column "Please select" --hide-column=1 --text="What do you want to do?" "bright" "Change LCD Brightness" "gamma" "Manage LCD Gamma"); do
 

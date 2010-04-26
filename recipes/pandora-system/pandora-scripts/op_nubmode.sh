@@ -1,4 +1,7 @@
 #!/bin/bash
+# Released under the GPL
+# Nub-Settings, v1.0, written by Michael Mrozek aka EvilDragon 2010
+# This scripts allows you to configure all parameters of the Pandora-Nubs. The left and right nub can both be configured individually.
 
 while mainsel=$(zenity --title="Nub-Configuration" --width="430" --height="400" --list --column "id" --column "Please select" --hide-column=1 --text="What do you want to do?" "nub0mode" "Change the mode for the left nub" "nub0msense" "Change the mouse speed for the left nub" "nub0ssense" "Change the scroll sensitivity for the left nub" "nub0rate" "Change the scroll speed for the left nub" "nub0thres" "Change the mouse button sensitivity for the left nub" "nub1mode" "Change the mode for the right nub" "nub1msense" "Change the mouse speed for the right nub" "nub1ssense" "Change the scroll sensitivity for the right nub" "nub1rate" "Change the scroll speed for the right nub" "nub1thres" "Change the mouse button sensitivity for the right nub" "default" "Restore default settings for both nubs"); do
 

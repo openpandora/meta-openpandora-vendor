@@ -1,5 +1,7 @@
 #!/bin/bash
-# Main GUI
+# Released under the GPL
+# Startup-Manager, v1.0, written by Michael Mrozek aka EvilDragon 2010 with some help by vimacs.
+# This scripts allows you to change various settings of the Pandora startup process.
 
 while mainsel=$(zenity --title="Startupmanager" --width="400" --height="250" --list --column "id" --column "Please select" --hide-column=1 --text="What do you want to do?" "gui" "Change Default GUI for current user" "login" "Enable/Disable Autologin" "user" "Select default user" "wifi" "Enable/Disable WiFi on Boot"); do
 
