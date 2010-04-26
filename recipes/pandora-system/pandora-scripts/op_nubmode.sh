@@ -83,5 +83,6 @@ case $mainsel in
       echo 20 > /proc/pandora/nub1/scroll_rate
       echo 20 > /proc/pandora/nub1/mbutton_threshold
       zenity --info --title="Settings restored" --text "The default nub-settings have been restored." --timeout 6
+    ;;
 esac
 done
