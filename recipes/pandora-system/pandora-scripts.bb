@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r20"
+PR = "r21"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -31,8 +31,8 @@ SRC_URI = " \
 #          file://op_datetime.desktop \
           file://op_usermanager.sh \
 #          file://op_usermanager.desktop \
-          file://op_gammamanager.sh \
-#          file://op_gammamanager.desktop \
+          file://op_lcdsettings.sh \
+#          file://op_lcdsettings.desktop \
           file://op_nubmode.sh \
 #	  file://op_nubmode.desktop \
           file://gui.conf \
@@ -52,7 +52,7 @@ do_install() {
           install -m 0755 ${WORKDIR}/op_calibrate.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_datetime.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_usermanager.sh ${D}${prefix}/pandora/scripts/
-          install -m 0755 ${WORKDIR}/op_gammamanager.sh ${D}${prefix}/pandora/scripts/
+          install -m 0755 ${WORKDIR}/op_lcdsettings.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_nubmode.sh ${D}${prefix}/pandora/scripts/
 
           install -d ${D}${prefix}/pandora/apps/
@@ -68,7 +68,7 @@ do_install() {
 #          install -m 0644 ${WORKDIR}/op_calibrate.desktop ${D}${datadir}/applications/
 #          install -m 0644 ${WORKDIR}/op_datetime.desktop ${D}${datadir}/applications/
 #          install -m 0644 ${WORKDIR}/op_usermanager.desktop ${D}${datadir}/applications/
-#          install -m 0644 ${WORKDIR}/op_gammamanager.desktop ${D}${datadir}/applications/
+#          install -m 0644 ${WORKDIR}/op_lcdsettings.desktop ${D}${datadir}/applications/
 #	  install -m 0644 ${WORKDIR}/op_nubmode.desktop ${D}${datadir}/applications/
           
           install -d ${D}${sysconfdir}/xdg/autostart/
