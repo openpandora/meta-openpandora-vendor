@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=LCD Settings
+Comment=Manage LCD Gamma and Brightness.
+StartupNotify=false
+Exec=sudo /usr/pandora/scripts/op_lcdsettings.sh
+Icon=package_graphics
+Terminal=false
+Type=Application
+Categories=Settings;
