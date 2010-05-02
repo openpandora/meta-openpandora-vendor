@@ -1,6 +1,6 @@
 DESCRIPTION = "Miscellaneous OpenPandora utilities"
 
-PR = "r3"
+PR = "r4"
 
 PARALLEL_MAKE = ""
 
@@ -12,7 +12,7 @@ SRC_URI = " \
 
 TARGET_LDFLAGS += "-lpthread -lX11 -lts"
 
-SRCREV = "84815134b3dbba81f930ab2476568e7ba1a783d9"
+SRCREV = "27058c48ecef47331a1f1683fb323ba51a8a5670"
 
 S = "${WORKDIR}/git"
 
@@ -21,6 +21,7 @@ do_install() {
           install -m 0755 ${S}/op_runfbapp ${D}${bindir}/op_runfbapp
           install -m 0755 ${S}/op_gammatool ${D}${bindir}/op_gammatool_bin 
           install -m 0755 ${S}/op_test_inputs ${D}${bindir}/op_test_inputs_bin 
+          install -m 0755 ${S}/ofbset ${D}${bindir}/ofbset           
           install -m 0755 ${S}/scripts/op_gammatool ${D}${bindir}/op_gammatool
           install -m 0755 ${S}/scripts/op_test_inputs ${D}${bindir}/op_test_inputs
 }
