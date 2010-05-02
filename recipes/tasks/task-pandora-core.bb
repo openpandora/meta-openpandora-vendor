@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps and libs in the Pandora i
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r21"
+PR = "r22"
 
 inherit task 
 
@@ -24,6 +24,7 @@ BLUETOOTH = " \
 BOOT = " \
   pandora-uboot-scripts \
   bootchart \
+  mtd-utils \
 "
 
 WIRELESS = " \
