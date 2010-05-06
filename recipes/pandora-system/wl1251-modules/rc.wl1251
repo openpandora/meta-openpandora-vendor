@@ -1,5 +1,4 @@
 #!/bin/sh
-
 DESC="WL1251 MAC80211 Wireless LAN driver"
 NAME="wl1251"
 
@@ -12,21 +11,21 @@ d_stop() {
 }
 
 d_start() {
-	insmod $(busybox find /lib/modules/$(uname -r) -name "board-omap3pandora-wifi.ko")
-	insmod $(busybox find /lib/modules/$(uname -r) -name "arc4.ko")
-	insmod $(busybox find /lib/modules/$(uname -r) -name "ecb.ko")
-	insmod $(busybox find /lib/modules/$(uname -r) -name "pcbc.ko")
-	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "compat.ko")	
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "rfkill_backport.ko")
-	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "cfg80211.ko")
+        insmod $(busybox find /lib/modules/$(uname -r)/updates -name "compat.ko")
+        insmod $(busybox find /lib/modules/$(uname -r)/updates -name "cfg80211.ko")
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "mac80211.ko")
+        insmod $(busybox find /lib/modules/$(uname -r)/updates -name "compat_firmware_class.ko")
+        insmod $(busybox find /lib/modules/$(uname -r) -name "ecb.ko")
+	insmod $(busybox find /lib/modules/$(uname -r) -name "pcbc.ko")
+        insmod $(busybox find /lib/modules/$(uname -r) -name "arc4.ko")
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "lib80211.ko")
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "lib80211_crypt_tkip.ko")
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "lib80211_crypt_wep.ko")
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "lib80211_crypt_ccmp.ko")
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "wl1251.ko")
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "wl1251_sdio.ko")
-	iwconfig wlan0 power off
+	insmod $(busybox find /lib/modules/$(uname -r) -name "board-omap3pandora-wifi.ko")
 }
 
 case "$1" in
