@@ -5,12 +5,11 @@ DESCRIPTION = "Task file for default core/console apps and libs in the Pandora i
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r22"
+PR = "r24"
 
 inherit task 
 
 AUFS = " \
-#  aufs2-27 \
   aufs2-util \
 "
 
@@ -123,6 +122,7 @@ RDEPENDS_${PN} = "\
   ${MEDIA_LIBS} \
   ${OPENGLES} \
   ${PANDORA_LIBS} \
+  ${PAM} \  
   ${SSH} \
   ${SUDO} \
   ${TOUCHSCREEN} \
@@ -133,20 +133,12 @@ RDEPENDS_${PN} = "\
   python-pygame \
   alsa-utils alsa-utils-alsactl alsa-utils-alsamixer alsa-utils-aplay \
   rdesktop \
-  mplayer \
   \
 #  angstrom-zeroconf-audio \
   angstrom-led-config \ 
-  \
-  ${PAM} \
 "
 
 # Make sure we install all kernel modules with the Pandora images
 RRECOMMENDS_${PN} += "kernel-modules"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-
-RRECOMMENDS_${PN}_append_armv7a = " \
-#	gnash gnash-browser-plugin \
-	omapfbplay \
-"
