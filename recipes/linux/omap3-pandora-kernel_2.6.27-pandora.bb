@@ -5,7 +5,7 @@ KERNEL_IMAGETYPE = "uImage"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-SRCREV = "fd96f5bb4f65e1fd6f185a37073dfaf76da57e4a"
+SRCREV = "a0a25e6fd8c1f53602d73f818e327cbb29e2ba86"
 
 SRC_URI = " \
            git://git.openpandora.org/pandora-kernel.git;protocol=git;branch=pandora-27-omap1 \
@@ -33,7 +33,6 @@ SRC_URI_append = " \
            file://dvb-fix-dma.diff;patch=1 \
            file://0001-Removed-resolution-check-that-prevents-scaling-when.patch;patch=1 \
            file://0001-Implement-downsampling-with-debugs.patch;patch=1 \
-           file://sitecomwl168-support.diff;patch=1 \
            file://musb-rxtx.patch;patch=1 \
 "
 
