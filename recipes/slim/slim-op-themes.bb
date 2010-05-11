@@ -5,7 +5,7 @@ LICENSE = "GPL"
 DEPENDS = "slim"
 RDEPENDS = "slim"
 
-PR = "r2"
+PR = "r3"
 
 SRC_URI = " \        
 "
@@ -28,7 +28,6 @@ do_install() {
           install -m 0644 ${WORKDIR}/greek/* ${D}${datadir}/slim/themes/greek/
           install -d ${D}${datadir}/slim/themes/pnd-default/          
           install -m 0644 ${WORKDIR}/pnd-default/* ${D}${datadir}/slim/themes/pnd-default/
-}
 }
 
 pkg_postinst() {
