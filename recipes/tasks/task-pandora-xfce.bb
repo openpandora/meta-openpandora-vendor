@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r25"
+PR = "r26"
 
 inherit task
 
@@ -209,15 +209,8 @@ XFCE46_EXTRAS = " \
 XFCE_THEMES = " \
   xfwm4-theme-daloa \
   xfwm4-theme-moheli \
-#  xfwm4-theme-default-4.0 \
-#  xfwm4-theme-default-4.2 \
-#  xfwm4-theme-default-4.4 \
   xfwm4-theme-kokodi \
   xfwm4-theme-sassandra \
-#  xfwm4-theme-stoneage \
-#  xfwm4-theme-therapy \
-#  xfwm4-theme-tyrex \
-#  xfwm4-theme-wallis \  
   xfwm4-themes \
 "
 
@@ -280,7 +273,7 @@ RDEPENDS_${PN} = " \
   pango-module-basic-x \
   pango-module-basic-fc \
   xcursor-transparent-theme \	
-  xterm xmms \
+  xterm \
   jaaa nmap iperf \
 #  gnuplot \
 "
