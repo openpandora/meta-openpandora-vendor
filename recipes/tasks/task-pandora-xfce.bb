@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r23"
+PR = "r24"
 
 inherit task
 
@@ -61,11 +61,11 @@ GAMES = " \
 #  scummvm \
 #  frozen-bubble \
 #  gnome-games \  
-  numptyphysics \
+#  numptyphysics \
 "
 
 GNOME_APPS = " \
-  gnome-mplayer \
+#  gnome-mplayer \
 #  gcalctool \ 
   gnome-keyring gnome-keyring-pam-plugin \
   gksu \
@@ -78,13 +78,13 @@ GNOME_GTK = " \
 
 GSTREAMER = " \
 #  gstreamer-ti \
-  gst-ffmpeg \
+#  gst-ffmpeg \
   gst-omapfb \
 #  gst-plugin-pulse \
   gst-plugin-xvimagesink \
-  gst-plugins-base-meta \
-  gst-plugins-good-meta \
-  gst-plugins-bad-meta \
+#  gst-plugins-base-meta \
+#  gst-plugins-good-meta \
+#  gst-plugins-bad-meta \
 #  gst-plugins-ugly-meta \
   gst-plugin-gles \
 "
@@ -148,16 +148,16 @@ BAD_RRECOMMENDS += " \
 "
 
 TOTEM = " \
-  totem \
-  totem-browser-plugin \
-  totem-plugin-bemused \
-  totem-plugin-gromit \
-  totem-plugin-media-player-keys \
-  totem-plugin-ontop \
-  totem-plugin-properties \
-  totem-plugin-screensaver \
-  totem-plugin-skipto \
-  totem-plugin-thumbnail \
+#  totem \
+#  totem-browser-plugin \
+#  totem-plugin-bemused \
+#  totem-plugin-gromit \
+#  totem-plugin-media-player-keys \
+#  totem-plugin-ontop \
+#  totem-plugin-properties \
+#  totem-plugin-screensaver \
+#  totem-plugin-skipto \
+#  totem-plugin-thumbnail \
 "
 
 TOUCHSCREEN = " \
