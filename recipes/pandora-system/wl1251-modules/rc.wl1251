@@ -26,6 +26,16 @@ d_start() {
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "wl1251.ko")
 	insmod $(busybox find /lib/modules/$(uname -r)/updates -name "wl1251_sdio.ko")
 	insmod $(busybox find /lib/modules/$(uname -r) -name "board-omap3pandora-wifi.ko")
+
+	# restore phy0 related LED triggers (they come from mac80211.ko)
+	if [ -e /sys/class/leds/ ] ; then
+		for led in /sys/class/leds/* ; do
+			trigger=$(grep "$(basename $led)" /etc/default/leds | grep "phy0" | awk '{print $2}')
+			if [ "x$trigger" != "x" ] ; then
+				echo "$trigger" > "$led/trigger"
+			fi
+		done
+	fi
 }
 
 case "$1" in
