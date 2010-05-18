@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r26"
+PR = "r28"
 
 inherit task
 
@@ -25,7 +25,6 @@ APPS = " \
 "
 
 BLUETOOTH_GUI = " \
-  blueman \
   gnome-bluetooth \
 "
 
@@ -162,7 +161,7 @@ TOTEM = " \
 TOUCHSCREEN = " \
   gtk-touchscreen-mode-enable \
   libgtkstylus \
-  xinput-calibrator \
+#  xinput-calibrator \
 "
 
 XFCE46_BASE = " \
