@@ -19,4 +19,4 @@
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_datetime.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_wifi.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_lcdsettings.sh
-
+%wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_nubmode.sh
