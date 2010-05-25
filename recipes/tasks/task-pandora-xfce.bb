@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r28"
+PR = "r30"
 
 inherit task
 
@@ -77,11 +77,11 @@ GNOME_GTK = " \
 
 GSTREAMER = " \
 #  gstreamer-ti \
-#  gst-ffmpeg \
+  gst-ffmpeg \
   gst-omapfb \
 #  gst-plugin-pulse \
   gst-plugin-xvimagesink \
-#  gst-plugins-base-meta \
+  gst-plugins-base-meta \
 #  gst-plugins-good-meta \
 #  gst-plugins-bad-meta \
 #  gst-plugins-ugly-meta \
