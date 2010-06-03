@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r30"
+PR = "r31"
 
 inherit task
 
@@ -124,6 +124,14 @@ PULSEAUDIO = " \
 #  pulseaudio-module-gconf \
 #  libasound-module-ctl-pulse \
 #  libasound-module-pcm-pulse \
+"
+
+PYTHON_LIBS = " \
+  python-shell \
+  python-pygtk \
+  python-pycairo \
+  gnome-vfs-plugin-http \
+  gnome-vfs-plugin-ftp \
 "
 
 QT_SELECTED = " qt4-x11-free \
@@ -254,6 +262,7 @@ RDEPENDS_${PN} = " \
   ${PANDORA} \
   ${PERL} \
   ${PULSEAUDIO} \
+  ${PYTHON_LIBS} \
   ${QT_SUPPORT} \
   ${TOTEM} \
   ${TOUCHSCREEN} \
