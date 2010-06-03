@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps and libs in the Pandora i
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r24"
+PR = "r26"
 
 inherit task 
 
@@ -26,6 +26,11 @@ BOOT = " \
   mtd-utils \
 "
 
+# Package BOOST libs so people can use them in apps. It will pull in the RRECOMENDS.
+BOOST = " \
+  boost \
+"
+
 WIRELESS = " \
   pandora-firmware \
   wl1251-modules \
@@ -43,7 +48,7 @@ MEDIA_LIBS = " \
   faad2 \
   mikmod \
   speex \  
-  
+  flac \  
 "
 OPENGLES = " \
   omap3-sgx-modules devmem2 \
@@ -103,6 +108,7 @@ EXTRA_TOOLS = " \
   nano \
   gdb \
   sessreg \
+  lua5.1 \
 "
 
 # Add extra util-linux-ng utils to image. 
@@ -116,6 +122,7 @@ RDEPENDS_${PN} = "\
   task-base-extended \
   task-proper-tools \
   ${AUFS} \
+  ${BOOST} \
   ${WIRELESS} \
   ${BLUETOOTH} \  
   ${BOOT} \
