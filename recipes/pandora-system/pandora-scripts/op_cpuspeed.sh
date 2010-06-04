@@ -3,13 +3,14 @@
 minmhz=14
 safemhz=600
 maxmhz=900
+newmhz=$(cat /proc/pandora/cpu_mhz_max)
 curmhz=$(cat /proc/pandora/cpu_mhz_max)
 device=/proc/pandora/cpu_mhz_max
 if [ ! $1 ]; then
 	if [ $DISPLAY ]; then
 		newmhz=$(zenity --scale --text "set cpu mhz" --min-value=$minmhz --max-value=$maxmhz --value=$curmhz --step 1)
 	else
-		newmhz=$(read -p "Pleas enter the desired speed")
+		newmhz=$(read -p "Please enter the desired speed")
 	fi
 else
 newmhz=$1
