@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PXML xmlns="http://openpandora.org/namespaces/PXML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PXML_schema.xsd">
+
+  <application id="updater.openpandora.org">
+
+    <title lang="en_US">Pandora Hotfix Kit 1</title>
+ 
+    <exec command="./start.sh"/>
+    <icon src="updater.png"/>
+
+    <description lang="en_US">Hotfix for your Pandora.</description>
+ 
+    <author name="OpenPandora Team" website="http://www.openpandora.org"/>
+ 
+    <categories>
+      <category name="System">
+      </category>
+    </categories>
+ 
+  </application>
+
+</PXML>
