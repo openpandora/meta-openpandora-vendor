@@ -13,7 +13,10 @@ NAME="pandora-lcd-state"
 
 d_stop() {
 	echo "Saving LCD and Nub-Settings"
-	cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness > /etc/pandora/conf/brightness.state
+	bright=$(cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness)
+	if [ $bright != "0" ]; then
+	    cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness > /etc/pandora/conf/brightness.state
+	fi
 	cat /sys/devices/platform/omap2_mcspi.1/spi1.1/gamma > /etc/pandora/conf/gamma.state
         cat -v /proc/pandora/nub0/mode | sed -n '1p' > /etc/pandora/conf/nubs.state
 	cat -v /proc/pandora/nub0/mouse_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
