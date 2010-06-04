@@ -14,6 +14,8 @@ else
 	then
 		notify-send -u normal "Bluetooth" "Bluetooth is being disabled..." -i /usr/share/icons/hicolor/32x32/apps/blueman.png
 		sudo /usr/sbin/hciconfig ${INTERFACE} down
+		sudo killall btaddconn
+                sudo killall btdelconn
 		rm ~/.op_btenabled
 	else
 		pgrep bluetoothd
