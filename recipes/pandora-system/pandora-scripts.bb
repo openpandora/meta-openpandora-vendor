@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r22"
+PR = "r23"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -25,6 +25,7 @@ SRC_URI = " \
           file://startnetbooklauncher \
           file://startmmenu \    
           file://startpmenu \ 
+          file://stopmmenu
           file://op_calibrate.sh \
 #          file://op_calibrate.desktop \
           file://op_datetime.sh \
@@ -85,6 +86,7 @@ do_install() {
           install -m 0755 ${WORKDIR}/startnetbooklauncher ${D}${bindir}/
           install -m 0755 ${WORKDIR}/startmmenu ${D}${bindir}/
           install -m 0755 ${WORKDIR}/startpmenu ${D}${bindir}/
+          install -m 0755 ${WORKDIR}/stopmmenu ${D}${bindir}/
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
