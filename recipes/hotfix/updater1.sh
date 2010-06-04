@@ -35,7 +35,7 @@ echo "# Updating kernel if needed"
         err="There is not enough diskspace on /boot/ to update the kernel.\n\nKernel couldn't be updated."
         echo "Kernel not updated - not enough diskspace on /boot/" >> /tmp/updater.log
       else
-        cp uImage /boot/uImage.new
+        cp 1/uImage /boot/uImage.new
         sync
         currkern=$(md5sum /boot/uImage.new | cut -d" " -f1)
           if [ $currkern = $newkern ]; then
@@ -63,7 +63,7 @@ echo "# Updating kernel if needed"
 echo "20"
 echo "# Installing missing Python libraries"
 if [ ! -f /usr/lib/glob.py ];
-  opkg install gnome-vfs-plugin-ftp_2.24.1-r2.5_armv7a.ipk gnome-vfs-plugin-http_2.24.1-r2.5_armv7a.ipk python-pycairo_1.4.0-ml3.5_armv7a.ipk python-pygtk_2.16.0-r1.5_armv7a.ipk python-shell_2.6.4-ml9.1.5_armv7a.ipk
+  opkg install 1/gnome-vfs-plugin-ftp_2.24.1-r2.5_armv7a.ipk 1/gnome-vfs-plugin-http_2.24.1-r2.5_armv7a.ipk 1/python-pycairo_1.4.0-ml3.5_armv7a.ipk 1/python-pygtk_2.16.0-r1.5_armv7a.ipk 1/python-shell_2.6.4-ml9.1.5_armv7a.ipk
   echo "Python libraries successfully updated" >> /tmp/updater.log
   sync
 else 
@@ -110,8 +110,8 @@ echo "# Installing updated MiniMenu"
 
 echo "40"
 echo "# Installing Boost Library"
-if [ ! -f /usr/lib/glob.py ];
-  opkg install 2/
+if [ ! -f /usr/lib/libboost_prg_exec_monitor-mt-d.so.1.41.0 ];
+  opkg install 2/boost*
   echo "Boost library successfully updated" >> /tmp/updater.log
   sync
 else 
