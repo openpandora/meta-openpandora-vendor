@@ -3,7 +3,7 @@ LICENSE = "GPLv2"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r3"
+PR = "r4"
 inherit update-rc.d
 
 INITSCRIPT_NAME = "pandora-lcd-state"
