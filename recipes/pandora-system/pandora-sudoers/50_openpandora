@@ -12,6 +12,7 @@
 %wheel ALL=(ALL) NOPASSWD: /usr/bin/traceroute
 %wheel ALL=(ALL) NOPASSWD: /usr/bin/uniqueid.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/sbin/bluetoothd
+%wheel ALL=(ALL) NOPASSWD: /usr/sbin/hciconfig
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_bright.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_cpuspeed.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_tvout.sh
@@ -20,4 +21,4 @@
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_wifi.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_lcdsettings.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_nubmode.sh
-%wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_bluetooth.sh
+
