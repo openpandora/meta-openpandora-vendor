@@ -2,7 +2,7 @@
 Name=Toggle Bluetooth Status
 Comment=Toggle the status of your Bluetooth device.
 StartupNotify=false
-Exec=sudo /usr/pandora/scripts/op_bluetooth.sh
+Exec=/usr/pandora/scripts/op_bluetooth.sh
 Icon=bluetooth
 Terminal=false
 Type=Application
