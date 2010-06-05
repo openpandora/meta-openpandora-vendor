@@ -2,8 +2,8 @@
 
 # Set the timezone and date/time
 
-while ! timezone=$(zenity --list --title "Select your timezone" --text="Please select your timezone" --column="Select your timezone" --print-column=1 "GMT (London, Lisbon, Portugal, Casablanca, Morocco)" "GMT+1 (Paris, Berlin, Amsterdam, Bern, Stockholm)" "GMT+2 (Athens, Helsinki, Istanbul)" "GMT+3 (Kuwait, Nairobi, Riyadh, Moscow)" "GMT+4 (Abu Dhabi, Iraq, Muscat, Kabul)" "GMT+5 (Calcutta, Colombo, Islamabad, Madras, New Delhi)" "GMT+6 (Almaty, Dhakar, Kathmandu)" "GMT+7 (Bangkok, Hanoi, Jakarta)" "GMT+8 (Beijing, Hong Kong, Kuala Lumpar, Singapore, Taipei)" "GMT+9 (Osaka, Seoul, Sapporo, Tokyo, Yakutsk)" "GMT+10 (Brisbane, Melbourne, Sydney, Vladivostok)" "GMT+11 (Magadan, New Caledonia, Solomon Is)" "GMT+12 (Auckland, Fiji, Kamchatka, Marshall Is., Wellington, Suva)" "GMT-1 (Azores, Cape Verde Is.)" "GMT-2 (Mid-Atlantic)" "GMT-3 (Brasilia, Buenos Aires, Georgetown)" "GMT-4 (Atlantic Time, Caracas)" "GMT-5 (Bogota, Lima, New York)" "GMT-6 (Mexico City, Saskatchewan, Chicago, Guatamala)" "GMT-7 (Denver, Edmonton, Mountain Time, Phoenix, Salt Lake City)" "GMT-8 (Anchorage, Los Angeles, San Francisco, Seattle)" "GMT-9 (Alaska)" "GMT-10 (Hawaii, Honolulu)" "GMT-11 (Midway Island, Samoa)" "GMT-12 (Eniwetok, Kwaialein)" "UTC" "Universal" --width=500 --height=450) || [ "x$timezone" = "x" ] ; do
-	zenity --title="Error" --error --text="Please select a timezone." --timeout=6
+while ! timezone=$(zenity --list --title "Select your time zone" --text="Please select your time zone" --column="Select your time zone" --print-column=1 "GMT (London, Lisbon, Portugal, Casablanca, Morocco)" "GMT+1 (Paris, Berlin, Amsterdam, Bern, Stockholm)" "GMT+2 (Athens, Helsinki, Istanbul)" "GMT+3 (Kuwait, Nairobi, Riyadh, Moscow)" "GMT+4 (Abu Dhabi, Iraq, Muscat, Kabul)" "GMT+5 (Calcutta, Colombo, Islamabad, Madras, New Delhi)" "GMT+6 (Almaty, Dhakar, Kathmandu)" "GMT+7 (Bangkok, Hanoi, Jakarta)" "GMT+8 (Beijing, Hong Kong, Kuala Lumpar, Singapore, Taipei)" "GMT+9 (Osaka, Seoul, Sapporo, Tokyo, Yakutsk)" "GMT+10 (Brisbane, Melbourne, Sydney, Vladivostok)" "GMT+11 (Magadan, New Caledonia, Solomon Is)" "GMT+12 (Auckland, Fiji, Kamchatka, Marshall Is., Wellington, Suva)" "GMT-1 (Azores, Cape Verde Is.)" "GMT-2 (Mid-Atlantic)" "GMT-3 (Brasilia, Buenos Aires, Georgetown)" "GMT-4 (Atlantic Time, Caracas)" "GMT-5 (Bogota, Lima, New York)" "GMT-6 (Mexico City, Saskatchewan, Chicago, Guatamala)" "GMT-7 (Denver, Edmonton, Mountain Time, Phoenix, Salt Lake City)" "GMT-8 (Anchorage, Los Angeles, San Francisco, Seattle)" "GMT-9 (Alaska)" "GMT-10 (Hawaii, Honolulu)" "GMT-11 (Midway Island, Samoa)" "GMT-12 (Eniwetok, Kwaialein)" "UTC" "Universal" --width=500 --height=450) || [ "x$timezone" = "x" ] ; do
+	zenity --title="Error" --error --text="Please select a time zone." --timeout=6
 done
 timezone=`echo $timezone | sed  's/(.*)//g'`
 echo $timezone
@@ -13,6 +13,7 @@ echo rm /etc/localtime && ln -s /usr/share/zoneinfo/Etc/$timezone /etc/localtime
 date_d=`date +%d | sed 's/^0//'`
 date_m=`date +%m`
 date_y=`date +%Y`
+
 
 while ! date=$(zenity --calendar --text="Please select the current date" --title "Please select the current date" --day=$date_d --month=$date_m --year=$date_y --date-format="%Y%m%d" --width=500) || [ "x$date" = "x" ] ; do
         zenity --title="Error" --error --text="Please select the date." --timeout 6

@@ -12,7 +12,7 @@ case $mainsel in
    case $leftsel in
 
     "nub0mode")
-        if nubm=$(zenity --height=300 --list --title="Select Nub-mode for the left nub" --text="Please select the modus for the left nub.\n\nNote: This can affect running programs.\nSome programs also may change the nub mode themselves."  --column "return" --hide-column=1 --column "Nub Mode" "mouse" "Use the nub as mouse" "mbuttons" "Use the nub for mousebuttons" "scroll" "Use the nub for scrolling" "absolute" "Use the nub as joystick") ; then
+        if nubm=$(zenity --height=300 --list --title="Select Nub-mode for the left nub" --text="Please select the mode for the left nub.\n\nNote: This can affect running programs.\nSome programs also may change the nub mode themselves."  --column "return" --hide-column=1 --column "Nub Mode" "mouse" "Use the nub as mouse" "mbuttons" "Use the nub for mousebuttons" "scroll" "Use the nub for scrolling" "absolute" "Use the nub as joystick") ; then
 
         echo $nubm > /proc/pandora/nub0/mode
         fi;;
@@ -55,7 +55,7 @@ case $mainsel in
         sleep 1
         echo 0 > /sys/bus/i2c/drivers/vsense/3-0066/reset      
         done
-        echo curmode > /proc/pandora/nub0/mode
+        echo $curmode > /proc/pandora/nub0/mode
         ;;
      esac
    done
@@ -67,7 +67,7 @@ case $mainsel in
    case $rightsel in
   
     "nub1mode")
-        if nubm=$(zenity --height=300 --list --title="Select Nub-mode for the right nub" --text="Please select the modus for the right nub.\n\nNote: This can affect running programs.\nSome programs also may change the nub mode themselves."  --column "return" --hide-column=1 --column "Nub Mode" "mouse" "Use the nub as mouse" "mbuttons" "Use the nub for mousebuttons" "scroll" "Use the nub for scrolling" "absolute" "Use the nub as joystick") ; then
+        if nubm=$(zenity --height=300 --list --title="Select Nub-mode for the right nub" --text="Please select the mode for the right nub.\n\nNote: This can affect running programs.\nSome programs also may change the nub mode themselves."  --column "return" --hide-column=1 --column "Nub Mode" "mouse" "Use the nub as mouse" "mbuttons" "Use the nub for mousebuttons" "scroll" "Use the nub for scrolling" "absolute" "Use the nub as joystick") ; then
 
         echo $nubm > /proc/pandora/nub1/mode
         fi;;
@@ -110,7 +110,7 @@ case $mainsel in
         sleep 1
         echo 0 > /sys/bus/i2c/drivers/vsense/3-0067/reset      
         done
-        echo curmode > /proc/pandora/nub1/mode
+        echo $curmode > /proc/pandora/nub1/mode
         ;;
      esac
    done

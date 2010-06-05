@@ -13,7 +13,7 @@ case $mainsel in
     curbright=$(cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness)
     device=/sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness
     if [ ! $1 ]; then
-      newbright=$(zenity --scale --text "set brightness" --min-value=$minbright --max-value=$maxbright --value=$curbright --step 1)
+      newbright=$(zenity --scale --text "Set brightness" --min-value=$minbright --max-value=$maxbright --value=$curbright --step 1)
     else
       newbright=$1
     fi
