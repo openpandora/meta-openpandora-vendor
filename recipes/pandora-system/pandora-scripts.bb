@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r24"
+PR = "r25"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -34,6 +34,7 @@ SRC_URI = " \
 #          file://op_usermanager.desktop \
           file://op_lcdsettings.sh \
 #          file://op_lcdsettings.desktop \
+          file://op_lcdrate.sh \
           file://op_nubmode.sh \
 #	  file://op_nubmode.desktop \
           file://gui.conf \
@@ -54,6 +55,7 @@ do_install() {
           install -m 0755 ${WORKDIR}/op_datetime.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_usermanager.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_lcdsettings.sh ${D}${prefix}/pandora/scripts/
+          install -m 0755 ${WORKDIR}/op_lcdrate.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_nubmode.sh ${D}${prefix}/pandora/scripts/
 
           install -d ${D}${prefix}/pandora/apps/
