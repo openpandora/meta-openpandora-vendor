@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r31"
+PR = "r32"
 
 inherit task
 
@@ -11,6 +11,7 @@ ANGSTROM_EXTRA_INSTALL ?= ""
 APPS = " \
   avahi-ui \
   abiword \
+  evince \
   claws-mail \
   swfdec swfdec-gnome swfdec-mozilla \
 #  firefox \
