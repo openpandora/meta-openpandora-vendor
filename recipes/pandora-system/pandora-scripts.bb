@@ -25,7 +25,7 @@ SRC_URI = " \
           file://startnetbooklauncher \
           file://startmmenu \    
           file://startpmenu \ 
-          file://stopmmenu
+          file://stopmmenu \
           file://op_calibrate.sh \
 #          file://op_calibrate.desktop \
           file://op_datetime.sh \
