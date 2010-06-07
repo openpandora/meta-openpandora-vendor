@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Toggle Bluetooth Status
-Comment=Toggle the status of your Bluetooth device.
-StartupNotify=false
-Exec=/usr/pandora/scripts/op_bluetooth.sh
-Icon=bluetooth
-Terminal=false
-Type=Application
-Categories=System;

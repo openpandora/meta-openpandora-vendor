@@ -1,3 +1,0 @@
-#!/bin/sh
-killall xfwm4
-killall mmwrapper
