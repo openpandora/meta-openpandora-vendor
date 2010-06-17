@@ -1,9 +1,9 @@
 #!/bin/bash
 # Released under the GPL
-# Startup-Manager, v1.0, written by Michael Mrozek aka EvilDragon 2010 with some help by vimacs.
+# Startup-Manager, v1.1, written by Michael Mrozek aka EvilDragon 2010 with some help by vimacs.
 # This scripts allows you to change various settings of the Pandora startup process.
 
-while mainsel=$(zenity --title="Startup manager" --width="400" --height="250" --list --column "id" --column "Please select" --hide-column=1 --text="What do you want to do?" "gui" "Change Default GUI for current user" "login" "Enable/Disable auto login" "user" "Select default user" "wifi" "Enable/Disable WiFi on boot"); do
+while mainsel=$(zenity --title="Startup manager" --width="400" --height="250" --list --column "id" --column "Please select" --hide-column=1 --text="What do you want to do?" "gui" "Change Default GUI for current user" "login" "Enable/Disable auto login" "user" "Select default user" "service" "Enable/Disable services on boot"); do
 
 
 case $mainsel in
@@ -43,16 +43,27 @@ case $mainsel in
         zenity --info --title="Changed default user" --text "The default user disabled" --timeout 6
        fi;;
 
-# Enable / Disable WiFi on boot
-     "wifi")
-      if zenity --question --title="Start WiFi on Bootup" --text="Do you wish to automatically start the WiFi driver on bootup?" --ok-label="Yes" --cancel-label="No"; then      	
-	 ln -s ../init.d/wl1251-init /etc/rc5.d/S30wl1251-init
-	 ln -s ../init.d/wl1251-init /etc/rc2.d/S30wl1251-init
-	 zenity --info --title="Changed WiFi startup" --text "WiFi on boot is now enabled." --timeout 6
-      else
-	 rm /etc/rc2.d/S30wl1251-init
-         rm /etc/rc5.d/S30wl1251-init
-         zenity --info --title="Changed WiFi startup" --text "WiFi on boot is now disabled." --timeout 6
-      fi;;
+# Enable / Disable services on boot
+      
+     "service")
+        while servsel=$((
+		cat /etc/pandora/conf/service.conf|awk -F\# '{
+		if (system("test -f "$1))
+		    print "FALSE"
+		else
+		    print "TRUE";print NR;print $2
+		}'
+		)|
+		zenity --title='Service Manager' --width=500 --height=300 --list --checklist --hide-column=2 --column Enabled --column line --column 'Please select'  --text='Enable / Disable Service:' --separator='#'); do
+
+	cat /etc/pandora/conf/service.conf|awk -F\# -v pat="$servsel" '{
+	if (match(pat,NR))
+	    system ($4)
+	else
+	    system ($3)
+	}'
+	zenity --info --title="Done" --text "The startup services have been changed." --timeout 6
+	done
+;;
 esac
 done 
