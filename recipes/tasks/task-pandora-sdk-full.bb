@@ -1,6 +1,6 @@
 DESCRIPTION = "OpenPandora: Full SDK development packages"
 
-PR = "r1"
+PR = "r2"
 ALLOW_EMPTY = "1"
 
 DEPENDS = "task-pandora-sdk-base"
@@ -46,6 +46,11 @@ RDEPENDS += "\
 RDEPENDS += "\
   libgles-omap3 \
   libgles-omap3-dev \
+"
+
+# QT4 libs.
+RDEPENDS += "\
+  qt4-x11-free-dev \
 "
 
 # X11 Development libs.
