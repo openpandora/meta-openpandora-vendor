@@ -5,7 +5,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 
 RDEPENDS = "sudo"
 
-PR = "r6"
+PR = "r7"
 
 SRC_URI = " \
           file://50_openpandora \
