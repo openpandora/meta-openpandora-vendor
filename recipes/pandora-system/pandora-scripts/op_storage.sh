@@ -6,11 +6,19 @@ while mainsel=$(zenity --title="SD Card Mass Storage" --width="380" --height="20
   if umount /dev/mmcblk0p1
   then
     # switch to mass storage
-    rmmod g_cdc
+    if lsmod | grep g_cdc &>/dev/null
+	then
+	echo Found g_cdc - removing...
+	rmmod g_cdc
+	ethernet=1
+    fi
     modprobe g_file_storage file=/dev/mmcblk0p1 stall=0
     zenity --title="SD Card 1 Mass Storage Mode" --info --text="SD Card Slot 1 is currently in Mass Storage Mode.\n\nClick on OK when you're finished with your data transfer\nand want to go back to normal mode."
     rmmod g_file_storage
-    modprobe g_cdc
+    if [ $ethernet=1 ]; then
+      echo Reloading g_cdc...
+      modprobe g_cdc
+    fi
     $remount
   else
      zenity --title="Error" --error --text="Error.\nEither there is no card in SD Slot 1 or some program\nis currently accessing the card.\n\nPlease make sure to close any programs that currently access te SD Card." --timeout 6
@@ -21,11 +29,19 @@ while mainsel=$(zenity --title="SD Card Mass Storage" --width="380" --height="20
   if umount /dev/mmcblk1p1
   then
     # switch to mass storage
-    rmmod g_cdc
+     if lsmod | grep g_cdc &>/dev/null
+	then
+	echo Found g_cdc - removing...
+	rmmod g_cdc
+	ethernet=1
+    fi
     modprobe g_file_storage file=/dev/mmcblk1p1 stall=0
     zenity --title="SD Card 2 Mass Storage Mode" --info --text="SD Card Slot 2 is currently in Mass Storage Mode.\n\nClick on OK when you're finished with your data transfer\nand want to go back to normal mode."
     rmmod g_file_storage
-    insmod g_cdc
+    if [ $ethernet=1 ]; then
+      echo Reloading g_cdc...
+      modprobe g_cdc
+    fi
     $remount
   else
      zenity --title="Error" --error --text="Error.\nEither there is no card in SD Slot 2 or some program\nis currently accessing the card.\n\nPlease make sure to close any programs that currently access te SD Card." --timeout 6
