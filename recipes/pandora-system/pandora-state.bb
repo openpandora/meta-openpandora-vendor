@@ -10,7 +10,7 @@ INITSCRIPT_NAME = "pandora-state"
 INITSCRIPT_PARAMS = "start 39 S . stop 31 0 1 6 ."
 
 SRC_URI = " \
-          file://rc.pandora-lcd-state \
+	  file://rc.pandora-state \
 	  file://gamma.state \
 	  file://brightness.state \
 	  file://nubs.state \
