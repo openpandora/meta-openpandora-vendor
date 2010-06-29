@@ -3,9 +3,10 @@
 # Released under the GPL
 
 INTERFACE="`hciconfig | grep "^hci" | cut -d ':' -f 1`"
-LOCK="~/.op_btenabled"
+LOCK=".op_btenabled"
+cd "$HOME"
 
-if [ $1 = "startup" ]; then
+if [ "$1" = "startup" ]; then
 	[ -f "$LOCK" ] && sudo /usr/sbin/hciconfig "$INTERFACE" up pscan 1>/dev/null && sudo /usr/sbin/bluetoothd || echo "Bluetooth: User has not enabled Bluetooth." 
 
 else
