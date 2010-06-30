@@ -13,6 +13,7 @@ if umount $device
 	then
 	echo Found g_cdc - removing...
 	rmmod g_cdc
+	sleep 2
 	ethernet=1
     fi
    modprobe g_file_storage file=$device stall=0
