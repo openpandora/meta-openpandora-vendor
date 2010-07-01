@@ -16,7 +16,7 @@ else
 newmhz=$1
 fi
 if [ $newmhz ]; then
-        if [ $newmhz -ge $safemhz ]; then
+        if [ $newmhz -gt $safemhz ]; then
                 if [ $DISPLAY ]; then
                         answer=$(zenity --question --title "Alert" --text "You are trying to set the CPU clock to $newmhz which is above its specification of $safemhz, doing so may burn down your house, sour milk, or just blow up (OK, not that likely)! Proceed?";echo $?)
                         echo $answer

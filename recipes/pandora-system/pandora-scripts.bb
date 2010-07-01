@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r29"
+PR = "r30"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -74,8 +74,8 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_nubmode.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_storage.sh ${D}${prefix}/pandora/scripts/
 
-          install -d ${D}${prefix}/pandora/menu/
-          install -m 0755 ${WORKDIR}/pandorascripts.pnd ${D}${prefix}/pandora/menu/
+          install -d ${D}${prefix}/pandora/apps/
+          install -m 0755 ${WORKDIR}/pandorascripts.pnd ${D}${prefix}/pandora/apps/
 	  install -d ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/abiword.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/arora.pnd ${D}${prefix}/pandora/mmenu/
