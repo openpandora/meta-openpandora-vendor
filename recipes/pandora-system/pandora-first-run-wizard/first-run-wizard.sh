@@ -118,11 +118,13 @@ EOF
 
 # Pick a name for the OpenPandora.
 
-while ! hostname=$(zenity --title="Name your Pandora" --entry --text "Please choose a name for your OpenPandora.\n\nIt should only contain letters, numbers and dashes." --entry-text "$username-openpandora") || [ "x$hostname" = "x" ]; do 
+while ! hostname=$(zenity --title="Name your Pandora" --entry --text "Please choose a name for your OpenPandora.\n\nIt should only contain letters, numbers and dashes, no spaces." --entry-text "$username-openpandora") || [ "x$hostname" = "x" ]; do 
 	zenity --title="Error" --error --text="Please try again."
 done
 
+
 echo $hostname > /etc/hostname
+sed 's/ /_/g' /etc/hostname
 echo "127.0.0.1 localhost.localdomain localhost $hostname" > /etc/hosts
 hostname -F /etc/hostname
 
@@ -146,7 +148,10 @@ fi
 
 # Select the default interface and setup SLiM to pass that as a sesion to ~./.xinitrc
 
-selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity --width=500 --height=300 --title="Select the Default GUI" --list --column "name" --column "description" --text "select defaultgui" )
+while ! selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity --width=500 --height=300 --title="Select the Default GUI" --list --column "Name" --column "Description" --text "Please select the Default GUI" ); do
+  zenity --title="Error" --error --text="Please select a GUI." --timeout=6
+done
+
 echo $selection
 
 gui=$(grep $selection /etc/pandora/conf/gui.conf | awk -F\; '{print $3}')
@@ -205,6 +210,20 @@ date +%H:%M -s $time
 zenity --info --title="Finished" --text "This concludes the First Boot Wizard.\n\nYour chosen interface will start in a few seconds\n\nThankyou for buying the OpenPandora. Enjoy using the device!" --timeout 6
 
 # ----
+
+# NOTE: This is just a temporary fix! These daemons should be removed from startup in the OE recipes. Until the time is found, we'll do it from here.
+update-rc.d -f samba remove
+update-rc.d -f xinetd
+update-rc.d -f avahi-daemon
+update-rc.d -f apmd
+update-rc.d -f usb-gadget
+update-rc.d -f banner
+update-rc.d -f portmap
+update-rc.d -f mountnfs
+update-rc.d -f blueprobe
+update-rc.d -f dropbear
+update-rc.d -f wl1251-init
+
 
 # Write the control file so this script is not run on next boot 
 # (hackish I know but I want the flexability to drop a new script in later esp. in the early firmwares).
