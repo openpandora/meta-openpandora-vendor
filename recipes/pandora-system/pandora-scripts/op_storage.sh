@@ -5,7 +5,7 @@ options=$(grep ${selection2} /proc/mounts | awk '{print $4}' | sed "s/,codepage=
 device=$(grep ${selection2} /proc/mounts | awk '{print substr($1,1,12)}')
 device2=$(grep ${selection2} /proc/mounts | awk '{print $1}')
 
-if umount $device
+if umount $device2
  
   then
     # switch to mass storage
