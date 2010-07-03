@@ -151,7 +151,7 @@ fi
 
 selection=""
 while [ x$selection = x ]; do
-selection=$(zenity --width=500 --height=300 --title="Select the Default GUI" --list --column "Name" --column "Description" --text "Please select the Default GUI" Test1 Desc1 Test2 Desc2 )
+selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity --width=500 --height=300 --title="Select the Default GUI" --list --column "Name" --column "Description" --text "Please select the Default GUI" )
 if [ x$selection = x ]; then
   zenity --title="Error" --error --text="Please select a GUI." --timeout=6
 fi
