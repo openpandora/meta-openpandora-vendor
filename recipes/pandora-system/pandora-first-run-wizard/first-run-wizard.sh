@@ -124,7 +124,8 @@ done
 
 
 echo $hostname > /etc/hostname
-sed 's/ /_/g' /etc/hostname
+hostname =$(sed 's/ /_/g' /etc/hostname)
+echo $hostname > /etc/hostname
 echo "127.0.0.1 localhost.localdomain localhost $hostname" > /etc/hosts
 hostname -F /etc/hostname
 
@@ -148,8 +149,12 @@ fi
 
 # Select the default interface and setup SLiM to pass that as a sesion to ~./.xinitrc
 
-while ! selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity --width=500 --height=300 --title="Select the Default GUI" --list --column "Name" --column "Description" --text "Please select the Default GUI" ); do
+selection=""
+while [ x$selection = x ]; do
+selection=$(zenity --width=500 --height=300 --title="Select the Default GUI" --list --column "Name" --column "Description" --text "Please select the Default GUI" Test1 Desc1 Test2 Desc2 )
+if [ x$selection = x ]; then
   zenity --title="Error" --error --text="Please select a GUI." --timeout=6
+fi
 done
 
 echo $selection
