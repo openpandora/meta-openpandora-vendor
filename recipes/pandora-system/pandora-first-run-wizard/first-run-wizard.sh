@@ -213,16 +213,16 @@ zenity --info --title="Finished" --text "This concludes the First Boot Wizard.\n
 
 # NOTE: This is just a temporary fix! These daemons should be removed from startup in the OE recipes. Until the time is found, we'll do it from here.
 update-rc.d -f samba remove
-update-rc.d -f xinetd
-update-rc.d -f avahi-daemon
-update-rc.d -f apmd
-update-rc.d -f usb-gadget
-update-rc.d -f banner
-update-rc.d -f portmap
-update-rc.d -f mountnfs
-update-rc.d -f blueprobe
-update-rc.d -f dropbear
-update-rc.d -f wl1251-init
+update-rc.d -f xinetd remove
+update-rc.d -f avahi-daemon remove
+update-rc.d -f apmd remove
+update-rc.d -f usb-gadget remove
+update-rc.d -f banner remove
+update-rc.d -f portmap remove
+update-rc.d -f mountnfs remove
+update-rc.d -f blueprobe remove
+update-rc.d -f dropbear remove
+update-rc.d -f wl1251-init remove
 
 
 # Write the control file so this script is not run on next boot 
