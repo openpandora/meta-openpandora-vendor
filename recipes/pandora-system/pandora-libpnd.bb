@@ -1,7 +1,7 @@
 DESCRIPTION = "Support for the PND format in Pandora images (lib, daemon, init script etc.)"
 LICENSE = "lGPL"
 
-PR = "r24"
+PR = "r25"
 
 PARALLEL_MAKE = ""
 
@@ -14,7 +14,7 @@ SRC_URI = " \
           file://op_pnd_run.desktop \
 "
 
-SRCREV = "b9135cc3ad746972a6f6f4dd3419bbcda861dd67"
+SRCREV = "c1584c727555ca27b94fb6d31155a31f84f979be"
 
 S = "${WORKDIR}/git"
 
