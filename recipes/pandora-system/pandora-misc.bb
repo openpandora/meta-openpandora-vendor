@@ -1,6 +1,6 @@
 DESCRIPTION = "Miscellaneous OpenPandora utilities"
 
-PR = "r6"
+PR = "r7"
 
 PARALLEL_MAKE = ""
 
