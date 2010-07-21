@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps and libs in the Pandora i
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r31"
+PR = "r32"
 
 inherit task 
 
@@ -53,7 +53,7 @@ MEDIA_LIBS = " \
 OPENGLES = " \
   omap3-sgx-modules devmem2 \
   libgles-omap3 \
-  libgles-omap3-rawdemos \
+#  libgles-omap3-rawdemos \
 "
 
 PAM = " \
@@ -109,6 +109,7 @@ EXTRA_TOOLS = " \
   gdb \
   sessreg \
   lua5.1 \
+  tzdata \
 "
 
 # Add extra util-linux-ng utils to image. 
