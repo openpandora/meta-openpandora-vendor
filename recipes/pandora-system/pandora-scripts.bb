@@ -6,38 +6,38 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r31"
+PR = "r34"
 
 SRC_URI = " \
           file://op_bright.sh \
 #	   file://op_bright.desktop \
           file://op_cpuspeed.sh \
-#          file://op_cpuspeed.desktop \          
+          file://op_cpuspeed.pnd \          
           file://op_wifi.sh \
-#          file://op_wifi.desktop \          
+#          file://op_wifi.pnd \          
           file://op_bluetooth.sh \
           file://op_bluetooth-check.desktop \
           file://op_bluetooth.desktop \          
           file://op_startupmanager.sh \
-#          file://op_startupmanager.desktop \
+          file://op_startupmanager.pnd \
           file://op_switchgui.sh \
-#          file://op_switchgui.desktop \
+          file://op_switchgui.pnd \
           file://startnetbooklauncher \
           file://startmmenu \    
           file://startpmenu \ 
           file://stopmmenu \
           file://op_calibrate.sh \
-#          file://op_calibrate.desktop \
+          file://op_calibrate.pnd \
           file://op_datetime.sh \
-#          file://op_datetime.desktop \
+          file://op_datetime.pnd \
           file://op_usermanager.sh \
-#          file://op_usermanager.desktop \
+          file://op_usermanager.pnd \
           file://op_lcdsettings.sh \
-#          file://op_lcdsettings.desktop \
+          file://op_lcdsettings.pnd \
            file://op_lcdrate.sh \
           file://op_storage.sh \
           file://op_nubmode.sh \
-#	  file://op_nubmode.desktop \
+	  file://op_nubmode.pnd \
           file://gui.conf \
           file://gamma.conf \
           file://service.conf \
@@ -75,7 +75,16 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_storage.sh ${D}${prefix}/pandora/scripts/
 
           install -d ${D}${prefix}/pandora/apps/
-          install -m 0755 ${WORKDIR}/pandorascripts.pnd ${D}${prefix}/pandora/apps/
+          install -m 0755 ${WORKDIR}/op_calibrate.pnd ${D}${prefix}/pandora/apps/
+	  install -m 0755 ${WORKDIR}/op_cpuspeed.pnd ${D}${prefix}/pandora/apps/
+	  install -m 0755 ${WORKDIR}/op_datetime.pnd ${D}${prefix}/pandora/apps/
+	  install -m 0755 ${WORKDIR}/op_lcdsettings.pnd ${D}${prefix}/pandora/apps/
+	  install -m 0755 ${WORKDIR}/op_nubmode.pnd ${D}${prefix}/pandora/apps/
+	  install -m 0755 ${WORKDIR}/op_startupmanager.pnd ${D}${prefix}/pandora/apps/
+	  install -m 0755 ${WORKDIR}/op_storage.pnd ${D}${prefix}/pandora/apps/
+	  install -m 0755 ${WORKDIR}/op_switchgui.pnd ${D}${prefix}/pandora/apps/
+	  install -m 0755 ${WORKDIR}/op_usermanager.pnd ${D}${prefix}/pandora/apps/
+#	  install -m 0755 ${WORKDIR}/op_wifi.pnd ${D}${prefix}/pandora/apps/
 	  install -d ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/abiword.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/arora.pnd ${D}${prefix}/pandora/mmenu/
