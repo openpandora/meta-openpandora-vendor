@@ -43,7 +43,7 @@ SRC_URI = " \
           file://gamma.conf \
           file://service.conf \
           file://op_env.sh \
-          file://pandorascripts.pnd \
+#          file://pandorascripts.pnd \
 	  file://abiword.pnd \
           file://arora.pnd \
           file://claws-mail.pnd \
@@ -86,6 +86,7 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_switchgui.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_usermanager.pnd ${D}${prefix}/pandora/apps/
 #	  install -m 0755 ${WORKDIR}/op_wifi.pnd ${D}${prefix}/pandora/apps/
+
 	  install -d ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/abiword.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/arora.pnd ${D}${prefix}/pandora/mmenu/
