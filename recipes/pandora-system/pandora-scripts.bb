@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r34"
+PR = "r35"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -34,8 +34,9 @@ SRC_URI = " \
           file://op_usermanager.pnd \
           file://op_lcdsettings.sh \
           file://op_lcdsettings.pnd \
-           file://op_lcdrate.sh \
+          file://op_lcdrate.sh \
           file://op_storage.sh \
+	  file://op_storage.pnd \
           file://op_nubmode.sh \
 	  file://op_nubmode.pnd \
           file://gui.conf \
