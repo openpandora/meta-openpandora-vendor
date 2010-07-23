@@ -317,11 +317,13 @@ CONFIG_ATAGS_PROC=y
 #
 # At least one emulation must be selected
 #
-# CONFIG_FPE_NWFPE is not set
+CONFIG_FPE_NWFPE=y
+# CONFIG_FPE_NWFPE_XP is not set
 # CONFIG_FPE_FASTFPE is not set
 CONFIG_VFP=y
 CONFIG_VFPv3=y
 CONFIG_NEON=y
+# CONFIG_ARM_ERRATUM_451034 is not set
 
 #
 # Userspace binary formats
@@ -1957,8 +1959,8 @@ CONFIG_HAVE_DYNAMIC_FTRACE=y
 # CONFIG_SAMPLES is not set
 CONFIG_HAVE_ARCH_KGDB=y
 # CONFIG_KGDB is not set
-# CONFIG_DEBUG_USER is not set
-# CONFIG_DEBUG_ERRORS is not set
+CONFIG_DEBUG_USER=y
+CONFIG_DEBUG_ERRORS=y
 # CONFIG_DEBUG_STACK_USAGE is not set
 # CONFIG_DEBUG_LL is not set
 
