@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r37"
+PR = "r38"
 
 SRC_URI = " \
           file://op_bright.sh \
