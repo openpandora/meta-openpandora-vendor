@@ -7,11 +7,11 @@ while ! timezone=$(zenity --list --title "Select your time zone" --text="Please 
 done
 timezone=`echo $timezone | sed  's/(.*)//g'`
 echo $timezone
-echo rm /etc/localtime && ln -s /usr/share/zoneinfo/Etc/$timezone /etc/localtime
+rm /etc/localtime && ln -s /usr/share/zoneinfo/Etc/$timezone /etc/localtime
 
 #Make sure we clean up any leading zeros in the day (as Zenity freaks out)
 date_d=`date +%d | sed 's/^0//'`
-date_m=`date +%m`| sed 's/^0//'`
+date_m=`date +%m | sed 's/^0//'`
 date_y=`date +%Y`
 
 

@@ -181,11 +181,11 @@ while ! timezone=$(zenity --list --title "Select your timezone" --text="Please s
 done
 timezone=`echo $timezone | sed  's/(.*)//g'`
 echo $timezone
-echo rm /etc/localtime && ln -s /usr/share/zoneinfo/Etc/$timezone /etc/localtime
+rm /etc/localtime && ln -s /usr/share/zoneinfo/Etc/$timezone /etc/localtime
 
 #Make sure we clean up any leading zeros in the day (as Zenity freaks out)
 date_d=`date +%d | sed 's/^0//'`
-date_m=`date +%m`| sed 's/^0//'`
+date_m=`date +%m | sed 's/^0//'`
 date_y=`date +%Y`
 
 while ! date=$(zenity --calendar --text="Please select the current date" --title "Please select the current date" --day=$date_d --month=$date_m --year=$date_y --date-format="%Y%m%d" --width=500) || [ "x$date" = "x" ] ; do
