@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps and libs in the Pandora i
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r33"
+PR = "r34"
 
 inherit task 
 
@@ -49,7 +49,7 @@ MEDIA_LIBS = " \
   mikmod \
   speex \  
   flac \ 
-  libaudiofile0 \
+  audiofile \
 "
 OPENGLES = " \
   omap3-sgx-modules devmem2 \
