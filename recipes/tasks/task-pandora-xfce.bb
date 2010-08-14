@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r33"
+PR = "r34"
 
 inherit task
 
@@ -87,6 +87,7 @@ GSTREAMER = " \
 #  gst-plugins-bad-meta \
 #  gst-plugins-ugly-meta \
   gst-plugin-gles \
+  qt4-plugin-phonon-backend-gstreamer \
 "
 
 ICON_THEME = " \
@@ -146,6 +147,7 @@ QT_SUPPORT = " \
   ${QT_SELECTED} \
   qt4-plugin-imageformat-jpeg \
   qt4-plugin-imageformat-gif \
+  libqtopengl4 \
 "
 
 # We want all of the Qt metapackage (for dev use) without the demos/examples.

@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps and libs in the Pandora i
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r32"
+PR = "r33"
 
 inherit task 
 
@@ -48,7 +48,8 @@ MEDIA_LIBS = " \
   faad2 \
   mikmod \
   speex \  
-  flac \  
+  flac \ 
+  libaudiofile0 \
 "
 OPENGLES = " \
   omap3-sgx-modules devmem2 \
@@ -139,6 +140,8 @@ RDEPENDS_${PN} = "\
   ${UTIL_LINUX_NG_EXTRAS} \
 #        packagekit \
   python-pygame \
+  python-misc \
+  python-modules \
   alsa-utils alsa-utils-alsactl alsa-utils-alsamixer alsa-utils-aplay \
   rdesktop \
   \
