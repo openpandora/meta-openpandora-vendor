@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r35"
+PR = "r36"
 
 inherit task
 
@@ -135,7 +135,7 @@ PYTHON_LIBS = " \
   gnome-vfs-plugin-ftp \
 "
 
-QT_SELECTED = " qt4-x11-free-gles \
+QT_SELECTED = " qt4-x11-free \
 "
 # qt4-x11-free"
 # qt4-x11-free-gles"
