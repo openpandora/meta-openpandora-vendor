@@ -1,7 +1,7 @@
 DESCRIPTION = "Kernel drivers for the TI WL1251 WiFi chip found on the Pandora - Connected via SDIO"
 LICENSE = "GPLv2"
 
-SRCREV = "c2a2f58d1e5923b59ee5ef8b8127ad88f1716e90"
+SRCREV = "1b4f73540778042846ca3ddac9ddb0c1d21ccbc0"
 
 SRC_URI = " \
            git://git.openpandora.org/pandora-wifi.git;protocol=git;branch=compat-wireless \
