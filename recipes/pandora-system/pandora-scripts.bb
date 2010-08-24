@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r40"
+PR = "r41"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -36,6 +36,7 @@ SRC_URI = " \
           file://op_lcdsettings.sh \
           file://op_lcdsettings.pnd \
           file://op_lcdrate.sh \
+          file://op_videofir.sh \
           file://op_storage.sh \
 	  file://op_storage.pnd \
           file://op_nubmode.sh \
@@ -43,6 +44,12 @@ SRC_URI = " \
           file://gui.conf \
           file://gamma.conf \
           file://service.conf \
+          file://default_up_h \
+          file://default_up_v3 \
+          file://default_up_v5 \
+          file://none_up_h \
+          file://none_up_v3 \
+          file://none_up_v5 \
           file://op_env.sh \
 #          file://pandorascripts.pnd \
 	  file://abiword.pnd \
@@ -73,6 +80,7 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_usermanager.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_lcdsettings.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_lcdrate.sh ${D}${prefix}/pandora/scripts/
+          install -m 0755 ${WORKDIR}/op_videofir.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_nubmode.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_storage.sh ${D}${prefix}/pandora/scripts/
 
@@ -123,6 +131,14 @@ do_install() {
           install -m 0644 ${WORKDIR}/gui.conf ${D}${sysconfdir}/pandora/conf/gui.conf
           install -m 0644 ${WORKDIR}/gamma.conf ${D}${sysconfdir}/pandora/conf/gamma.conf
           install -m 0644 ${WORKDIR}/service.conf ${D}${sysconfdir}/pandora/conf/service.conf
+
+          install -d ${D}${sysconfdir}/pandora/conf/dss_fir/
+          install -m 0644 ${WORKDIR}/default_up_h ${D}${sysconfdir}/pandora/conf/dss_fir/
+          install -m 0644 ${WORKDIR}/default_up_v3 ${D}${sysconfdir}/pandora/conf/dss_fir/
+          install -m 0644 ${WORKDIR}/default_up_v5 ${D}${sysconfdir}/pandora/conf/dss_fir/
+          install -m 0644 ${WORKDIR}/none_up_h ${D}${sysconfdir}/pandora/conf/dss_fir/
+          install -m 0644 ${WORKDIR}/none_up_v3 ${D}${sysconfdir}/pandora/conf/dss_fir/
+          install -m 0644 ${WORKDIR}/none_up_v5 ${D}${sysconfdir}/pandora/conf/dss_fir/
 
           install -d ${D}${sysconfdir}/profile.d/
           install -m 0755 ${WORKDIR}/op_env.sh ${D}${sysconfdir}/profile.d/
