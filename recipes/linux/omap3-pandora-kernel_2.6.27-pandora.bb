@@ -5,7 +5,7 @@ KERNEL_IMAGETYPE = "uImage"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-SRCREV = "0ed40f320acac5b656fe0554329b681e88b47e25"
+SRCREV = "449c13a99bb39ced8dbea5daccc402c39f77455e"
 
 SRC_URI = " \
            git://git.openpandora.org/pandora-kernel.git;protocol=git;branch=pandora-27-omap1 \
