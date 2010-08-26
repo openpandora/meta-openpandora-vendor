@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r41"
+PR = "r42"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -41,6 +41,8 @@ SRC_URI = " \
 	  file://op_storage.pnd \
           file://op_nubmode.sh \
 	  file://op_nubmode.pnd \
+          file://op_tvout.sh \
+	  file://op_tvout.pnd \
           file://gui.conf \
           file://gamma.conf \
           file://service.conf \
@@ -83,6 +85,7 @@ do_install() {
           install -m 0755 ${WORKDIR}/op_videofir.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_nubmode.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_storage.sh ${D}${prefix}/pandora/scripts/
+          install -m 0755 ${WORKDIR}/op_tvout.sh ${D}${prefix}/pandora/scripts/
 
           install -d ${D}${prefix}/pandora/apps/
           install -m 0755 ${WORKDIR}/op_calibrate.pnd ${D}${prefix}/pandora/apps/
@@ -95,6 +98,7 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_switchgui.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_usermanager.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_wifi.pnd ${D}${prefix}/pandora/apps/
+          install -m 0755 ${WORKDIR}/op_tvout.pnd ${D}${prefix}/pandora/apps/
 
 	  install -d ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/abiword.pnd ${D}${prefix}/pandora/mmenu/
