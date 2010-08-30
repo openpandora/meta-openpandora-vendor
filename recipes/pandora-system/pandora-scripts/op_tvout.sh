@@ -30,9 +30,9 @@ case $mainsel in
   echo 0 > display1/enabled
   echo "" > /sys/class/graphics/fb2/overlays
   echo "0,2" > /sys/class/graphics/fb0/overlays
-  echo "658,520" > overlay2/output_size
+  echo "655,455" > overlay2/output_size
   echo "tv" > overlay2/manager
-  echo "35,35" > overlay2/position 
+  echo "40,15" > overlay2/position 
   echo "ntsc" > display1/timings
   echo 1 > overlay0/enabled
   echo 1 > overlay2/enabled
