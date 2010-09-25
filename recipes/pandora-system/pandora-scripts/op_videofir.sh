@@ -15,14 +15,15 @@ fi
 
 apply_filter()
 {
-	file="${1}_${2}"
+	file="${1}"
 	if [ -f "$file" ]; then
 		# hardcode overlay for now.. We'll update this as needed
-		echo "writing fir: $2"
-		cat "$file" > "/sys/devices/platform/omapdss/overlay1/filter_coef_$2"
+		echo "writing fir:"
+		head -n1 "$file"
+		sed -n 3,10p "$file" > "/sys/devices/platform/omapdss/overlay1/filter_coef_up_h"
+		sed -n 12,19p "$file" > "/sys/devices/platform/omapdss/overlay1/filter_coef_up_v3"
+		sed -n 21,28p "$file" > "/sys/devices/platform/omapdss/overlay1/filter_coef_up_v5"
 	fi
 }
 
-apply_filter "${base_path}" up_h
-apply_filter "${base_path}" up_v3
-apply_filter "${base_path}" up_v5
+apply_filter "${base_path}"

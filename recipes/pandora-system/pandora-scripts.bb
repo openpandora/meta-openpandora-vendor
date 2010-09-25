@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r43"
+PR = "r44"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -46,12 +46,8 @@ SRC_URI = " \
           file://gui.conf \
           file://gamma.conf \
           file://service.conf \
-          file://default_up_h \
-          file://default_up_v3 \
-          file://default_up_v5 \
-          file://none_up_h \
-          file://none_up_v3 \
-          file://none_up_v5 \
+          file://default_up \
+          file://none_up \
           file://op_env.sh \
 #          file://pandorascripts.pnd \
 	  file://abiword.pnd \
@@ -137,12 +133,8 @@ do_install() {
           install -m 0644 ${WORKDIR}/service.conf ${D}${sysconfdir}/pandora/conf/service.conf
 
           install -d ${D}${sysconfdir}/pandora/conf/dss_fir/
-          install -m 0644 ${WORKDIR}/default_up_h ${D}${sysconfdir}/pandora/conf/dss_fir/
-          install -m 0644 ${WORKDIR}/default_up_v3 ${D}${sysconfdir}/pandora/conf/dss_fir/
-          install -m 0644 ${WORKDIR}/default_up_v5 ${D}${sysconfdir}/pandora/conf/dss_fir/
-          install -m 0644 ${WORKDIR}/none_up_h ${D}${sysconfdir}/pandora/conf/dss_fir/
-          install -m 0644 ${WORKDIR}/none_up_v3 ${D}${sysconfdir}/pandora/conf/dss_fir/
-          install -m 0644 ${WORKDIR}/none_up_v5 ${D}${sysconfdir}/pandora/conf/dss_fir/
+          install -m 0644 ${WORKDIR}/default_up ${D}${sysconfdir}/pandora/conf/dss_fir/
+          install -m 0644 ${WORKDIR}/none_up ${D}${sysconfdir}/pandora/conf/dss_fir/
 
           install -d ${D}${sysconfdir}/profile.d/
           install -m 0755 ${WORKDIR}/op_env.sh ${D}${sysconfdir}/profile.d/
