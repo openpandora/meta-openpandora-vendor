@@ -14,7 +14,7 @@ SRC_URI = " \
           file://op_pnd_run.desktop \
 "
 
-SRCREV = "9349f4f66a18c8888feb3c7107fd57163b42a5de"
+SRCREV = "77637d2afa5645a4ea553bf513e8637f095ce856"
 
 S = "${WORKDIR}/git"
 
