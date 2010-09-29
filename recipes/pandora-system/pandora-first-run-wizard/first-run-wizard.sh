@@ -118,10 +118,13 @@ EOF
 
 # Pick a name for the OpenPandora.
 
-while ! hostname=$(zenity --title="Name your Pandora" --entry --text "Please choose a name for your OpenPandora.\n\nIt should only contain letters, numbers and dashes." --entry-text "$username-openpandora") || [ "x$hostname" = "x" ]; do 
+while ! hostname=$(zenity --title="Name your Pandora" --entry --text "Please choose a name for your OpenPandora.\n\nIt should only contain letters, numbers and dashes, no spaces." --entry-text "$username-openpandora") || [ "x$hostname" = "x" ]; do 
 	zenity --title="Error" --error --text="Please try again."
 done
 
+
+echo $hostname > /etc/hostname
+hostname =$(sed 's/ /_/g' /etc/hostname)
 echo $hostname > /etc/hostname
 echo "127.0.0.1 localhost.localdomain localhost $hostname" > /etc/hosts
 hostname -F /etc/hostname
@@ -146,7 +149,14 @@ fi
 
 # Select the default interface and setup SLiM to pass that as a sesion to ~./.xinitrc
 
-selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity --width=500 --height=300 --title="Select the Default GUI" --list --column "name" --column "description" --text "select defaultgui" )
+selection=""
+while [ x$selection = x ]; do
+selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity --width=500 --height=300 --title="Select the Default GUI" --list --column "Name" --column "Description" --text "Please select the Default GUI" )
+if [ x$selection = x ]; then
+  zenity --title="Error" --error --text="Please select a GUI." --timeout=6
+fi
+done
+
 echo $selection
 
 gui=$(grep $selection /etc/pandora/conf/gui.conf | awk -F\; '{print $3}')
@@ -171,11 +181,11 @@ while ! timezone=$(zenity --list --title "Select your timezone" --text="Please s
 done
 timezone=`echo $timezone | sed  's/(.*)//g'`
 echo $timezone
-echo rm /etc/localtime && ln -s /usr/share/zoneinfo/Etc/$timezone /etc/localtime
+rm /etc/localtime && ln -s /usr/share/zoneinfo/Etc/$timezone /etc/localtime
 
 #Make sure we clean up any leading zeros in the day (as Zenity freaks out)
 date_d=`date +%d | sed 's/^0//'`
-date_m=`date +%m`
+date_m=`date +%m | sed 's/^0//'`
 date_y=`date +%Y`
 
 while ! date=$(zenity --calendar --text="Please select the current date" --title "Please select the current date" --day=$date_d --month=$date_m --year=$date_y --date-format="%Y%m%d" --width=500) || [ "x$date" = "x" ] ; do
@@ -205,6 +215,20 @@ date +%H:%M -s $time
 zenity --info --title="Finished" --text "This concludes the First Boot Wizard.\n\nYour chosen interface will start in a few seconds\n\nThankyou for buying the OpenPandora. Enjoy using the device!" --timeout 6
 
 # ----
+
+# NOTE: This is just a temporary fix! These daemons should be removed from startup in the OE recipes. Until the time is found, we'll do it from here.
+update-rc.d -f samba remove
+update-rc.d -f xinetd remove
+update-rc.d -f avahi-daemon remove
+update-rc.d -f apmd remove
+update-rc.d -f usb-gadget remove
+update-rc.d -f banner remove
+update-rc.d -f portmap remove
+update-rc.d -f mountnfs remove
+update-rc.d -f blueprobe remove
+update-rc.d -f dropbear remove
+update-rc.d -f wl1251-init remove
+
 
 # Write the control file so this script is not run on next boot 
 # (hackish I know but I want the flexability to drop a new script in later esp. in the early firmwares).

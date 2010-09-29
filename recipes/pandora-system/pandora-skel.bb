@@ -5,7 +5,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 # /etc/skel is used by Shadow's useradd so you really have that installed for this to make sense ;)
 RDEPENDS = "shadow"
 
-PR = "r3"
+PR = "r4"
 
 SRC_URI = " \
   file://.xinitrc \     
@@ -16,6 +16,7 @@ SRC_URI = " \
   file://xsettings.xml \
   file://pndXmodmap \
   file://asoundrc \
+  file://vimrc \
 #  file://op_btenabled \
 "
 
@@ -24,6 +25,7 @@ SRC_URI = " \
 do_install() {
   install -d ${D}${sysconfdir}/skel/
   install -m 0644 ${WORKDIR}/.xinitrc ${D}${sysconfdir}/skel/.xinitrc
+  install -m 0644 ${WORKDIR}/vimrc ${D}${sysconfdir}/skel/.vimrc
   install -m 0644 ${WORKDIR}/bashrc ${D}${sysconfdir}/skel/.bashrc
   install -m 0644 ${WORKDIR}/profile ${D}${sysconfdir}/skel/.profile
   install -m 0644 ${WORKDIR}/pam_environment ${D}${sysconfdir}/skel/.pam_environment

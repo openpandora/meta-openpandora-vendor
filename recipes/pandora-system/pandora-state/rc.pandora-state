@@ -9,10 +9,10 @@
 ### END INIT INFO
  
 DESC="OpenPandora Save and Restore LCD Settings"
-NAME="pandora-lcd-state"
+NAME="pandora-state"
 
 d_stop() {
-	echo "Saving LCD and Nub-Settings"
+	echo "Saving Pandora specific settings"
 	bright=$(cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness)
 	if [ $bright != "0" ]; then
 	    cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness > /etc/pandora/conf/brightness.state
@@ -33,7 +33,8 @@ d_stop() {
 }
 
 d_start() {
-	echo "Restoring LCD and Nub-Settings"
+	echo "Restoring Pandora specific settings"
+	cat /etc/pandora/conf/dirty_expire_centisecs >  /proc/sys/vm/dirty_expire_centisecs
 	cat /etc/pandora/conf/brightness.state > /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness 
 	cat /etc/pandora/conf/gamma.state > /sys/devices/platform/omap2_mcspi.1/spi1.1/gamma
 	sed -n '1p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mode

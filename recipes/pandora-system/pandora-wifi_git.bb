@@ -24,7 +24,7 @@ SRC_URI += " \
 inherit update-rc.d
 
 INITSCRIPT_NAME = "tiwifi-init"
-INITSCRIPT_PARAMS = "start 30 5 2 . stop 40 0 1 6 ."
+INITSCRIPT_PARAMS = "stop 40 0 1 6 ."
 
 do_compile_prepend() {
           cd ${S}/sta_dk_4_0_4_32/
