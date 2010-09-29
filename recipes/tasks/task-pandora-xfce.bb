@@ -14,11 +14,8 @@ APPS = " \
   evince \
   claws-mail \
   swfdec swfdec-gnome swfdec-mozilla \
-#  firefox \
   gnumeric \   
-#  gimp \
   networkmanager network-manager-applet \ 
-#  synergy \
   vnc x11vnc angstrom-x11vnc-xinit \
   xchat \
 #  xournal \
@@ -71,11 +68,6 @@ GNOME_APPS = " \
   gksu \
 "
 
-GNOME_GTK = " \
-#  gnome-icon-theme \
-#  angstrom-gnome-icon-theme-enable \
-"
-
 GSTREAMER = " \
 #  gstreamer-ti \
   gst-ffmpeg \
@@ -96,7 +88,7 @@ ICON_THEME = " \
 "
 
 LAUNCHERS = " \
-#  netbook-launcher-efl \
+  netbook-launcher-efl \
   pandora-libpnd-minimenu \
   pandora-pmenu \
 "
@@ -255,7 +247,6 @@ RDEPENDS_${PN} = " \
   ${DISPMAN} \
   ${FONTS} \
   ${GAMES} \  
-  ${GNOME_GTK} \
   ${GNOME_APPS} \
   ${GSTREAMER} \
   ${ICON_THEME} \

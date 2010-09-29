@@ -17,7 +17,8 @@ do_populate_sdk_append() {
        # SED out incorrect paths in SDK support *-config files so tools can use the files to find libs to cross compile.
        # not ready to commit.
 
-       # Tweak the environment-setup script to get QT4 dev working.
+       # Tweak the environment-setup script to try get Qt4 X11 dev working.
+       # Based on Koen's mods to create the Qte SDK.
        
        script = "${SDK_OUTPUT}/${SDKPATH}/environment-setup"
        touch $script

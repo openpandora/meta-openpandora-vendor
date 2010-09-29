@@ -1,7 +1,8 @@
 DESCRIPTION = "OpenPandora: Full SDK development packages"
 
-PR = "r2"
 ALLOW_EMPTY = "1"
+
+PR = "r4"
 
 DEPENDS = "task-pandora-sdk-base"
 
@@ -51,6 +52,28 @@ RDEPENDS += "\
 # QT4 libs.
 RDEPENDS += "\
   qt4-x11-free-dev \
+  qt4-mkspecs \
+  libqt-phonon4-dev \
+  libqt-3support4-dev \
+  libqt-assistantclient4-dev \
+  libqt-clucene4-dev \
+  libqt-core4-dev \
+  libqt-dbus4-dev \
+  libqt-designercomponents4-dev \
+  libqt-designer4-dev \
+  libqt-uitools4-dev \
+  libqt-gui4-dev \
+  libqt-help4-dev \
+  libqt-network4-dev \
+  libqt-script4-dev \
+  libqt-scripttools4-dev \
+  libqt-sql4-dev \
+  libqt-svg4-dev \
+  libqt-test4-dev \
+  libqt-webkit4-dev \
+  libqt-xml4-dev \
+  sqlite-dev \
+  libsqlite-dev \
 "
 
 # X11 Development libs.
