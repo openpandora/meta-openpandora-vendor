@@ -1,8 +1,8 @@
 DESCRIPTION = "Linux Kernel"
 SECTION = "kernel"
-LICENSE = "GPL"
+LICENSE = "GPLv2"
 
-inherit kernel
+inherit kernel siteinfo
 
 RPSRC = "http://www.rpsys.net/openzaurus/patches/archive"
 
@@ -32,12 +32,19 @@ KERNEL_DEVICETREE_boc01 = "${WORKDIR}/boc01.dts"
 KERNEL_DEVICETREE_calamari = "arch/${ARCH}/boot/dts/mpc8536ds.dts"
 KERNEL_DEVICETREE_canyonlands = "arch/${ARCH}/boot/dts/canyonlands.dts"
 KERNEL_DEVICETREE_kilauea = "arch/${ARCH}/boot/dts/kilauea.dts"
+KERNEL_DEVICETREE_lite5200 = "arch/${ARCH}/boot/dts/lite5200.dts"
 KERNEL_DEVICETREE_lsppchd = "arch/${ARCH}/boot/dts/kuroboxHD.dts"
 KERNEL_DEVICETREE_lsppchg = "arch/${ARCH}/boot/dts/kuroboxHG.dts"
 KERNEL_DEVICETREE_mpc8313e-rdb = "arch/${ARCH}/boot/dts/mpc8313erdb.dts"
 KERNEL_DEVICETREE_mpc8315e-rdb = "arch/${ARCH}/boot/dts/mpc8315erdb.dts"
 KERNEL_DEVICETREE_mpc8323e-rdb = "arch/${ARCH}/boot/dts/mpc832x_rdb.dts"
+KERNEL_DEVICETREE_mpc8544ds = "arch/${ARCH}/boot/dts/mpc8544ds.dts"
+KERNEL_DEVICETREE_mpc8641-hpcn = "arch/${ARCH}/boot/dts/mpc8641_hpcn.dts"
+KERNEL_DEVICETREE_p1020rdb = "arch/${ARCH}/boot/dts/p1020rdb.dts"
+KERNEL_DEVICETREE_p2020ds = "arch/${ARCH}/boot/dts/p2020ds.dts"
 KERNEL_DEVICETREE_sequoia = "arch/${ARCH}/boot/dts/sequoia.dts"
+KERNEL_DEVICETREE_tqm8540 = "arch/${ARCH}/boot/dts/tqm8540.dts"
+KERNEL_DEVICETREE_xilinx-ml507 = "arch/${ARCH}/boot/dts/virtex440-ml507.dts"
 
 KERNEL_DEVICETREE_FLAGS = "-R 8 -S 0x3000"
 
@@ -54,6 +61,16 @@ python __anonymous () {
 }
 
 do_configure_prepend() {
+
+        # Rename getline in ./scripts/unifdef.c
+        # Kernels up to 2.6.29 are currently failing to build unifdef.c,
+        # clashing with exposed getline() from <stdio.h>
+        # see https://patchwork.kernel.org/patch/11166/
+        # committed in 2.6.29 (commit d15bd1067b1fcb2b7250d22bc0c7c7fea0b759f7)
+
+        sed -i -e 's/getline/parseline/g' ${S}/scripts/unifdef.c
+
+
         echo "" > ${S}/.config
 
         #
@@ -86,10 +103,16 @@ do_configure_prepend() {
             echo "CONFIG_ARM_THUMB=y" >> ${S}/.config
         fi
 
+        # Enable thumb2 fixup for specific issue in angstrom toolchains when used on A8 r1p[012] silicon
+        if [ "${DISTRO_NAME}" = "Angstrom" ] ; then
+            sed -i -e /CONFIG_ARM_ERRATA_430973/d ${WORKDIR}/defconfig
+            echo "CONFIG_ARM_ERRATA_430973=y" >> ${S}/.config
+        fi
+
 	#
 	# endian support
 	#
-        if [ "${SITEINFO_ENDIANESS}" = "be" ]; then
+        if [ "${SITEINFO_ENDIANNESS}" = "be" ]; then
                 echo "CONFIG_CPU_BIG_ENDIAN=y"          >> ${S}/.config
         fi
 
@@ -116,9 +139,49 @@ do_configure_prepend() {
         if [ "${UDEV_GE_141}" = "1" ] ; then
             sed -e /CONFIG_SYSFS_DEPRECATED/d \
                 -e /CONFIG_SYSFS_DEPRECATED_V2/d \
+                -e /CONFIG_HOTPLUG/d \
+                -e /CONFIG_UEVENT_HELPER_PATH/d \
+                -e /CONFIG_UNIX/d \
+                -e /CONFIG_SYSFS/d \
+                -e /CONFIG_PROC_FS/d \
+                -e /CONFIG_TMPFS/d \
+                -e /CONFIG_INOTIFY_USER/d \
+                -e /CONFIG_SIGNALFD/d \
+                -e /CONFIG_TMPFS_POSIX_ACL/d \
+                -e /CONFIG_BLK_DEV_BSG/d \
                 -i '${S}/.config'
+
             echo '# CONFIG_SYSFS_DEPRECATED is not set' >> ${S}/.config
             echo '# CONFIG_SYSFS_DEPRECATED_V2 is not set' >> ${S}/.config
+            echo 'CONFIG_HOTPLUG=y' >> ${S}/.config
+            echo 'CONFIG_UEVENT_HELPER_PATH=""' >> ${S}/.config
+            echo 'CONFIG_UNIX=y' >> ${S}/.config
+            echo 'CONFIG_SYSFS=y' >> ${S}/.config
+            echo 'CONFIG_PROC_FS=y' >> ${S}/.config
+            echo 'CONFIG_TMPFS=y' >> ${S}/.config
+            echo 'CONFIG_INOTIFY_USER=y' >> ${S}/.config
+            echo 'CONFIG_SIGNALFD=y' >> ${S}/.config
+            echo 'CONFIG_TMPFS_POSIX_ACL=y' >> ${S}/.config
+            echo 'CONFIG_BLK_DEV_BSG=y' >> ${S}/.config
+            echo 'CONFIG_DEVTMPFS=y' >> ${S}/.config
+            echo 'CONFIG_DEVTMPFS_MOUNT=y' >> ${S}/.config
+        fi
+
+        # Newer inits like systemd need cgroup support
+        if [ "${KERNEL_ENABLE_CGROUPS}" = "1" ] ; then
+            sed -e /CONFIG_CGROUP_SCHED/d \
+                -e /CONFIG_CGROUPS/d \
+                -i '${S}/.config'
+            
+            echo 'CONFIG_CGROUP_SCHED=y' >> ${S}/.config
+            echo 'CONFIG_CGROUPS=y' >> ${S}/.config
+            echo 'CONFIG_CGROUP_NS=y' >> ${S}/.config
+            echo 'CONFIG_CGROUP_FREEZER=y' >> ${S}/.config
+            echo 'CONFIG_CGROUP_DEVICE=y' >> ${S}/.config
+            echo 'CONFIG_CPUSETS=y' >> ${S}/.config
+            echo 'CONFIG_PROC_PID_CPUSET=y' >> ${S}/.config
+            echo 'CONFIG_CGROUP_CPUACCT=y' >> ${S}/.config
+            echo 'CONFIG_RESOURCE_COUNTERS=y' >> ${S}/.config
         fi
 
         #
@@ -148,15 +211,18 @@ do_configure_prepend() {
 		yes '' | oe_runmake oldconfig
 }
 
-do_configure_append_avr32() {
-        sed -i -e s:-mno-pic::g arch/avr32/Makefile
-}
-
 do_configure_append() {
         if test -e scripts/Makefile.fwinst ; then
 		sed -i -e "s:-m0644:-m 0644:g" scripts/Makefile.fwinst
 	fi
 }
+
+do_install_append() {
+	oe_runmake headers_install INSTALL_HDR_PATH=${D}${exec_prefix}/src/linux-${KERNEL_VERSION} ARCH=$ARCH
+}
+
+PACKAGES =+ "kernel-headers"
+FILES_kernel-headers = "${exec_prefix}/src/linux*"
 
 do_devicetree_image() {
     if test -n "${KERNEL_DEVICETREE}" ; then
@@ -164,9 +230,11 @@ do_devicetree_image() {
         install -m 0644 devicetree ${D}/boot/devicetree-${KERNEL_VERSION}
         install -d ${DEPLOY_DIR_IMAGE}
         install -m 0644 devicetree ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGE_BASE_NAME}.dtb
+        package_stagefile_shell ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGE_BASE_NAME}.dtb
         cd ${DEPLOY_DIR_IMAGE}
         rm -f ${KERNEL_IMAGE_SYMLINK_NAME}.dtb
         ln -sf ${KERNEL_IMAGE_BASE_NAME}.dtb ${KERNEL_IMAGE_SYMLINK_NAME}.dtb
+        package_stagefile_shell ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGE_SYMLINK_NAME}.dtb
     fi
 }
 
