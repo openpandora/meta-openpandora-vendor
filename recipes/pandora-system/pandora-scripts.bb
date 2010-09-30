@@ -6,16 +6,14 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r45"
+PR = "r46"
 
 SRC_URI = " \
           file://op_bright.sh \
-#	   file://op_bright.desktop \
           file://op_cpuspeed.sh \
           file://op_cpuspeed.pnd \          
           file://op_wifi.sh \
           file://op_wifi.pnd \  
-#	  file://op_wifi.desktop \ 
           file://op_bluetooth.sh \
           file://op_bluetooth-check.desktop \
           file://op_bluetooth.desktop \          
@@ -49,7 +47,6 @@ SRC_URI = " \
           file://default_up \
           file://none_up \
           file://op_env.sh \
-#          file://pandorascripts.pnd \
 	  file://abiword.pnd \
           file://arora.pnd \
           file://claws-mail.pnd \
@@ -112,17 +109,7 @@ do_install() {
           install -m 0755 ${WORKDIR}/xchat.pnd ${D}${prefix}/pandora/mmenu/
 
           install -d ${D}${datadir}/applications/
-#	  install -m 0644 ${WORKDIR}/op_bright.desktop ${D}${datadir}/applications/
-#          install -m 0644 ${WORKDIR}/op_cpuspeed.desktop ${D}${datadir}/applications/
-#          install -m 0644 ${WORKDIR}/op_wifi.desktop ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_bluetooth.desktop ${D}${datadir}/applications/
-#          install -m 0644 ${WORKDIR}/op_startupmanager.desktop ${D}${datadir}/applications/
-#          install -m 0644 ${WORKDIR}/op_switchgui.desktop ${D}${datadir}/applications/          
-#          install -m 0644 ${WORKDIR}/op_calibrate.desktop ${D}${datadir}/applications/
-#          install -m 0644 ${WORKDIR}/op_datetime.desktop ${D}${datadir}/applications/
-#          install -m 0644 ${WORKDIR}/op_usermanager.desktop ${D}${datadir}/applications/
-#          install -m 0644 ${WORKDIR}/op_lcdsettings.desktop ${D}${datadir}/applications/
-#	  install -m 0644 ${WORKDIR}/op_nubmode.desktop ${D}${datadir}/applications/
           
           install -d ${D}${sysconfdir}/xdg/autostart/
           install -m 0644 ${WORKDIR}/op_bluetooth-check.desktop ${D}${sysconfdir}/xdg/autostart/op_bluetooth-check.desktop
