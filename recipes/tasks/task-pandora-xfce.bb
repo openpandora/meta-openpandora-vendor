@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r36"
+PR = "r37"
 
 inherit task
 
@@ -88,7 +88,7 @@ ICON_THEME = " \
 "
 
 LAUNCHERS = " \
-  netbook-launcher-efl \
+#  netbook-launcher-efl \
   pandora-libpnd-minimenu \
   pandora-pmenu \
 "
