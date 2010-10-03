@@ -1,9 +1,9 @@
 #!/bin/bash
 while selection=$(grep "/dev/mmcblk" /proc/mounts | cut -f 2 -d " " | sed 's/\\040/ /g' | zenity --title="SD Card Mass Storage" --width="380" --height="200" --list --text="Enable mass storage" --column="Select card"); do
-selection2=$(echo $selection | sed 's/ /\\\\040/g')
-options=$(grep ${selection2} /proc/mounts | awk '{print $4}' | sed "s/,codepage=[A-Za-z0-9]*,/,/g" | sed 's/\\040/\\ /g' )
-device=$(grep ${selection2} /proc/mounts | awk '{print substr($1,1,12)}')
-device2=$(grep ${selection2} /proc/mounts | awk '{print $1}')
+selection2=$(echo "$selection" | sed 's/ /\\\\040/g')
+options=$(grep "${selection2}" /proc/mounts | awk '{print $4}' | sed "s/,codepage=[A-Za-z0-9]*,/,/g" | sed 's/\\040/\\ /g' )
+device=$(grep "${selection2}" /proc/mounts | awk '{print substr($1,1,12)}')
+device2=$(grep "${selection2}" /proc/mounts | awk '{print $1}')
 
 if umount $device2
  
@@ -23,7 +23,10 @@ if umount $device2
       echo Reloading g_cdc...
       modprobe g_cdc
     fi
-    mount $device2 "$selection" -o $options
+   if [ ! -d "$selection" ]; then
+    mkdir "$selection"
+   fi 
+	mount $device2 "$selection" -o $options
   else
      zenity --title="Error" --error --text="Error.\nThe card could not be unmounted.\n\nPlease make sure to close any programs that currently access the SD Card." --timeout 10
 fi
