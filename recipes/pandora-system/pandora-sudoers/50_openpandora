@@ -25,3 +25,4 @@
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_nubmode.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_storage.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_tvout.sh
+%wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/pnd_run.sh
