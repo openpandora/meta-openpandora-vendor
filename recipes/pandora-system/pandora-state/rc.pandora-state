@@ -37,6 +37,8 @@ d_start() {
 	cat /etc/pandora/conf/dirty_expire_centisecs >  /proc/sys/vm/dirty_expire_centisecs
 	cat /etc/pandora/conf/brightness.state > /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness 
 	cat /etc/pandora/conf/gamma.state > /sys/devices/platform/omap2_mcspi.1/spi1.1/gamma
+	filter=$(cat /etc/pandora/conf/filter.state)
+	/usr/pandora/scripts/op_videofir.sh $filter 
 	sed -n '1p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mode
 	sed -n '2p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mouse_sensitivity
 	sed -n '3p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/scrollx_sensitivity
