@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r37"
+PR = "r38"
 
 inherit task
 
@@ -10,11 +10,11 @@ ANGSTROM_EXTRA_INSTALL ?= ""
 
 APPS = " \
   avahi-ui \
-  abiword \
+#  abiword \
   evince \
-  claws-mail \
+#  claws-mail \
   swfdec swfdec-gnome swfdec-mozilla \
-  gnumeric \   
+#  gnumeric \   
   networkmanager network-manager-applet \ 
   vnc x11vnc angstrom-x11vnc-xinit \
   xchat \
@@ -27,11 +27,11 @@ BLUETOOTH_GUI = " \
 "
 
 IM_CLIENT = " \
-  pidgin \
-  libpurple-protocol-msn \
-  libpurple-protocol-yahoo \
-  libpurple-protocol-icq \
-  libpurple-protocol-aim \
+#  pidgin \
+#  libpurple-protocol-msn \
+#  libpurple-protocol-yahoo \
+#  libpurple-protocol-icq \
+#  libpurple-protocol-aim \
 "
 
 DISPMAN = " \
@@ -63,7 +63,7 @@ GAMES = " \
 
 GNOME_APPS = " \
 #  gnome-mplayer \
-#  gcalctool \ 
+  gcalctool \ 
   gnome-keyring gnome-keyring-pam-plugin \
   gksu \
 "
