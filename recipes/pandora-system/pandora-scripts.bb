@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r47"
+PR = "r48"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -47,15 +47,11 @@ SRC_URI = " \
           file://default_up \
           file://none_up \
           file://op_env.sh \
-	  file://abiword.pnd \
           file://arora.pnd \
-          file://claws-mail.pnd \
           file://evince.pnd \
           file://gigolo.pnd \
-          file://gnumeric.pnd \
           file://midori.pnd \
           file://mousepad.pnd \
-          file://pidgin.pnd \
           file://ristretto.pnd \
           file://squeeze.pnd \
           file://thunar.pnd \
