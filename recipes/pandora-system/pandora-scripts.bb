@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r48"
+PR = "r49"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -42,6 +42,7 @@ SRC_URI = " \
           file://op_tvout.sh \
 	  file://op_tvout.pnd \
           file://gui.conf \
+	  file://cpu.conf \
           file://gamma.conf \
           file://service.conf \
           file://default_up \
@@ -56,6 +57,7 @@ SRC_URI = " \
           file://squeeze.pnd \
           file://thunar.pnd \
           file://xchat.pnd \
+	  file://gcalctool.pnd \
 "
 
 do_install() {
@@ -90,19 +92,16 @@ do_install() {
           install -m 0755 ${WORKDIR}/op_tvout.pnd ${D}${prefix}/pandora/apps/
 
 	  install -d ${D}${prefix}/pandora/mmenu/
-          install -m 0755 ${WORKDIR}/abiword.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/arora.pnd ${D}${prefix}/pandora/mmenu/
-          install -m 0755 ${WORKDIR}/claws-mail.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/evince.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/gigolo.pnd ${D}${prefix}/pandora/mmenu/
-          install -m 0755 ${WORKDIR}/gnumeric.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/midori.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/mousepad.pnd ${D}${prefix}/pandora/mmenu/
-          install -m 0755 ${WORKDIR}/pidgin.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/ristretto.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/squeeze.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/thunar.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/xchat.pnd ${D}${prefix}/pandora/mmenu/
+	  install -m 0755 ${WORKDIR}/gcalctool.pnd ${D}${prefix}/pandora/mmenu/
 
           install -d ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_bluetooth.desktop ${D}${datadir}/applications/
@@ -112,6 +111,7 @@ do_install() {
 
           install -d ${D}${sysconfdir}/pandora/conf/
           install -m 0644 ${WORKDIR}/gui.conf ${D}${sysconfdir}/pandora/conf/gui.conf
+	  install -m 0644 ${WORKDIR}/cpu.conf ${D}${sysconfdir}/pandora/conf/cpu.conf
           install -m 0644 ${WORKDIR}/gamma.conf ${D}${sysconfdir}/pandora/conf/gamma.conf
           install -m 0644 ${WORKDIR}/service.conf ${D}${sysconfdir}/pandora/conf/service.conf
 
