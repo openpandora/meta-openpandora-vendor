@@ -2,7 +2,7 @@ DESCRIPTION = "Default OpenPandora settings for Xfce4"
 HOMEPAGE = "http://www.openpandora.org"
 SECTION = "x11/xfce"
 
-PR = "r11"
+PR = "r12"
 
 SRC_URI = " \
   file://xfce4-conf.zip \
