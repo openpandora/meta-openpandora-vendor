@@ -238,17 +238,11 @@ XSERVER_BASE = " \
 "
 
 ADD_LIBS = " \
-  glibc-gconv-cp1252 \
-  glibc-gconv-ibm850 \
-  glibc-gconv-iso8859 \
   libbonobo \
-  libetpan13 \
-  libfribidi0 \
-  libgnt0 \
-  libgsf-gnome-1-114 \
-  libgstfarsight-0.10-0 \
+  libetpan \
+  libfribidi \
+  libgsf \
   libidn \
-  libnice \
   wv \
 " 
 
