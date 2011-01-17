@@ -79,6 +79,13 @@ chmod +x /tmp/gui.stop
 # This way, we can easily do a quick switch from any session to the next one by simply
 # echo'ing the new session executable into /tmp/gui.load and exiting.
 
+if [ -f /tmp/nocleanwarn ]; then
+    defmhz="$(cat /etc/pandora/conf/cpu.conf | grep default | awk -F\: '{print $2}')"
+      if [ $defmhz -gt 600 ]; then
+	zenity --info --title="Unclean Shutdown" --text "Warning!\n\nThe system has not been shutdown properly last time.\n\nAs you overclocked the CPU as default speed, this might be the reason for that.\nTherefore, for this session, the current CPU speed has been set to 500 MHz."
+      fi
+  rm /tmp/nocleanwarn
+ fi
 while true
 do
 	rm /tmp/gui.load

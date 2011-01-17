@@ -5,7 +5,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 # /etc/skel is used by Shadow's useradd so you really have that installed for this to make sense ;)
 RDEPENDS = "shadow"
 
-PR = "r4"
+PR = "r5"
 
 SRC_URI = " \
   file://.xinitrc \     
