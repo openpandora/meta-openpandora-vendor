@@ -3,7 +3,7 @@ LICENSE = "GPLv2"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r6"
+PR = "r7"
 inherit update-rc.d
 
 INITSCRIPT_NAME = "pandora-state"

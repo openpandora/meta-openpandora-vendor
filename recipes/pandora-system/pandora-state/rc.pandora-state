@@ -17,6 +17,7 @@ d_stop() {
 	if [ $bright != "0" ]; then
 	    cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness > /etc/pandora/conf/brightness.state
 	fi
+	touch /etc/pandora/shutdown
 	cat /sys/devices/platform/omap2_mcspi.1/spi1.1/gamma > /etc/pandora/conf/gamma.state
         cat -v /proc/pandora/nub0/mode | sed -n '1p' > /etc/pandora/conf/nubs.state
 	cat -v /proc/pandora/nub0/mouse_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
@@ -39,6 +40,17 @@ d_start() {
 	cat /etc/pandora/conf/gamma.state > /sys/devices/platform/omap2_mcspi.1/spi1.1/gamma
 	filter=$(cat /etc/pandora/conf/filter.state)
 	/usr/pandora/scripts/op_videofir.sh $filter 
+	cpuspeed="$(cat /etc/pandora/conf/cpu.conf | grep default | awk -F\: '{print $2}')"
+	oppmax="$(cat /etc/pandora/conf/cpu.conf | grep opp | awk -F\: '{print $2}')"
+	echo $oppmax > /proc/pandora/cpu_opp_max
+	if [ -f /etc/pandora/shutdown ]; then
+	      rm /etc/pandora/shutdown
+	      sync
+	      echo $cpuspeed > /proc/pandora/cpu_mhz_max
+	else
+	      echo "No clean shutdown - will not set CPU speed"
+	      touch /tmp/nocleanwarn
+	fi
 	sed -n '1p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mode
 	sed -n '2p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mouse_sensitivity
 	sed -n '3p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/scrollx_sensitivity
