@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r38"
+PR = "r39"
 
 inherit task
 
@@ -237,6 +237,21 @@ XSERVER_BASE = " \
   xmodmap \
 "
 
+ADD_LIBS = " \
+  glibc-gconv-cp1252 \
+  glibc-gconv-ibm850 \
+  glibc-gconv-iso8859 \
+  libbonobo \
+  libetpan13 \
+  libfribidi0 \
+  libgnt0 \
+  libgsf-gnome-1-114 \
+  libgstfarsight-0.10-0 \
+  libidn \
+  libnice \
+  wv \
+" 
+
 RDEPENDS_${PN} = " \
   task-pandora-core \
   angstrom-x11-base-depends \
@@ -262,6 +277,7 @@ RDEPENDS_${PN} = " \
   ${XFCE46_BASE} \
   ${XFCE46_EXTRAS} \
   ${XFCE_THEMES} \
+  ${ADD_LIBS} \
   \
   rxvt-unicode \
 #  xst \
