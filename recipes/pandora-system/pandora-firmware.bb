@@ -1,7 +1,7 @@
 DESCRIPTION = "Install binary firmware for Bluetooth and WiFi into the image."
 LICENSE = "proprietary-binary"
 RRECOMMENDS_${PN} = "kernel-module-firmware-class"
-PR = "r3"
+PR = "r4"
 
 SRC_URI = " \
         file://brf6300.bin \
