@@ -22,6 +22,8 @@ ERROR_WINDOW='zenity --title="Error" --error --text="Sorry! Please try again." -
 
 RESET_ROOT="yes"
 
+xset s off
+
 # Greet the user.
 
 if zenity --question --title="Pandoras Box has been opened." --text="Welcome!\n\nPandora's Box has been opened.\n\nThis wizard will help you setting up your new OpenPandora handheld before the first use.\n\nYou will be asked a few simple questions to personalise and configure your device.\n\nDo you want to set up your unit now or shut the unit down and do it later?" --ok-label="Start now" --cancel-label="Shutdown" ; then
@@ -241,6 +243,7 @@ touch /etc/pandora/first-boot
 # Make the control file writeable by all to allow the user to delete to rerun the wizard on next boot.
 chmod 0666 /etc/pandora/first-boot
 
+xset s on
 # ----
 else
 poweroff

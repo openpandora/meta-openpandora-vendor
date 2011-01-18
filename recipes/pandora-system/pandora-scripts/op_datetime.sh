@@ -35,6 +35,10 @@ done
 while ! date -d $time ; do
 	time=$(zenity --title="Enter actual time" --entry --text "Please enter the time in 24hour format (HH:MM):" --entry-text "$time_h:$time_m")
 done
- 
+
+xset s off
+
 date +%Y%m%d -s $date
 date +%H:%M -s $time
+
+xset s on
