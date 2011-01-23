@@ -3,7 +3,7 @@
 # LCD-Settings, v1.0, written by Michael Mrozek aka EvilDragon 2010. Brightness-Settings-Part written by vimacs.
 # This scripts allows you to create, load and save Gamma-Settings and to change the LCD Brightness.
 
-while mainsel=$(zenity --title="LCD-Settings" --width="300" --height="200" --list --column "id" --column "Please select" --hide-column=1 --text="What do you want to do?" "bright" "Change LCD Brightness" "gamma" "Manage LCD Gamma" "filter" "Select current video filter"); do
+while mainsel=$(zenity --title="LCD-Settings" --width="300" --height="200" --list --column "id" --column "Please select" --hide-column=1 --text="What do you want to do?" "bright" "Change LCD Brightness" "gamma" "Manage LCD Gamma" "filter" "Select current video filter" "filterdef" "Select default video filter"); do
 
 case $mainsel in
 
@@ -78,6 +78,13 @@ case $mainsel in
       videofilter=$(basename $selection)
       sudo /usr/pandora/scripts/op_videofir.sh $videofilter
       zenity --info --title="Videofilter applied" --text "The videofilter has been applied." --timeout 6
+    fi;;
+    
+    "filterdef")
+    if selection=$(head -1 /etc/pandora/conf/dss_fir/* | sed 's:==> ::' | sed 's: <==::' | sed '/^$/d' | zenity --width=700 --height=200 --title="Videofilter" --hide-column=1 --list --column "filter" --column "Videofilter" --text "Please select a videofilter which will automatically be set on startup" ); then
+      videofilter=$(basename $selection)
+      echo $videofilter > /etc/pandora/conf/filter.state
+      zenity --info --title="Default Videofilter set" --text "The default video filter has been set." --timeout 6
     fi;;
 esac
 done
