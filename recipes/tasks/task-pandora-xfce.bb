@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r39"
+PR = "r40"
 
 inherit task
 
@@ -244,6 +244,7 @@ ADD_LIBS = " \
   libgsf \
   libidn \
   wv \
+  libsamplerate \
 " 
 
 RDEPENDS_${PN} = " \
