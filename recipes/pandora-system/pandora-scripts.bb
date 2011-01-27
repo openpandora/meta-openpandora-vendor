@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r52"
+PR = "r53"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -33,6 +33,8 @@ SRC_URI = " \
           file://op_usermanager.pnd \
           file://op_lcdsettings.sh \
           file://op_lcdsettings.pnd \
+	  file://op_cpusettings.sh \
+          file://op_cpusettings.pnd \
           file://op_lcdrate.sh \
           file://op_videofir.sh \
           file://op_storage.sh \
@@ -64,6 +66,7 @@ do_install() {
           install -d ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_bright.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_cpuspeed.sh ${D}${prefix}/pandora/scripts/
+	  install -m 0755 ${WORKDIR}/op_cpusettings.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_wifi.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_bluetooth.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_startupmanager.sh ${D}${prefix}/pandora/scripts/
@@ -83,6 +86,7 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_cpuspeed.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_datetime.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_lcdsettings.pnd ${D}${prefix}/pandora/apps/
+	  install -m 0755 ${WORKDIR}/op_cpusettings.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_nubmode.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_startupmanager.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_storage.pnd ${D}${prefix}/pandora/apps/
