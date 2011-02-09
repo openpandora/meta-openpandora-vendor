@@ -95,7 +95,7 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_usermanager.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_wifi.pnd ${D}${prefix}/pandora/apps/
           install -m 0755 ${WORKDIR}/op_tvout.pnd ${D}${prefix}/pandora/apps/
-	  install -m 0755 ${WORKDIR}/op_opinputtest.pnd ${D}${prefix}/pandora/apps/
+	  install -m 0755 ${WORKDIR}/op_inputtest.pnd ${D}${prefix}/pandora/apps/
 
 	  install -d ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/arora.pnd ${D}${prefix}/pandora/mmenu/
