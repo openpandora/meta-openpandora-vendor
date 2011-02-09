@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r42"
+PR = "r43"
 
 inherit task
 
@@ -252,6 +252,16 @@ ADD_LIBS = " \
   
 " 
 
+LXDE = " \
+  pcmanfm \
+  lxpanel \
+  lxsession-lite \
+  lxde-common \
+  openbox \
+  leafpad \
+  gpicview \
+"
+
 RDEPENDS_${PN} = " \
   task-pandora-core \
   angstrom-x11-base-depends \
@@ -278,6 +288,7 @@ RDEPENDS_${PN} = " \
   ${XFCE46_EXTRAS} \
   ${XFCE_THEMES} \
   ${ADD_LIBS} \
+  ${LXDE} \
   \
   rxvt-unicode \
 #  xst \
