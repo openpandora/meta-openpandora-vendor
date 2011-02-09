@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r55"
+PR = "r56"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -43,6 +43,7 @@ SRC_URI = " \
 	  file://op_nubmode.pnd \
           file://op_tvout.sh \
 	  file://op_tvout.pnd \
+	  file://op_inputtest.pnd \
           file://gui.conf \
 	  file://cpu.conf \
           file://gamma.conf \
@@ -94,6 +95,7 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_usermanager.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_wifi.pnd ${D}${prefix}/pandora/apps/
           install -m 0755 ${WORKDIR}/op_tvout.pnd ${D}${prefix}/pandora/apps/
+	  install -m 0755 ${WORKDIR}/op_opinputtest.pnd ${D}${prefix}/pandora/apps/
 
 	  install -d ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/arora.pnd ${D}${prefix}/pandora/mmenu/
