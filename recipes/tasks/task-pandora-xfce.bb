@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r41"
+PR = "r42"
 
 inherit task
 
@@ -96,7 +96,7 @@ LAUNCHERS = " \
 PANDORA = " \
   pandora-first-run-wizard hsetroot \
   pandora-scripts \
-  pandora-wallpaper-official pandora-wallpaper-community \
+  pandora-wallpaper-official \
   pandora-xfce-defaults \
   pandora-midori-defaults midori \
   libgles2d \
@@ -204,6 +204,7 @@ XFCE46_EXTRAS = " \
   ristretto \
   mousepad \ 
   gigolo \
+  xdotool \
 "
 
 XFCE_THEMES = " \
@@ -245,6 +246,10 @@ ADD_LIBS = " \
   libidn \
   wv \
   libsamplerate0 \
+  glibc-gconv-cp1252 \
+  glibc-gconv-ibm850 \
+  glibc-gconv-iso8859-15 \
+  
 " 
 
 RDEPENDS_${PN} = " \
