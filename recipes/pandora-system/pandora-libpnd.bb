@@ -1,7 +1,7 @@
 DESCRIPTION = "Support for the PND format in Pandora images (lib, daemon, init script etc.)"
 LICENSE = "lGPL"
 
-PR = "r42"
+PR = "r43"
 
 PARALLEL_MAKE = ""
 
@@ -14,7 +14,7 @@ SRC_URI = " \
           file://op_pnd_run.desktop \
 "
 
-SRCREV = "f0cfe39f333746c9455f7cf8d451826669b0241f"
+SRCREV = "8075d3dba75ec1bf935e452595897d160f39244a"
 
 S = "${WORKDIR}/git"
 
@@ -69,9 +69,6 @@ do_install() {
 
           install -d ${D}${prefix}/pandora/
           install -d ${D}${prefix}/pandora/apps/
-          install -d ${D}${prefix}/pandora/scripts/
-          install -m 0755 ${S}/deployment/usr/pandora/scripts/* ${D}${prefix}/pandora/scripts
-          install -m 0755 ${S}/testdata/scripts/* ${D}${prefix}/pandora/scripts
 
           install -d ${D}${sysconfdir}/pandora/mmenu/
           install -d ${D}${sysconfdir}/pandora/mmenu/skins/

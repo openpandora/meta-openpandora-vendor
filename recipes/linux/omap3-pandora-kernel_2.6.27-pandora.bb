@@ -13,7 +13,7 @@ SRC_URI = " \
 
 # -------------------------------
 
-PV = "2.6.27-pandora+${PR}+git${SRCREV}"
+PV = "2.6.27-pandora+${PR}+git${SRCREV}.2"
 
 SRC_URI_append = " \
            file://defconfig \
