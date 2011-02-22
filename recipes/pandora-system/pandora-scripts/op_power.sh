@@ -9,7 +9,7 @@ if [ "$1" -le "2" ]; then # button was pressed 1-2sec, "suspend"
     powerstate=0
   fi
   if [ $powerstate -eq "1" ]; then
-    #in lowpower mode
+    #switch from lowpower to normal mode
     oldspeed=$(cat /tmp/oldspeed)
     /usr/pandora/scripts/op_cpuspeed.sh $oldspeed
     echo 0 > /tmp/powerstate
@@ -25,7 +25,7 @@ if [ "$1" -le "2" ]; then # button was pressed 1-2sec, "suspend"
     fi
     hcistate=$(cat /tmp/hcistate)
     if [ ! $hcistate ]; then
-      hciconfig hci0 up
+      hciconfig hci0 up pscan
     fi
     wlstate=$(cat /tmp/wlstate)
     if [ ! $wlstate ]; then
@@ -39,7 +39,7 @@ if [ "$1" -le "2" ]; then # button was pressed 1-2sec, "suspend"
     echo 255 > /sys/class/leds/pandora\:\:power/brightness #power LED bright
     rm /tmp/powerstate
   else
-    #in normal mode
+    #switch from normal to lowpower mode
     echo 1 > /tmp/powerstate
     cat /proc/pandora/cpu_mhz_max > /tmp/oldspeed
     cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness > /tmp/oldbright
@@ -60,7 +60,8 @@ if [ "$1" -le "2" ]; then # button was pressed 1-2sec, "suspend"
     if [ ! $wlstate ]; then
     	echo "down" > /tmp/wlstate
     else
-	    /etc/init.d/wl1251-init stop
+	    ifconfig wlan0 down
+	    rmmod board_omap3pandora_wifi wl1251_sdio wl1251
     fi
     echo 0 > /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness
     echo 1 > /sys/devices/platform/omapfb/graphics/fb0/blank
