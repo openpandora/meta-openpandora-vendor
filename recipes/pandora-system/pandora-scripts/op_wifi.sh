@@ -3,7 +3,7 @@
 # Released under the GPL
 
 # This script simply toggles internal WiFi on or off.
-
+cd /
 if [ "`lsmod | grep wl1251`" ]
 then
 	notify-send -u normal "WLAN" "WLAN is being disabled..." -i /usr/share/icons/hicolor/32x32/apps/nm-no-connection.png
