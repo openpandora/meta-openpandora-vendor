@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r59"
+PR = "r60"
 
 SRC_URI = " \
           file://op_bright.sh \
@@ -60,17 +60,13 @@ SRC_URI = " \
           file://squeeze.pnd \
           file://thunar.pnd \
           file://xchat.pnd \
-	  file://gcalctool.pnd \
-	  file://genpxml.sh \  
+	  file://gcalctool.pnd \ 
 	  file://op_bright_down.sh \ 
 	  file://op_lid.sh \  
 	  file://op_power.sh \
-	  file://pnd_make.sh \
 	  file://op_battlow.sh \ 
 	  file://op_bright_up.sh \  
 	  file://op_menu.sh \ 
-	  file://pnd_hup.sh \ 
-	  file://pnd_run.sh \
 "
 
 do_install() {
@@ -91,16 +87,13 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_nubmode.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_storage.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_tvout.sh ${D}${prefix}/pandora/scripts/
-	  install -m 0755 ${WORKDIR}/genpxml.sh ${D}${prefix}/pandora/scripts/ 
 	  install -m 0755 ${WORKDIR}/op_bright_down.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_lid.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_power.sh ${D}${prefix}/pandora/scripts/
-	  install -m 0755 ${WORKDIR}/pnd_make.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_battlow.sh ${D}${prefix}/pandora/scripts/ 
 	  install -m 0755 ${WORKDIR}/op_bright_up.sh ${D}${prefix}/pandora/scripts/  
 	  install -m 0755 ${WORKDIR}/op_menu.sh ${D}${prefix}/pandora/scripts/ 
-	  install -m 0755 ${WORKDIR}/pnd_hup.sh ${D}${prefix}/pandora/scripts/ 
-	  install -m 0755 ${WORKDIR}/pnd_run.sh ${D}${prefix}/pandora/scripts/
+
 
 
           install -d ${D}${prefix}/pandora/apps/
