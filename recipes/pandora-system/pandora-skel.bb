@@ -5,7 +5,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 # /etc/skel is used by Shadow's useradd so you really have that installed for this to make sense ;)
 RDEPENDS = "shadow"
 
-PR = "r5"
+PR = "r6"
 
 SRC_URI = " \
   file://.xinitrc \     
@@ -24,6 +24,7 @@ SRC_URI = " \
 
 do_install() {
   install -d ${D}${sysconfdir}/skel/
+  install -d ${D}${sysconfdir}/skel/Desktop
   install -m 0644 ${WORKDIR}/.xinitrc ${D}${sysconfdir}/skel/.xinitrc
   install -m 0644 ${WORKDIR}/vimrc ${D}${sysconfdir}/skel/.vimrc
   install -m 0644 ${WORKDIR}/bashrc ${D}${sysconfdir}/skel/.bashrc
