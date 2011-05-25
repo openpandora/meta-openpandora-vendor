@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r45"
+PR = "r46"
 
 inherit task
 
@@ -15,11 +15,11 @@ APPS = " \
 #  claws-mail \
   swfdec swfdec-gnome swfdec-mozilla \
 #  gnumeric \   
-  networkmanager network-manager-applet \ 
+  networkmanager network-manager-applet nmcli \ 
   vnc x11vnc angstrom-x11vnc-xinit \
   xchat \
 #  xournal \
-  arora \
+#  arora \
 "
 
 BLUETOOTH_GUI = " \
@@ -90,7 +90,7 @@ ICON_THEME = " \
 LAUNCHERS = " \
 #  netbook-launcher-efl \
   pandora-libpnd-minimenu \
-  pandora-pmenu \
+#  pandora-pmenu \
 "
 
 PANDORA = " \
@@ -141,7 +141,7 @@ QT_SUPPORT = " \
 "
 
 # We want all of the Qt metapackage (for dev use) without the demos/examples.
-BAD_RRECOMMENDS += " \
+BAD_RECOMMENDS += " \
   qt4-demos \
   qt4-examples \
 "
