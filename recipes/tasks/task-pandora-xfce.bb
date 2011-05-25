@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r46"
+PR = "r47"
 
 inherit task
 
@@ -15,7 +15,7 @@ APPS = " \
 #  claws-mail \
   swfdec swfdec-gnome swfdec-mozilla \
 #  gnumeric \   
-  networkmanager network-manager-applet nmcli \ 
+  networkmanager network-manager-applet netm-cli \ 
   vnc x11vnc angstrom-x11vnc-xinit \
   xchat \
 #  xournal \
