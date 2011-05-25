@@ -2,7 +2,7 @@ DESCRIPTION = "Task file for the XFCE Pandora image"
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r47"
+PR = "r48"
 
 inherit task
 
@@ -141,7 +141,7 @@ QT_SUPPORT = " \
 "
 
 # We want all of the Qt metapackage (for dev use) without the demos/examples.
-BAD_RECOMMENDS += " \
+BAD_RECOMMENDATIONS += " \
   qt4-demos \
   qt4-examples \
 "
