@@ -1,0 +1,17 @@
+#!/bin/sh 
+
+if grep -qE '\s?psplash=false\s?' /proc/cmdline; then
+	echo "Boot splashscreen disabled"
+	exit 0;
+fi
+
+. /etc/init.d/functions
+. /etc/default/psplash
+
+export TMPDIR=/mnt/.splash
+mount tmpfs -t tmpfs $TMPDIR -o,size=40k
+
+/usr/bin/psplash $PARAMS &
+
+# Timetrap against hanging with splash hiding console messages.
+(sleep 600; psplash-write "QUIT") &

@@ -1,0 +1,119 @@
+Index: psplash.c
+--- psplash.orig/psplash.c	(revision 423)
++++ psplash/psplash.c	(working copy)
+@@ -46,15 +46,15 @@
+ 
+   psplash_fb_draw_rect (fb, 
+ 			0, 
+-			fb->height - (fb->height/6) - h, 
++			fb->height - (fb->height/PSPLASH_TEXT_DIVIDER) - h, 
+ 			fb->width,
+ 			h,
+-			0xec, 0xec, 0xe1);
++			PSPLASH_BACKGROUND_COLOR_R, PSPLASH_BACKGROUND_COLOR_G, PSPLASH_BACKGROUND_COLOR_B);
+ 
+   psplash_fb_draw_text (fb,
+ 			(fb->width-w)/2, 
+-			fb->height - (fb->height/6) - h,
+-			0x6d, 0x6d, 0x70,
++			fb->height - (fb->height/PSPLASH_TEXT_DIVIDER) - h,
++			PSPLASH_TEXT_COLOR_R, PSPLASH_TEXT_COLOR_G, PSPLASH_TEXT_COLOR_B,
+ 			&radeon_font,
+ 			msg);
+ }
+@@ -66,8 +66,8 @@
+ 
+   /* 4 pix border */
+   x      = ((fb->width  - BAR_IMG_WIDTH)/2) + 4 ;
+-  y      = fb->height - (fb->height/6) + 4;
+-  width  = BAR_IMG_WIDTH - 8; 
++  y      = fb->height - (fb->height/PSPLASH_PROGRESS_DIVIDER) + 4;
++  width  = BAR_IMG_WIDTH - 8;
+   height = BAR_IMG_HEIGHT - 8;
+ 
+   if (value > 0)
+@@ -75,19 +75,19 @@
+       barwidth = (CLAMP(value,0,100) * width) / 100;
+       psplash_fb_draw_rect (fb, x + barwidth, y, 
+     			width - barwidth, height,
+-			0xec, 0xec, 0xe1);
++			PSPLASH_BACKGROUND_COLOR_R, PSPLASH_BACKGROUND_COLOR_G, PSPLASH_BACKGROUND_COLOR_B);
+       psplash_fb_draw_rect (fb, x, y, barwidth,
+-			    height, 0x6d, 0x6d, 0x70);
++			    height, PSPLASH_PROGRESS_COLOR_R, PSPLASH_PROGRESS_COLOR_G, PSPLASH_PROGRESS_COLOR_B);
+     }
+   else
+     {
+       barwidth = (CLAMP(-value,0,100) * width) / 100;
+       psplash_fb_draw_rect (fb, x, y, 
+     			width - barwidth, height,
+-			0xec, 0xec, 0xe1);
++			PSPLASH_BACKGROUND_COLOR_R, PSPLASH_BACKGROUND_COLOR_G, PSPLASH_BACKGROUND_COLOR_B);
+       psplash_fb_draw_rect (fb, x + width - barwidth,
+ 			    y, barwidth, height,
+-			    0x6d, 0x6d, 0x70);
++			    PSPLASH_PROGRESS_COLOR_R, PSPLASH_PROGRESS_COLOR_G, PSPLASH_PROGRESS_COLOR_B);
+     }
+ 
+   DBG("value: %i, width: %i, barwidth :%i\n", value, 
+@@ -269,7 +269,7 @@
+   /* Draw the OH logo  */
+   psplash_fb_draw_image (fb, 
+ 			 (fb->width  - POKY_IMG_WIDTH)/2, 
+-			 (fb->height - POKY_IMG_HEIGHT)/2, 
++			 (fb->height - POKY_IMG_HEIGHT)/2,
+ 			 POKY_IMG_WIDTH,
+ 			 POKY_IMG_HEIGHT,
+ 			 POKY_IMG_BYTES_PER_PIXEL,
+@@ -278,7 +278,7 @@
+   /* Draw progress bar border */
+   psplash_fb_draw_image (fb, 
+ 			 (fb->width  - BAR_IMG_WIDTH)/2, 
+-			 fb->height - (fb->height/6), 
++			 fb->height - (fb->height/PSPLASH_PROGRESS_DIVIDER), 
+ 			 BAR_IMG_WIDTH,
+ 			 BAR_IMG_HEIGHT,
+ 			 BAR_IMG_BYTES_PER_PIXEL,
+@@ -286,7 +286,7 @@
+ 
+   psplash_draw_progress (fb, 0);
+ 
+-  psplash_draw_msg (fb, MSG);
++  psplash_draw_msg (fb, MSG); /* draw initial progress */
+ 
+   psplash_main (fb, pipe_fd, 0);
+ 
+Index: psplash.h
+===================================================================
+--- psplash.orig/psplash.h	(revision 423)
++++ psplash/psplash.h	(working copy)
+@@ -1,5 +1,5 @@
+-/* 
+- *  pslash - a lightweight framebuffer splashscreen for embedded devices. 
++/*
++ *  pslash - a lightweight framebuffer splashscreen for embedded devices.
+  *
+  *  Copyright (c) 2006 Matthew Allum <mallum@o-hand.com>
+  *
+@@ -55,6 +55,21 @@
+ #define TRUE 1
+ #endif
+ 
++#define PSPLASH_BACKGROUND_COLOR_R    0x00
++#define PSPLASH_BACKGROUND_COLOR_G    0x00
++#define PSPLASH_BACKGROUND_COLOR_B    0x00
++
++#define PSPLASH_PROGRESS_COLOR_R    0x25
++#define PSPLASH_PROGRESS_COLOR_G    0x39
++#define PSPLASH_PROGRESS_COLOR_B    0x4d
++
++#define PSPLASH_TEXT_COLOR_R    0xff
++#define PSPLASH_TEXT_COLOR_G    0xff
++#define PSPLASH_TEXT_COLOR_B    0xff
++
++#define PSPLASH_PROGRESS_DIVIDER    7
++#define PSPLASH_TEXT_DIVIDER    3
++
+ #define PSPLASH_FIFO "psplash_fifo"
+ 
+ #define CLAMP(x, low, high) \
