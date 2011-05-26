@@ -17,7 +17,10 @@ URI: git://git.angstrom-distribution.org/meta-angstrom
 branch: master
 revision: HEAD
 
-Send pull requests to firmware-dev-bounces@openpandora.org
-
+Send pull requests to OpenPandora Firmware mailing list:
+                   
+                   firmware-dev@openpandora.org
+                   http://openpandora.org/cgi-bin/mailman/listinfo/firmware-dev
+                   
 Layer maintainers: John Willis <John.Willis at distant-earth.com>
                    Michael Mrozek <EvilDragon at openpandora.org>
