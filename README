@@ -1,7 +1,13 @@
 This is the general machine/platform specific 'stuff' overlay for the OpenPandora device.
 It should be used with openembedded-core (not old-style org.openembedded.dev).
 
-http://www.openpandora.org/
+More information can be found at:
+
+                    http://www.openpandora.org/
+                    
+Build scripts to support making a firmware image for the OpenPandora can be found at:
+
+                    https://github.com/openpandora/openpandora-oe-environment
 
 This layer depends on:
 
