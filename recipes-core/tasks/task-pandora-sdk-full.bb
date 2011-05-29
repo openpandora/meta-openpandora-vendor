@@ -3,6 +3,7 @@ DESCRIPTION = "OpenPandora: Full SDK development packages"
 ALLOW_EMPTY = "1"
 
 PR = "r4"
+LICENSE = "MIT"
 
 DEPENDS = "task-pandora-sdk-base"
 

@@ -1,4 +1,5 @@
 DESCRIPTION = "Helper uboot boot scripts for the OpenPandora"
+LICENSE = "GPLv2"
 
 DEPENDS = "u-boot-mkimage-native"
 

@@ -1,6 +1,8 @@
 DESCRIPTION = "OpenPandora: Barebones SDK development packages"
 
 PR = "r0"
+LICENSE = "MIT"
+
 ALLOW_EMPTY = "1"
 
 PACKAGES = "${PN}"

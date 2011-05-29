@@ -1,6 +1,8 @@
 DESCRIPTION = "OpenPandora: Basic SDK development packages"
 
 PR = "r1"
+LICENSE = "MIT"
+
 ALLOW_EMPTY = "1"
 
 DEPENDS = "task-pandora-sdk-bare"

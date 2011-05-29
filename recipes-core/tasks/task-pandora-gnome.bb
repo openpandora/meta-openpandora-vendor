@@ -3,6 +3,7 @@ DESCRIPTION = "Task file for the 'gnome' Pandora image"
 # Don't forget to bump the PR if you change it.
 
 PR = "r1"
+LICENSE = "MIT"
 
 inherit task
 
