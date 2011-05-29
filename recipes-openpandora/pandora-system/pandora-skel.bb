@@ -6,6 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 RDEPENDS = "shadow"
 
 PR = "r6"
+LICENSE = "MIT"
 
 SRC_URI = " \
   file://.xinitrc \     

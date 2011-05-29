@@ -1,6 +1,7 @@
 DESCRIPTION = "Miscellaneous OpenPandora utilities"
 
 PR = "r8"
+LICENSE = "GPL"
 
 PARALLEL_MAKE = ""
 

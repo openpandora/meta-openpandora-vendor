@@ -3,6 +3,7 @@ DESCRIPTION = "Enable gtk-touchscreen-mode in gtkrc"
 RDEPENDS = "gtk+"
 
 PR = "r1"
+LICENSE = "MIT"
 
 ALLOW_EMPTY_${PN} = "1"
 PACKAGE_ARCH = "all"

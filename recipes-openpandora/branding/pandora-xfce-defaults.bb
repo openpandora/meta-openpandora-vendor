@@ -3,6 +3,7 @@ HOMEPAGE = "http://www.openpandora.org"
 SECTION = "x11/xfce"
 
 PR = "r16"
+LICENSE = "GPL"
 
 SRC_URI = " \
   file://xfce4-conf.zip \

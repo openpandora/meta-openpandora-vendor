@@ -2,6 +2,7 @@ DESCRIPTION = "Default OpenPandora settings and skin for XMMS"
 HOMEPAGE = "http://www.openpandora.org"
 
 PR = "r1"
+LICENSE = "GPL"
 
 # This 'sort of ' depends on the other SKEL templates.
 RDEPENDS = "pandora-skel"
