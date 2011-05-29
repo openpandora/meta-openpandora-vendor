@@ -1,0 +1,4 @@
+recipes-bsp          - Anything with links to the OpenPandora hardware configuration information.
+recipes-core         - Recipes or amendments to recipies within the confines of the core image.
+recipes-kernel       - The OpenPandora kernel and applications/libraries/firmware with strong kernel dependencies.
+recipes-openpandora  - All things related to the OpenPandora device that is not core, BSP (libPND etc.)
