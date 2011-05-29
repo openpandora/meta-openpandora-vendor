@@ -2,7 +2,12 @@ DESCRIPTION = "Linux Kernel"
 SECTION = "kernel"
 LICENSE = "GPLv2"
 
+LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
+
 inherit kernel siteinfo
+
+# Try to build & install perf
+require recipes-kernel/linux/linux-tools.inc
 
 RPSRC = "http://www.rpsys.net/openzaurus/patches/archive"
 
@@ -23,6 +28,10 @@ CMDLINE_at91sam9263ek = "mem=64M console=ttyS0,115200 root=/dev/mmcblk0p1 rootfs
 # You can define CMDLINE_DEBUG in your local.conf or distro.conf to override this behaviour  
 CMDLINE_DEBUG ?= '${@base_conditional("DISTRO_TYPE", "release", "quiet", "debug", d)}'
 CMDLINE_append = " ${CMDLINE_DEBUG} "
+
+# Kernel bootlogo is distro-specific (default is OE logo).
+# Logo resolution (qvga, vga, ...) is machine-specific.
+LOGO_SIZE ?= "."
 
 # Support for binary device tree generation
 
@@ -47,6 +56,8 @@ KERNEL_DEVICETREE_tqm8540 = "arch/${ARCH}/boot/dts/tqm8540.dts"
 KERNEL_DEVICETREE_xilinx-ml507 = "arch/${ARCH}/boot/dts/virtex440-ml507.dts"
 
 KERNEL_DEVICETREE_FLAGS = "-R 8 -S 0x3000"
+
+CORTEXA8FIXUP ?= "yes"
 
 python __anonymous () {
 
@@ -76,8 +87,8 @@ do_configure_prepend() {
         #
         # logo support, if you supply logo_linux_clut224.ppm in SRC_URI, then it's going to be used
         #
-        if [ -e ${WORKDIR}/logo_linux_clut224.ppm ]; then
-                install -m 0644 ${WORKDIR}/logo_linux_clut224.ppm drivers/video/logo/logo_linux_clut224.ppm
+        if [ -e ${WORKDIR}/${LOGO_SIZE}/logo_linux_clut224.ppm ]; then
+                install -m 0644 ${WORKDIR}/${LOGO_SIZE}/logo_linux_clut224.ppm drivers/video/logo/logo_linux_clut224.ppm
                 echo "CONFIG_LOGO=y"                    >> ${S}/.config
                 echo "CONFIG_LOGO_LINUX_CLUT224=y"      >> ${S}/.config
         fi
@@ -104,7 +115,7 @@ do_configure_prepend() {
         fi
 
         # Enable thumb2 fixup for specific issue in angstrom toolchains when used on A8 r1p[012] silicon
-        if [ "${DISTRO_NAME}" = "Angstrom" ] ; then
+        if [ "${DISTRO_NAME}" = "Angstrom" -o "${CORTEXA8FIXUP}" = "yes" ] ; then
             sed -i -e /CONFIG_ARM_ERRATA_430973/d ${WORKDIR}/defconfig
             echo "CONFIG_ARM_ERRATA_430973=y" >> ${S}/.config
         fi
@@ -227,6 +238,7 @@ FILES_kernel-headers = "${exec_prefix}/src/linux*"
 do_devicetree_image() {
     if test -n "${KERNEL_DEVICETREE}" ; then
         dtc -I dts -O dtb ${KERNEL_DEVICETREE_FLAGS} -o devicetree ${KERNEL_DEVICETREE}
+        install -d ${D}/boot
         install -m 0644 devicetree ${D}/boot/devicetree-${KERNEL_VERSION}
         install -d ${DEPLOY_DIR_IMAGE}
         install -m 0644 devicetree ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGE_BASE_NAME}.dtb
