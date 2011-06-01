@@ -1,15 +1,17 @@
 DESCRIPTION = "Save and restore some specific Pandora settings on shutdown / startup"
 LICENSE = "GPLv2"
+LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r7"
+PR = "r8"
 inherit update-rc.d
 
 INITSCRIPT_NAME = "pandora-state"
 INITSCRIPT_PARAMS = "start 39 S . stop 31 0 1 6 ."
 
 SRC_URI = " \
+	  file://LICENSE \
 	  file://rc.pandora-state \
 	  file://gamma.state \
 	  file://brightness.state \
