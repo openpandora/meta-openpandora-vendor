@@ -1,6 +1,7 @@
 DESCRIPTION = "xdotool - command-line X11 automation tool - utilising X11 XTEST interface"
 HOMEPAGE = "http://www.semicomplete.com/projects/xdotool"
-LICENSE = "GPL"
+LICENSE = "BSD-3-Clause"
+LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=2f9cbf7e9401cec8a38666a08851ce6b"
 SECTION = "x11"
 PRIORITY = "optional"
 DEPENDS = "virtual/libx11 libxtst"
