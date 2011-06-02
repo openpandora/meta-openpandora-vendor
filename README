@@ -1,4 +1,7 @@
-This is the general machine/platform specific 'stuff' overlay for the OpenPandora device.
+This is the OpenPandora vendor maintained package configuration layer for use with Openembedded/Ångström. 
+This provides the branding, stylistic and functional overlay to stock Ångström to match that in shipped 
+'official' firmware images.
+
 It should be used with openembedded-core (not old-style org.openembedded.dev).
 
 More information can be found at:
@@ -20,6 +23,10 @@ branch: master
 revision: HEAD
 
 URI: git://git.angstrom-distribution.org/meta-angstrom
+branch: master
+revision: HEAD
+
+URI: git://github.com/openpandora/meta-openpandora.git
 branch: master
 revision: HEAD
 
