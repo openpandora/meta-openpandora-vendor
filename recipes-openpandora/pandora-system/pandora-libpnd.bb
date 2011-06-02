@@ -1,7 +1,8 @@
 DESCRIPTION = "Support for the PND format in Pandora images (lib, daemon, init script etc.)"
 LICENSE = "lGPL"
+LIC_FILES_CHKSUM = "file://LGPL.txt;md5=fbc093901857fcd118f065f900982c24"
 
-PR = "r47"
+PR = "r48"
 
 PARALLEL_MAKE = ""
 

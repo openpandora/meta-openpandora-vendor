@@ -1,5 +1,6 @@
 DESCRIPTION = "Autostart X on the first boot to support the first run wizard on the OpenPandora."
 LICENSE = "GPLV2"
+LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 RDEPENDS_${PN} = "xinit"
 
@@ -7,9 +8,10 @@ RDEPENDS_${PN} = "xinit"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r1"
+PR = "r2"
 
 SRC_URI = " \
+          file://LICENSE \
           file://rc.auto-startx \
 "
 
