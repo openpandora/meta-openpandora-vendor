@@ -1,2 +1,0 @@
-setenv bootargs debug root=/dev/mmcblk0p2 rw rootdelay=2 console=ttyS0,115200n8 vram=6272K omapfb.vram=0:3000K
-fatload mmc 0 0x80300000 uImage; bootm 0x80300000
