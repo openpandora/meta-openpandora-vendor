@@ -5,10 +5,12 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 # /etc/skel is used by Shadow's useradd so you really have that installed for this to make sense ;)
 RDEPENDS = "shadow"
 
-PR = "r6"
+PR = "r7"
 LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=956931f56ef227f7d172a149ddb40b48"
 
 SRC_URI = " \
+  file://LICENSE \
   file://.xinitrc \     
   file://bashrc \
   file://profile \
