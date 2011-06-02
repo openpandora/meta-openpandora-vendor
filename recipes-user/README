@@ -1,0 +1,7 @@
+The folder is IGNORED by git (see .gitignore in the root) and should only ever be
+used for temporary out-of-tree work.
+
+No pull requests that add to recipes-user will ever be accepted. 
+
+Please move any recipes to the correct place in the tree and generate patches/pulls 
+from that point.
