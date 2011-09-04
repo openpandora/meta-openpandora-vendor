@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for default core/console apps and libs in the Pandora i
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r34"
+PR = "r35"
 LICENSE = "MIT"
 
 inherit task 
@@ -35,7 +35,6 @@ BOOST = " \
 WIRELESS = " \
   pandora-firmware \
   wl1251-modules \
-#  pandora-wifi pandora-wifi-tools \
   wireless-tools \
   wpa-supplicant \  
   networkmanager netm-cli \
@@ -55,7 +54,6 @@ MEDIA_LIBS = " \
 OPENGLES = " \
   omap3-sgx-modules devmem2 \
   libgles-omap3 \
-#  libgles-omap3-rawdemos \
 "
 
 PAM = " \
@@ -85,7 +83,6 @@ TOUCHSCREEN = " \
 "
 
 FS_SUPPORT = " \
-#  nfs-utils \
   nfs-utils-client \
   fuse fuse-utils \
   sshfs-fuse gmailfs curlftpfs \
@@ -142,14 +139,12 @@ RDEPENDS_${PN} = "\
   ${FS_SUPPORT} \
   ${EXTRA_TOOLS} \
   ${UTIL_LINUX_NG_EXTRAS} \
-#        packagekit \
   python-pygame \
   python-misc \
   python-modules \
   alsa-utils alsa-utils-alsactl alsa-utils-alsamixer alsa-utils-aplay \
   rdesktop \
   \
-#  angstrom-zeroconf-audio \
   angstrom-led-config \ 
 "
 

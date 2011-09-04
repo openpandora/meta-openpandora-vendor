@@ -59,13 +59,10 @@ GSTREAMER = " \
   gst-plugins-base-meta \
   gst-plugins-good-meta \
   gst-plugins-bad-meta \
-#  gst-plugins-ugly-meta \
 "
 
 PERL = " \
   perl \
-#  task-perl-module-all \
-#  libnet-dbus-perl \
   libxml-parser-perl \
   libxml-twig-perl \
 "
@@ -86,7 +83,6 @@ XSERVER_BASE = " \
   mime-support \
   notification-daemon inotify-tools \
   xauth \
-#  xdg-utils \
   xhost \
   xinetd \
   xinit \
@@ -127,7 +123,6 @@ RDEPENDS_${PN} = " \
 	synergy \
 	x11vnc angstrom-x11vnc-xinit \
 	angstrom-gnome-icon-theme-enable \
-#	connman-gnome \
 	networkmanager network-manager-applet \
 	gnome-bluetooth \
 "

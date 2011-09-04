@@ -60,7 +60,6 @@ GNOME = " \
   gnome-media \
   gnome-menus \
   gnome-mime-data \
-#  gnome-packagekit packagekit packagekit-gtkmodule \
   gnome-panel libpanel-applet libgweather-locationdata\
   gnome-power-manager gnome-power-manager-applets \
   gnome-python \
@@ -100,7 +99,6 @@ GSTREAMER = " \
   gst-plugins-base-meta \
   gst-plugins-good-meta \
   gst-plugins-bad-meta \
-#  gst-plugins-ugly-meta \
 "
 
 UIM = " \
@@ -116,7 +114,6 @@ UIM = " \
 
 PERL = " \
   perl \
-#  task-perl-module-all \
   libnet-dbus-perl \
   libxml-parser-perl \
   libxml-twig-perl \
@@ -125,10 +122,8 @@ PERL = " \
 PRINT = " \
   cups \
   cups-backend-hal \
-#  cups-gs \
   gnome-cups-manager \
   gtk-printbackend-cups \
-#  gutenprint \
   hal-cups-utils \
 "
 
@@ -151,7 +146,6 @@ THEMES = " \
   gtk-theme-thinice \
   gtk-theme-redmond \
   hicolor-icon-theme \
-#  sound-theme-freedesktop \
 "
 
 TOTEM = " \

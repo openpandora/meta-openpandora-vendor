@@ -11,16 +11,11 @@ ANGSTROM_EXTRA_INSTALL ?= ""
 
 APPS = " \
   avahi-ui \
-#  abiword \
   evince \
-#  claws-mail \
   swfdec swfdec-gnome swfdec-mozilla \
-#  gnumeric \   
   networkmanager network-manager-applet netm-cli \ 
   vnc x11vnc angstrom-x11vnc-xinit \
   xchat \
-#  xournal \
-#  arora \
 "
 
 BLUETOOTH_GUI = " \
@@ -28,11 +23,6 @@ BLUETOOTH_GUI = " \
 "
 
 IM_CLIENT = " \
-#  pidgin \
-#  libpurple-protocol-msn \
-#  libpurple-protocol-yahoo \
-#  libpurple-protocol-icq \
-#  libpurple-protocol-aim \
 "
 
 DISPMAN = " \
@@ -56,29 +46,19 @@ FONTS = " \
 
 # Any default games we want to ship.
 GAMES = " \
-#  scummvm \
-#  frozen-bubble \
-#  gnome-games \  
-#  numptyphysics \
 "
 
 GNOME_APPS = " \
-#  gnome-mplayer \
   gcalctool \ 
   gnome-keyring gnome-keyring-pam-plugin \
   gksu \
 "
 
 GSTREAMER = " \
-#  gstreamer-ti \
   gst-ffmpeg \
   gst-omapfb \
-#  gst-plugin-pulse \
   gst-plugin-xvimagesink \
   gst-plugins-base-meta \
-#  gst-plugins-good-meta \
-#  gst-plugins-bad-meta \
-#  gst-plugins-ugly-meta \
   gst-plugin-gles \
 "
 
@@ -89,9 +69,7 @@ ICON_THEME = " \
 "
 
 LAUNCHERS = " \
-#  netbook-launcher-efl \
   pandora-libpnd-minimenu \
-#  pandora-pmenu \
 "
 
 PANDORA = " \
@@ -113,11 +91,6 @@ PERL = " \
 "
 
 PULSEAUDIO = " \
-#  pulseaudio-alsa-wrapper \
-#  pulseaudio-esd-wrapper \
-#  pulseaudio-module-gconf \
-#  libasound-module-ctl-pulse \
-#  libasound-module-pcm-pulse \
 "
 
 PYTHON_LIBS = " \
@@ -147,23 +120,10 @@ BAD_RECOMMENDATIONS += " \
   qt4-examples \
 "
 
-TOTEM = " \
-#  totem \
-#  totem-browser-plugin \
-#  totem-plugin-bemused \
-#  totem-plugin-gromit \
-#  totem-plugin-media-player-keys \
-#  totem-plugin-ontop \
-#  totem-plugin-properties \
-#  totem-plugin-screensaver \
-#  totem-plugin-skipto \
-#  totem-plugin-thumbnail \
-"
 
 TOUCHSCREEN = " \
   gtk-touchscreen-mode-enable \
   libgtkstylus \
-#  xinput-calibrator \
 "
 
 XFCE46_BASE = " \
@@ -250,7 +210,6 @@ ADD_LIBS = " \
   glibc-gconv-cp1252 \
   glibc-gconv-ibm850 \
   glibc-gconv-iso8859-15 \
-  
 " 
 
 RDEPENDS_${PN} = " \
@@ -281,9 +240,6 @@ RDEPENDS_${PN} = " \
   ${ADD_LIBS} \
   \
   rxvt-unicode \
-#  xst \
-#  suspend-desktop \
-#  teleport \
   gdk-pixbuf-loader-png \
   gdk-pixbuf-loader-xpm \
   gdk-pixbuf-loader-jpeg \
@@ -292,5 +248,4 @@ RDEPENDS_${PN} = " \
   xcursor-transparent-theme \	
   xterm \
   jaaa nmap iperf \
-#  gnuplot \
 "
