@@ -1,3 +1,4 @@
 recipes-branding     - Recipes related to the stock branding/theme of the OpenPandora device.
 recipes-core         - Recipes or amendments to recipies within the confines of the core image (tasks, image recipes etc.).
 recipes-openpandora  - Recipes related to the OpenPandora device that is not core, BSP (libPND etc.).
+recipes-missing      - Recipes that weren't in oe-core/angstrom, and/or needed patching to build
