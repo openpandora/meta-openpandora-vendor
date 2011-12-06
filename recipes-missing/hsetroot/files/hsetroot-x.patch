@@ -1,0 +1,14 @@
+Index: hsetroot-1.0.2/src/Makefile.am
+===================================================================
+--- hsetroot-1.0.2/src/Makefile.am	2011-09-21 21:03:02.442565099 +0200
++++ Makefile.am	2011-09-21 21:02:26.722565169 +0200
+@@ -1,7 +1,7 @@
+ bin_PROGRAMS = hsetroot
+ 
+ AM_CFLAGS = @CFLAGS@ @IMLIB2_CFLAGS@ -Wall
+-LIBS = @IMLIB2_LIBS@
++LIBS = @IMLIB2_LIBS@ -lX11
+ 
+ hsetroot_SOURCES = hsetroot.c
+ 
+
