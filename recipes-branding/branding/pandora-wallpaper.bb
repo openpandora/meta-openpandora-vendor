@@ -1,9 +1,11 @@
 DESCRIPTION = "Wallpapers created by the community for the OpenPandora, thanks go to the community for the graphics"
 
-PR = "r1"
+PR = "r2"
 LICENSE = "GPL"
+LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 SRC_URI = " \
+  file://LICENSE \  
   file://community/* \
   file://official/* \
 "
