@@ -2,7 +2,7 @@ DESCRIPTION = "Support for the PND format in Pandora images (lib, daemon, init s
 LICENSE = "lGPL"
 LIC_FILES_CHKSUM = "file://LGPL.txt;md5=fbc093901857fcd118f065f900982c24"
 
-PR = "r48"
+PR = "r50"
 
 PARALLEL_MAKE = ""
 
@@ -10,19 +10,20 @@ DEPENDS = "virtual/libsdl libsdl-image libsdl-gfx libsdl-ttf"
 
 SRC_URI = " \
           git://openpandora.org/pandora-libraries.git;protocol=git;branch=master \
+	  file://libpnd_make.patch \
           file://rc.pndnotifyd \
           file://rc.pndevmapperd \   
           file://op_pnd_run.desktop \
 "
 
-SRCREV = "6b70206ed7cdf2c7fd7e629c87af2520dc87c093"
+SRCREV = "1f90930a4e25a6bbb7264df6a6901310c2c3d388"
 
 S = "${WORKDIR}/git"
 
 inherit update-rc.d
 
 TARGET_CC_ARCH += "${LDFLAGS}"
-TARGET_CFLAGS += "-Wall -I./include -I${STAGING_INCDIR}/usr/include -I${STAGING_INCDIR}/SDL "
+TARGET_CFLAGS += "-fPIC -Wall -I./include -I${STAGING_INCDIR}/usr/include -I${STAGING_INCDIR}/SDL "
 
 PACKAGES =+ "${PN}-pndnotifyd ${PN}-pndevmapperd ${PN}-minimenu"
 

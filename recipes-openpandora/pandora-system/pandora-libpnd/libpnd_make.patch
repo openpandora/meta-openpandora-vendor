@@ -1,0 +1,11 @@
+--- git/Makefile	2011-12-07 02:22:17.340903809 +0100
++++ git/Makefile	2011-12-07 02:22:33.954243026 +0100
+@@ -61,7 +61,7 @@
+ 	${CXX} -o bin/pndevmapperd pndevmapperd.o ${SOLIB1}
+ 
+ mmenu:	mmenu.o mmui.o mmcache.o mmcat.o mmconf.o freedesktop_cats.o mmcustom_cats.o ${SOLIB1}
+-	${CXX} -o bin/mmenu mmenu.o mmui.o mmcache.o mmcat.o mmconf.o freedesktop_cats.o mmcustom_cats.o ${SOLIB1} -L${PNDSTUFF}/usr/lib -lSDL -lSDL_image -lSDL_ttf -lSDL_gfx
++	${CXX} -o bin/mmenu mmenu.o mmui.o mmcache.o mmcat.o mmconf.o freedesktop_cats.o mmcustom_cats.o ${SOLIB1}  -lSDL -lSDL_image -lSDL_ttf -lSDL_gfx
+ mmwrapper:	mmwrapper.o ${SOLIB1}
+ 	${CXX} -o bin/mmwrapper mmwrapper.o ${SOLIB1}
+ 
