@@ -1,11 +1,12 @@
 DESCRIPTION = "SLiM Themes for the OpenPandora"
 SECTION = "x11/dm"
 LICENSE = "GPL"
+LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 DEPENDS = "slim"
 RDEPENDS = "slim"
 
-PR = "r3"
+PR = "r4"
 
 SRC_URI = " \        
 "
@@ -13,6 +14,7 @@ SRC_URI = " \
 # Greek theme.
 
 SRC_URI_append = " \
+           file://LICENSE \
            file://greek/background.png \
            file://greek/panel.png \
            file://greek/slim.theme \
