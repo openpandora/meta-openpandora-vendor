@@ -1,0 +1,15 @@
+DESCRIPTION = "Yet another X Wallpaper Utility"
+DEPENDS += "imlib2 freetype zlib virtual/libx11 libxext"
+RDEPENDS_${PN} += "imlib2-loaders"
+LICENSE = "GPL"
+LIC_FILES_CHKSUM = "file://COPYING;md5=0636e73ff0215e8d672dc4c32c317bb3"
+PR = "r2"
+
+SRC_URI = "http://thegraveyard.org/files/hsetroot-${PV}.tar.gz \
+           file://pkgconfigize-imlib.patch \
+            file://hsetroot-x.patch"
+
+inherit autotools
+
+SRC_URI[md5sum] = "f599770a6411dcfe216c37b280fad9bc"
+SRC_URI[sha256sum] = "d6712d330b31122c077bfc712ec4e213abe1fe71ab24b9150ae2774ca3154fd7"
