@@ -1,4 +1,4 @@
-DESCRIPTION = "Task file for basic OpenPandora specific bits like libPND and firmware"
+DESCRIPTION = "Task file for base OpenPandora specific bits like libPND and firmware"
 
 # Note: This task assumes your building an X image and will pull in an XServer and all that jazz.
 # TODO: Break down again into GUI and CLI aspects like the classic trees, more testing needed 1st.
