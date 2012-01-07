@@ -26,14 +26,25 @@ URI: git://git.angstrom-distribution.org/meta-angstrom
 branch: master
 revision: HEAD
 
+URI: git://git.angstrom-distribution.org/meta-texasinstruments
+branch: master
+revision: HEAD
+
 URI: git://github.com/openpandora/meta-openpandora.git
 branch: master
 revision: HEAD
 
-Send pull requests to OpenPandora Firmware mailing list:
+It is preferred that people raise pull requests using GIThub by forking the appropriate tree:
+
+                   https://github.com/openpandora/
+                   (More info on achieving this can be found at http://help.github.com/send-pull-requests/)
+
+Alternatively you can send patches to OpenPandora Firmware mailing list:
                    
                    firmware-dev@openpandora.org
                    http://openpandora.org/cgi-bin/mailman/listinfo/firmware-dev
+
+If sending patches to the mailing list please try and ensure they are produced using 'git format-patch'
                    
 Layer maintainers: John Willis <John.Willis at distant-earth.com>
                    Michael Mrozek <EvilDragon at openpandora.org>

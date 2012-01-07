@@ -1,12 +1,9 @@
 require systemd-image.bb
 
 IMAGE_INSTALL += " \
-	task-xfce-base \
-	task-xserver \
-    sudo \
+    task-pandora-base \
+    task-xfce-base \
     nano \
-    kernel-modules \
-    wireless-tools \
     hsetroot \
     zenity \
     xset \
@@ -19,17 +16,10 @@ IMAGE_INSTALL += " \
     slim \
     coreutils \
     util-linux \
-    pandora-firmware \
     pandora-libpnd \
-    pandora-first-run-wizard \
-    pandora-wallpaper-official \
     pandora-slim-themes \
-    pandora-scripts lsof \
-    pandora-skel \
+    pandora-scripts \
     pandora-misc \
-    pandora-sudoers \ 
-    pandora-state \
 "
 
 export IMAGE_BASENAME = "systemd-pndwip-image"
-
