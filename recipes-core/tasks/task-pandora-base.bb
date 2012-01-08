@@ -7,7 +7,7 @@ DESCRIPTION = "Task file for base OpenPandora specific bits like libPND and firm
 
 PR = "r2"
 LICENSE = "MIT"
-
+LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3b58"
 inherit task 
 
 # Package up the boot scripts and bootchart to help us work to drop the startup time.
