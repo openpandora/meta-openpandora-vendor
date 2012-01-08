@@ -2,10 +2,12 @@ DESCRIPTION = "Default OpenPandora settings for Xfce4"
 HOMEPAGE = "http://www.openpandora.org"
 SECTION = "x11/xfce"
 
-PR = "r16"
+PR = "r17"
 LICENSE = "GPL"
+LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 SRC_URI = " \
+  file://LICENSE \
   file://xfce4-conf.zip \
   file://pixmaps/* \
 "
