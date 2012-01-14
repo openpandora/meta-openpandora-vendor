@@ -2,11 +2,14 @@
 
 IMAGE_LINGUAS = "de-de fr-fr en-gb en-us es-es"
 
-#IMAGE_LOGIN_MANAGER = "shadow"
+IMAGE_DEV_MANAGER   = "udev"
+IMAGE_INIT_MANAGER  = "systemd"
+IMAGE_INITSCRIPTS   = " "
+IMAGE_LOGIN_MANAGER = "tinylogin shadow"
 
 inherit image
 
-PR = "r6"
+PR = "r1"
 
 export IMAGE_BASENAME = "pandora-xfce-image"
 
@@ -15,6 +18,8 @@ SPLASH = "psplash-openpandora"
 DEPENDS = "task-base"
 
 IMAGE_INSTALL += " \
+    angstrom-task-boot \
+    task-basic \
     task-pandora-core \
     task-pandora-xfce \
     ${SPLASH} \	
