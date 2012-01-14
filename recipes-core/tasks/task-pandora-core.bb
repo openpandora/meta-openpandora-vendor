@@ -10,9 +10,9 @@ PR = "r1"
 
 inherit task 
 
-AUFS = " \
-  aufs2-util \
-"
+AUFS = " "
+#  aufs2-util \
+#"
 
 BLUETOOTH = " \
   bluez4 \
