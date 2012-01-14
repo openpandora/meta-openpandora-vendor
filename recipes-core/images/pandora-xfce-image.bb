@@ -10,7 +10,7 @@ PR = "r6"
 
 export IMAGE_BASENAME = "pandora-xfce-image"
 
-SPLASH = "psplash-omap3pandora"
+SPLASH = "psplash-openpandora"
 
 DEPENDS = "task-base"
 
