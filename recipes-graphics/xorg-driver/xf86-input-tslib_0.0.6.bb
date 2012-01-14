@@ -2,9 +2,8 @@ require recipes-graphics/xorg-driver/xorg-driver-input.inc
 DESCRIPTION = "X.Org X server -- tslib input driver"
 DEPENDS += "tslib"
 RRECOMMENDS_${PN} += "tslib-calibrate"
-RSUGGESTS_${PN} += "hal"
 
-# derived from xf86-input-void, that's why I kept MIT-X, but it's not clear, see COPYING
+# Derived from xf86-input-void, that's why I kept MIT-X, but it's not clear, see COPYING
 LIC_FILES_CHKSUM = "file://src/tslib.c;endline=28;md5=bd62eaef222dcf5cd59e490a12bd795e \
                     file://COPYING;md5=4641deddaa80fe7ca88e944e1fd94a94"
 
