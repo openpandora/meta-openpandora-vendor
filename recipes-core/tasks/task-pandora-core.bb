@@ -1,12 +1,12 @@
-DESCRIPTION = "Task file for default core/console apps and libs in the Pandora image"
+DESCRIPTION = "Task file for default core/console apps and libs in the OpenPandora image"
 
-# Use this task as a base to ship all kernel modules and make sure firmware and drivers are installed for BT and WiFi.
-# Please see metadata/openpandora.oe.git/packages/pandora-system/pandora-firmware/pandora-firmware/readme.txt for info on the hacks for firmware.
+# Use this task as a base to ship all kernel modules and setup basic OpenPandora userspace.
+
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 # Don't forget to bump the PR if you change it.
-
-PR = "r35"
-LICENSE = "MIT"
+PR = "r1"
 
 inherit task 
 
@@ -15,8 +15,7 @@ AUFS = " \
 "
 
 BLUETOOTH = " \
-  blueprobe \
-  bluez4 gst-plugin-bluez \
+  bluez4 \
   libsndfile1 libasound-module-bluez \
 "
 
@@ -33,24 +32,22 @@ BOOST = " \
 "
 
 WIRELESS = " \
-  pandora-firmware \
-  wl1251-modules \
   wireless-tools \
   wpa-supplicant \  
-  networkmanager netm-cli \
+  networkmanager \
 "
 
 MEDIA_LIBS = " \
   libmodplug \
-  libsdl-x11 libsdl-mixer libsdl-image \
+  libsdl libsdl-mixer libsdl-image \
   libsdl-gfx libsdl-net libsdl-ttf \
-  libpng libpng12 libpng3 \
+  libpng \
   faad2 \
-  mikmod \
   speex \  
   flac \
   audiofile \
 "
+
 OPENGLES = " \
   omap3-sgx-modules devmem2 \
   libgles-omap3 \
@@ -58,7 +55,6 @@ OPENGLES = " \
 
 PAM = " \
   libpam \
-  libpam-meta \
 "
 
 PANDORA_LIBS = " \
@@ -85,22 +81,20 @@ TOUCHSCREEN = " \
 FS_SUPPORT = " \
   nfs-utils-client \
   fuse fuse-utils \
-  sshfs-fuse gmailfs curlftpfs \
+  sshfs-fuse \
   ntfs-3g \
   squashfs-tools \
 "
 
 EXTRA_TOOLS = " \
   avahi \
-  fbgrab fbset fbset-modes \
+  fbset fbset-modes \
   portmap \
   file \
   socat \
   strace \
   screen \
   rsync \
-  unrar \
-  ksymoops \
   kexec-tools \
   zip \        
   gzip \
@@ -116,14 +110,15 @@ EXTRA_TOOLS = " \
 
 # Add extra util-linux-ng utils to image. 
 # TODO: Fix util-linux-ng to meta depend on all subpackages.
-UTIL_LINUX_NG_EXTRAS = " \
-  util-linux-ng-losetup util-linux-ng-mountall \
-  util-linux-ng-swaponoff \
-"
+#UTIL_LINUX_NG_EXTRAS = " \
+#  util-linux-ng-losetup util-linux-ng-mountall \
+#  util-linux-ng-swaponoff \
+#"
   
 RDEPENDS_${PN} = "\
+  task-core-basic-extended \
+  task-core-dev-utils \
   task-base-extended \
-  task-proper-tools \
   ${AUFS} \
   ${BOOST} \
   ${WIRELESS} \
@@ -138,14 +133,12 @@ RDEPENDS_${PN} = "\
   ${TOUCHSCREEN} \
   ${FS_SUPPORT} \
   ${EXTRA_TOOLS} \
-  ${UTIL_LINUX_NG_EXTRAS} \
-  python-pygame \
   python-misc \
   python-modules \
   alsa-utils alsa-utils-alsactl alsa-utils-alsamixer alsa-utils-aplay \
-  rdesktop \
+  freerdp \
   \
-  angstrom-led-config \ 
+  led-config \ 
 "
 
 # Make sure we install all kernel modules with the Pandora images
