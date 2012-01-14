@@ -2,9 +2,11 @@ DESCRIPTION = "Default OpenPandora settings for the Midori web browser"
 HOMEPAGE = "http://www.openpandora.org"
 
 PR = "r1"
-LICENSE = "GPL"
 
-# This 'sort of ' depends on the other SKEL templates.
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
+
+# This 'sort of' depends on the other SKEL templates.
 RDEPENDS = "pandora-skel"
 
 SRC_URI = " \
