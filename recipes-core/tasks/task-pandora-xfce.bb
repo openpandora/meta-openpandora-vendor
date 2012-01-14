@@ -1,9 +1,10 @@
-DESCRIPTION = "Task file for the XFCE Pandora image"
+DESCRIPTION = "Task file for the Xfce GUI OpenPandora image"
+
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 # Don't forget to bump the PR if you change it.
-
-PR = "r49"
-LICENSE = "MIT"
+PR = "r1"
 
 inherit task
 
@@ -12,10 +13,7 @@ ANGSTROM_EXTRA_INSTALL ?= ""
 APPS = " \
   avahi-ui \
   evince \
-  swfdec swfdec-gnome swfdec-mozilla \
-  networkmanager network-manager-applet netm-cli \ 
-  vnc x11vnc angstrom-x11vnc-xinit \
-  xchat \
+  networkmanager network-manager-applet \ 
 "
 
 BLUETOOTH_GUI = " \
@@ -23,15 +21,15 @@ BLUETOOTH_GUI = " \
 "
 
 IM_CLIENT = " \
+  pidgin \
 "
 
 DISPMAN = " \
   slim \
-  slim-op-themes \
+  pandora-slim-themes \
 "
 
 FONTS = " \
-  font-adobe-75dpi \
   fontconfig fontconfig-utils font-util \
   ttf-arphic-uming \
   ttf-dejavu-common \
@@ -50,16 +48,12 @@ GAMES = " \
 
 GNOME_APPS = " \
   gcalctool \ 
-  gnome-keyring gnome-keyring-pam-plugin \
-  gksu \
+  gnome-keyring \
 "
 
 GSTREAMER = " \
   gst-ffmpeg \
-  gst-omapfb \
-  gst-plugin-xvimagesink \
   gst-plugins-base-meta \
-  gst-plugin-gles \
 "
 
 ICON_THEME = " \
@@ -78,19 +72,11 @@ PANDORA = " \
   pandora-wallpaper-official \
   pandora-xfce-defaults \
   pandora-midori-defaults midori \
-  libgles2d \
   pandora-misc \
 "
 
 PERL = " \
   perl \
-  task-perl-module-all \
-  libnet-dbus-perl \
-  libxml-parser-perl \
-  libxml-twig-perl \
-"
-
-PULSEAUDIO = " \
 "
 
 PYTHON_LIBS = " \
@@ -103,10 +89,6 @@ PYTHON_LIBS = " \
 
 QT_SELECTED = " qt4-x11-free \
 "
-# qt4-x11-free"
-# qt4-x11-free-gles"
-
-#PREFERRED_PROVIDER_qt4-x11-free = "${QT_SELECTED}"
 
 QT_SUPPORT = " \
   ${QT_SELECTED} \
@@ -119,7 +101,6 @@ BAD_RECOMMENDATIONS += " \
   qt4-demos \
   qt4-examples \
 "
-
 
 TOUCHSCREEN = " \
   gtk-touchscreen-mode-enable \
@@ -135,7 +116,6 @@ XFCE46_BASE = " \
   xfconf \
   xfdesktop \
   xfce4-panel \
-  xfce4-power-manager \
   \
   gtk-xfce-engine \
   \
@@ -156,15 +136,8 @@ XFCE46_BASE = " \
 
 XFCE46_EXTRAS = " \
   xfce4-notifyd \
-  xfce4-mixer \
   xfce4-appfinder \
-  xfce4-battery-plugin \
-  xfprint \    
-  orage \
-  squeeze \
   ristretto \
-  mousepad \ 
-  gigolo \
   xdotool \
 "
 
@@ -182,18 +155,14 @@ XSERVER_BASE = " \
   desktop-file-utils \
   iso-codes \
   mime-support \
-  notification-daemon inotify-tools \
   xauth \
   xdg-utils \
   xhost \
   xinetd \
   xinit \
-  xlsfonts \
   xrdb \
-  xrefresh \
   xset \
   xvinfo \
-  devilspie \
   encodings \
   xterm \
   xmodmap \
@@ -201,8 +170,6 @@ XSERVER_BASE = " \
 
 ADD_LIBS = " \
   libbonobo \
-  libetpan \
-  libfribidi \
   libgsf \
   libidn \
   wv \
@@ -228,10 +195,8 @@ RDEPENDS_${PN} = " \
   ${LAUNCHERS} \
   ${PANDORA} \
   ${PERL} \
-  ${PULSEAUDIO} \
   ${PYTHON_LIBS} \
   ${QT_SUPPORT} \
-  ${TOTEM} \
   ${TOUCHSCREEN} \
   ${XSERVER_BASE} \
   ${XFCE46_BASE} \
@@ -247,5 +212,5 @@ RDEPENDS_${PN} = " \
   pango-module-basic-fc \
   xcursor-transparent-theme \	
   xterm \
-  jaaa nmap iperf \
+  iperf \
 "
