@@ -47,7 +47,6 @@ GAMES = " \
 "
 
 GNOME_APPS = " \
-  gcalctool \ 
   gnome-keyring \
 "
 
