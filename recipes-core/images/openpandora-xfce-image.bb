@@ -9,7 +9,7 @@ IMAGE_LOGIN_MANAGER = "tinylogin shadow"
 
 inherit image
 
-PR = "r1"
+PR = "r2"
 
 export IMAGE_BASENAME = "pandora-xfce-image"
 
@@ -20,8 +20,8 @@ DEPENDS = "task-base"
 IMAGE_INSTALL += " \
     angstrom-task-boot \
     task-basic \
-    task-pandora-core \
-    task-pandora-xfce \
+    task-core-openpandora \
+    task-xfce-openpandora \
     ${SPLASH} \	
 "
 

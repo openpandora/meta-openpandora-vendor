@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 # Don't forget to bump the PR if you change it.
-PR = "r1"
+PR = "r2"
 
 inherit task
 
@@ -103,7 +103,7 @@ BAD_RECOMMENDATIONS += " \
 
 TOUCHSCREEN = " \
   gtk-touchscreen-mode-enable \
-  libgtkstylus \
+  libgtkstylus pointercal-xinput \
 "
 
 XFCE46_BASE = " \
@@ -120,14 +120,12 @@ XFCE46_BASE = " \
   \
   xfce4-panel-plugin-actions \
   xfce4-panel-plugin-clock \
-  xfce4-panel-plugin-iconbox \
   xfce4-panel-plugin-launcher \
   xfce4-panel-plugin-pager \
   xfce4-panel-plugin-separator \
   xfce4-panel-plugin-showdesktop \
   xfce4-panel-plugin-systray \
-  xfce4-panel-plugin-tasklist \
-  xfce4-panel-plugin-windowlist \   
+  xfce4-panel-plugin-tasklist \ 
   xfce4-settings \
   xfce-terminal \
   thunar \
@@ -145,7 +143,6 @@ XFCE_THEMES = " \
   xfwm4-theme-moheli \
   xfwm4-theme-kokodi \
   xfwm4-theme-sassandra \
-  xfwm4-themes \
 "
 
 XSERVER_BASE = " \
@@ -179,7 +176,7 @@ ADD_LIBS = " \
 " 
 
 RDEPENDS_${PN} = " \
-  task-pandora-core \
+  task-core-openpandora \
   angstrom-x11-base-depends \
   ${ANGSTROM_EXTRA_INSTALL} \
   ${APPS} \

@@ -6,7 +6,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 # Don't forget to bump the PR if you change it.
-PR = "r1"
+PR = "r2"
 
 inherit task 
 
@@ -35,6 +35,7 @@ WIRELESS = " \
   wireless-tools \
   wpa-supplicant \  
   networkmanager \
+  rfkill \
 "
 
 MEDIA_LIBS = " \
@@ -95,7 +96,6 @@ EXTRA_TOOLS = " \
   strace \
   screen \
   rsync \
-  kexec-tools \
   zip \        
   gzip \
   bash \
