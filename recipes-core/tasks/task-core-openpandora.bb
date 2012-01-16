@@ -6,13 +6,13 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 # Don't forget to bump the PR if you change it.
-PR = "r2"
+PR = "r3"
 
 inherit task 
 
-AUFS = " "
-#  aufs2-util \
-#"
+AUFS = " \
+  aufs-util \
+"
 
 BLUETOOTH = " \
   bluez4 \
@@ -107,13 +107,6 @@ EXTRA_TOOLS = " \
   lua5.1 \
   tzdata \
 "
-
-# Add extra util-linux-ng utils to image. 
-# TODO: Fix util-linux-ng to meta depend on all subpackages.
-#UTIL_LINUX_NG_EXTRAS = " \
-#  util-linux-ng-losetup util-linux-ng-mountall \
-#  util-linux-ng-swaponoff \
-#"
   
 RDEPENDS_${PN} = "\
   task-core-basic-extended \
