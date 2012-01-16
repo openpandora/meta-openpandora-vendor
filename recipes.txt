@@ -1,4 +1,10 @@
+recipes-images       - 3rd party themes/icons etc.
 recipes-branding     - Recipes related to the stock branding/theme of the OpenPandora device.
 recipes-core         - Recipes or amendments to recipies within the confines of the core image (tasks, image recipes etc.).
-recipes-openpandora  - Recipes related to the OpenPandora device that is not core, BSP (libPND etc.).
+recipes-extended     - 
+recipes-graphics     - 
+recipes-images       - OpenPandora stock image files for firmware.
 recipes-missing      - Recipes that weren't in oe-core/angstrom, and/or needed patching to build
+recipes-openpandora  - Recipes related to the OpenPandora device that is not core, BSP (libPND etc.).
+recipes-support      -  
+recipes-user         - Folder for local recipes - NOT part of the GIT tree - See README in folder.
