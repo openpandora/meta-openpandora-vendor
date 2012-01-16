@@ -1,6 +1,6 @@
-# Console image for the Pandora handheld console
+# Desktop image for the Pandora handheld console
 
-IMAGE_LINGUAS = "de-de fr-fr en-gb en-us es-es"
+IMAGE_LINGUAS = "de-de fr-fr en-gb en-us pt-br es-es kn-in ml-in ta-in"
 
 IMAGE_LOGIN_MANAGER = "shadow"
 
@@ -8,7 +8,7 @@ inherit image
 
 PR = "r0"
 
-export IMAGE_BASENAME = "pandora-core-image"
+export IMAGE_BASENAME = "pandora-desktop-image"
 
 SPLASH = "psplash-omap3pandora"
 
@@ -16,12 +16,12 @@ DEPENDS = "task-base"
 
 IMAGE_INSTALL += " \
     task-pandora-core \
+    task-pandora-desktop \
     ${SPLASH} \	
 "
 
-IMAGE_PREPROCESS_COMMAND = "create_etc_timestamp"
+IMAGE_PREPROCESS_COMMAND = "rootfs_update_timestamp"
 
-#Dont use on core images as you have no GUI to let you set a root password ;).
 #zap root password for release images
 #ROOTFS_POSTPROCESS_COMMAND += '${@base_conditional("DISTRO_TYPE", "release", "zap_root_password; ", "",d)}'
 

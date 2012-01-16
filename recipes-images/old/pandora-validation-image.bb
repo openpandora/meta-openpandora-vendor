@@ -1,29 +1,20 @@
-# Desktop image for the Pandora handheld console
-
-IMAGE_LINGUAS = "de-de fr-fr en-gb en-us pt-br es-es kn-in ml-in ta-in"
-
-IMAGE_LOGIN_MANAGER = "shadow"
+# Validation image for Pandora handheld console
+# for hardware testing and flashing images to NAND if copied to the SD in the correct places.
 
 inherit image
 
 PR = "r0"
 
-export IMAGE_BASENAME = "pandora-desktop-image"
-
-SPLASH = "psplash-omap3pandora"
+export IMAGE_BASENAME = "pandora-validation-image"
 
 DEPENDS = "task-base"
 
 IMAGE_INSTALL += " \
-    task-pandora-core \
-    task-pandora-desktop \
-    ${SPLASH} \	
+  task-pandora-core \
+  task-pandora-validation \
 "
-
-IMAGE_PREPROCESS_COMMAND = "create_etc_timestamp"
-
-#zap root password for release images
-#ROOTFS_POSTPROCESS_COMMAND += '${@base_conditional("DISTRO_TYPE", "release", "zap_root_password; ", "",d)}'
+ 
+IMAGE_PREPROCESS_COMMAND = "rootfs_update_timestamp"
 
 # Helper to say what image we built, include GIT tag and image name.
 PANDORA_VERSION_FILE = "${IMAGE_ROOTFS}/${sysconfdir}/op-version"

@@ -23,7 +23,7 @@ IMAGE_INSTALL += " \
   ${SPLASH} \
  "
 
-IMAGE_PREPROCESS_COMMAND = "create_etc_timestamp"
+IMAGE_PREPROCESS_COMMAND = "rootfs_update_timestamp"
 
 # Helper to say what image we built, include GIT tag and image name.
 PANDORA_VERSION_FILE = "${IMAGE_ROOTFS}/${sysconfdir}/op-version"

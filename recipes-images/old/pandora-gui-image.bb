@@ -1,20 +1,29 @@
-# Validation image for Pandora handheld console
-# for hardware testing and flashing images to NAND if copied to the SD in the correct places.
+# Matchbox/GPE image for the Pandora handheld console
+
+IMAGE_LINGUAS = "de-de fr-fr en-gb en-us pt-br es-es kn-in ml-in ta-in"
+
+IMAGE_LOGIN_MANAGER = "shadow"
 
 inherit image
 
 PR = "r0"
 
-export IMAGE_BASENAME = "pandora-validation-image"
+export IMAGE_BASENAME = "pandora-gui-image"
+
+SPLASH = "psplash-omap3pandora"
 
 DEPENDS = "task-base"
 
 IMAGE_INSTALL += " \
-  task-pandora-core \
-  task-pandora-validation \
+    task-pandora-core \
+    task-pandora-gui \
+    ${SPLASH} \	
 "
- 
-IMAGE_PREPROCESS_COMMAND = "create_etc_timestamp"
+
+IMAGE_PREPROCESS_COMMAND = "rootfs_update_timestamp"
+
+#zap root password for release images
+#ROOTFS_POSTPROCESS_COMMAND += '${@base_conditional("DISTRO_TYPE", "release", "zap_root_password; ", "",d)}'
 
 # Helper to say what image we built, include GIT tag and image name.
 PANDORA_VERSION_FILE = "${IMAGE_ROOTFS}/${sysconfdir}/op-version"
