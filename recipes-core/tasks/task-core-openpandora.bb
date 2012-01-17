@@ -6,7 +6,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 # Don't forget to bump the PR if you change it.
-PR = "r3"
+PR = "r4"
 
 inherit task 
 
@@ -22,6 +22,7 @@ BLUETOOTH = " \
 # Package up the boot scripts and bootchart to help us work to drop the startup time.
 BOOT = " \
   pandora-uboot-scripts \
+  openpandora-u-boot-autoboot-sd \
   bootchart \
   mtd-utils \
 "
@@ -29,6 +30,12 @@ BOOT = " \
 # Package BOOST libs so people can use them in apps. It will pull in the RRECOMENDS.
 BOOST = " \
   boost \
+"
+
+# Install 'real' tools over BusyBox versions.
+COREUTILS = " \
+  coreutils \
+  util-linux \
 "
 
 WIRELESS = " \
@@ -114,6 +121,7 @@ RDEPENDS_${PN} = "\
   task-base-extended \
   ${AUFS} \
   ${BOOST} \
+  ${COREUTILS} \
   ${WIRELESS} \
   ${BLUETOOTH} \  
   ${BOOT} \
