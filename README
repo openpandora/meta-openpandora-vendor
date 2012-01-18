@@ -6,11 +6,11 @@ It should be used with openembedded-core (not old-style org.openembedded.dev).
 
 More information can be found at:
 
-                    http://www.openpandora.org/
-                    
+                   http://www.openpandora.org/
+
 Build scripts to support making a firmware image for the OpenPandora can be found at:
 
-                    https://github.com/openpandora/openpandora-oe-environment
+                   https://github.com/openpandora/openpandora-oe-environment
 
 This layer depends on:
 
@@ -40,11 +40,15 @@ It is preferred that people raise pull requests using GIThub by forking the appr
                    (More info on achieving this can be found at http://help.github.com/send-pull-requests/)
 
 Alternatively you can send patches to OpenPandora Firmware mailing list:
-                   
+
                    firmware-dev@openpandora.org
                    http://openpandora.org/cgi-bin/mailman/listinfo/firmware-dev
 
 If sending patches to the mailing list please try and ensure they are produced using 'git format-patch'
-                   
+
+If you are just reporting bugs with this metadata please add items to the OpenPandora bug tracker:
+
+                   http://bugs.openpandora.org/index.php?project=3
+
 Layer maintainers: John Willis <John.Willis at distant-earth.com>
                    Michael Mrozek <EvilDragon at openpandora.org>
