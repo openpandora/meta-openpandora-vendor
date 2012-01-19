@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 # Don't forget to bump the PR if you change it.
-PR = "r2"
+PR = "r3"
 
 inherit task
 
@@ -40,7 +40,7 @@ FONTS = " \
   ttf-liberation-serif \
   ttf-liberation-mono \
   xorg-minimal-fonts \
-"  
+"
 
 # Any default games we want to ship.
 GAMES = " \
@@ -135,7 +135,6 @@ XFCE46_EXTRAS = " \
   xfce4-notifyd \
   xfce4-appfinder \
   ristretto \
-  xdotool \
 "
 
 XFCE_THEMES = " \
@@ -162,6 +161,10 @@ XSERVER_BASE = " \
   encodings \
   xterm \
   xmodmap \
+  xinput \
+  xcursor-transparent-theme \
+  xterm \
+  xdotool \
 "
 
 ADD_LIBS = " \
@@ -173,7 +176,7 @@ ADD_LIBS = " \
   glibc-gconv-cp1252 \
   glibc-gconv-ibm850 \
   glibc-gconv-iso8859-15 \
-" 
+"
 
 RDEPENDS_${PN} = " \
   task-core-openpandora \
@@ -206,7 +209,5 @@ RDEPENDS_${PN} = " \
   gdk-pixbuf-loader-jpeg \
   pango-module-basic-x \
   pango-module-basic-fc \
-  xcursor-transparent-theme \	
-  xterm \
   iperf \
 "
