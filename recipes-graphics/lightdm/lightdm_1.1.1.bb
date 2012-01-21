@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
 DEPENDS = "libpam virtual/xserver consolekit libxklavier gtk+"
 
-PR = "r2"
+PR = "r3"
 
 inherit autotools update-rc.d
 
@@ -15,6 +15,7 @@ SRC_URI = " \
             file://lightdm \
 	    file://lightdm.service \
 	    file://lightdm.pam \
+	    file://lightdm-autologin.pam \
 	    file://Xsession \
 "
 
@@ -22,7 +23,6 @@ SRC_URI[md5sum] = "e42e1ac0b07b3591de44ff7b6daa6c7a"
 SRC_URI[sha256sum] = "285b7df76cd580ccb11d606fdd4ec8dfc3751891485d81c654d063264c47fc29"
 
 EXTRA_OECONF = " --disable-static \
-                 --with-greeter-session=lightdm-gtk-greeter \
                  --with-greeter-user=lightdm \
 "
 
@@ -33,8 +33,10 @@ do_install_append() {
 	install -d ${D}/${sysconfdir}/init.d
 	install -m 0755 ${WORKDIR}/lightdm ${D}/${sysconfdir}/init.d/
 
+	# Install PAM service and special service for autologin case.
 	install -d ${D}/${sysconfdir}/pam.d
-	install -m 0755 ${WORKDIR}/lightdm.pam ${D}/${sysconfdir}/pam.d/lightdm
+	install -m 0644 ${WORKDIR}/lightdm.pam ${D}/${sysconfdir}/pam.d/lightdm
+	install -m 0644 ${WORKDIR}/lightdm-autologin.pam ${D}/${sysconfdir}/pam.d/lightdm-autologin
 
 	install -d ${D}${base_libdir}/systemd/system
 	install -m 0644 ${WORKDIR}/lightdm.service ${D}${base_libdir}/systemd/system/ 
