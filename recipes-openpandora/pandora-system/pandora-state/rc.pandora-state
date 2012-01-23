@@ -38,8 +38,10 @@ d_start() {
 	cat /etc/pandora/conf/dirty_expire_centisecs >  /proc/sys/vm/dirty_expire_centisecs
 	cat /etc/pandora/conf/brightness.state > /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness 
 	cat /etc/pandora/conf/gamma.state > /sys/devices/platform/omap2_mcspi.1/spi1.1/gamma
+	if [ -f /etc/pandora/conf/filter.state ]; then
 	filter=$(cat /etc/pandora/conf/filter.state)
 	/usr/pandora/scripts/op_videofir.sh $filter 
+	fi
 	cpuspeed="$(cat /etc/pandora/conf/cpu.conf | grep default | awk -F\: '{print $2}')"
 	oppmax="$(cat /etc/pandora/conf/cpu.conf | grep opp | awk -F\: '{print $2}')"
 	echo $oppmax > /proc/pandora/cpu_opp_max

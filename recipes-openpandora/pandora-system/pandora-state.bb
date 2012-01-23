@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a42
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r8"
+PR = "r9"
 inherit update-rc.d
 
 INITSCRIPT_NAME = "pandora-state"
