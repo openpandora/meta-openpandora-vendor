@@ -23,12 +23,7 @@ if [ $xpid ]; then
     # invoke the appfinder; nice app, but it takes a few seconds to come up
     #su -c 'DISPLAY=:0.0 xfce4-appfinder' - $xfceuser
     # invoke the bottom-left popup menu, for launching new apps, instead.
-    popuppid=$(pidof xfce4-popup-menu)
-    if [ $popuppid ]; then
-	echo "popup menu is already running"
-    else
-	su -c 'DISPLAY=:0.0 xfce4-popup-menu' - $xfceuser
-    fi
+    su -c 'DISPLAY=:0.0 /usr/pandora/scripts/op_xfcemenu.sh' - $xfceuser
   fi
 else
   echo "no x, killing all pnd aps so x or DE gets restarted"

@@ -7,7 +7,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r63"
+PR = "r64"
 
 SRC_URI = " \
           file://LICENSE \
@@ -41,22 +41,31 @@ SRC_URI = " \
           file://op_videofir.sh \
           file://op_storage.sh \
 	  file://op_storage.pnd \
-          file://op_nubmode.sh \
+          file://op_nubmode.py \
 	  file://op_nubmode.pnd \
+	  file://op_lidsettings.pnd \
+	  file://op_lidsettings.sh \
           file://op_tvout.sh \
 	  file://op_tvout.pnd \
+	  file://ConfigModel.py \
+	  file://TVoutConfig.py \
 	  file://op_inputtest.pnd \
           file://gui.conf \
 	  file://cpu.conf \
           file://gamma.conf \
           file://service.conf \
+	  file://nub_profiles.conf \
+	  file://tvout-profiles.conf \
+	  file://nubmode.glade \
+	  file://reset_nubs.sh \
+	  file://pndlogo.png \
+	  file://tvicon.png \
+	  file://tvout.glade \
           file://default_up \
           file://none_up \
           file://op_env.sh \
-          file://arora.pnd \
           file://evince.pnd \
           file://gigolo.pnd \
-          file://midori.pnd \
           file://mousepad.pnd \
           file://ristretto.pnd \
           file://squeeze.pnd \
@@ -69,6 +78,7 @@ SRC_URI = " \
 	  file://op_battlow.sh \ 
 	  file://op_bright_up.sh \  
 	  file://op_menu.sh \ 
+	  file://op_xfcemenu.sh \
 "
 
 do_install() {
@@ -86,7 +96,7 @@ do_install() {
           install -m 0755 ${WORKDIR}/op_lcdsettings.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_lcdrate.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_videofir.sh ${D}${prefix}/pandora/scripts/
-	  install -m 0755 ${WORKDIR}/op_nubmode.sh ${D}${prefix}/pandora/scripts/
+	  install -m 0755 ${WORKDIR}/op_nubmode.py ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_storage.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_tvout.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_bright_down.sh ${D}${prefix}/pandora/scripts/
@@ -95,8 +105,15 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_battlow.sh ${D}${prefix}/pandora/scripts/ 
 	  install -m 0755 ${WORKDIR}/op_bright_up.sh ${D}${prefix}/pandora/scripts/  
 	  install -m 0755 ${WORKDIR}/op_menu.sh ${D}${prefix}/pandora/scripts/ 
-
-
+	  install -m 0755 ${WORKDIR}/op_xfcemenu.sh ${D}${prefix}/pandora/scripts/ 
+	  install -m 0755 ${WORKDIR}/reset_nubs.sh ${D}${prefix}/pandora/scripts/ 
+	  install -m 0644 ${WORKDIR}/pndlogo.png ${D}${prefix}/pandora/scripts/ 
+	  install -m 0755 ${WORKDIR}/ConfigModel.py ${D}${prefix}/pandora/scripts/
+	  install -m 0755 ${WORKDIR}/TVoutConfig.py ${D}${prefix}/pandora/scripts/
+	  install -m 0644 ${WORKDIR}/tvicon.png ${D}${prefix}/pandora/scripts/ 
+	  install -m 0644 ${WORKDIR}/nubmode.glade ${D}${prefix}/pandora/scripts/ 
+	  install -m 0644 ${WORKDIR}/tvout.glade ${D}${prefix}/pandora/scripts/ 
+	  install -m 0755 ${WORKDIR}/op_lidsettings.sh ${D}${prefix}/pandora/scripts/ 
 
           install -d ${D}${prefix}/pandora/apps/
           install -m 0755 ${WORKDIR}/op_calibrate.pnd ${D}${prefix}/pandora/apps/
@@ -112,12 +129,11 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_wifi.pnd ${D}${prefix}/pandora/apps/
           install -m 0755 ${WORKDIR}/op_tvout.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_inputtest.pnd ${D}${prefix}/pandora/apps/
+	  install -m 0755 ${WORKDIR}/op_lidsettings.pnd ${D}${prefix}/pandora/apps/
 
 	  install -d ${D}${prefix}/pandora/mmenu/
-          install -m 0755 ${WORKDIR}/arora.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/evince.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/gigolo.pnd ${D}${prefix}/pandora/mmenu/
-          install -m 0755 ${WORKDIR}/midori.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/mousepad.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/ristretto.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/squeeze.pnd ${D}${prefix}/pandora/mmenu/
@@ -136,6 +152,8 @@ do_install() {
 	  install -m 0644 ${WORKDIR}/cpu.conf ${D}${sysconfdir}/pandora/conf/cpu.conf
           install -m 0644 ${WORKDIR}/gamma.conf ${D}${sysconfdir}/pandora/conf/gamma.conf
           install -m 0644 ${WORKDIR}/service.conf ${D}${sysconfdir}/pandora/conf/service.conf
+	  install -m 0666 ${WORKDIR}/nub_profiles.conf ${D}${sysconfdir}/pandora/conf/nub_profiles.conf
+	  install -m 0666 ${WORKDIR}/tvout-profiles.conf ${D}${sysconfdir}/pandora/conf/tvout-profiles.conf
 
           install -d ${D}${sysconfdir}/pandora/conf/dss_fir/
           install -m 0644 ${WORKDIR}/default_up ${D}${sysconfdir}/pandora/conf/dss_fir/

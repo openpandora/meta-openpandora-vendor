@@ -3,7 +3,7 @@
 # LCD-Settings, v1.0, written by Michael Mrozek aka EvilDragon 2010. Brightness-Settings-Part written by vimacs.
 # This scripts allows you to create, load and save Gamma-Settings and to change the LCD Brightness.
 
-while mainsel=$(zenity --title="LCD-Settings" --width="300" --height="250" --list --column "id" --column "Please select" --hide-column=1 --text="What do you want to do?" "bright" "Change LCD Brightness" "gamma" "Manage LCD Gamma" "filter" "Select current video filter" "filterdef" "Select default video filter"); do
+while mainsel=$(zenity --title="LCD-Settings" --width="300" --height="280" --list --column "id" --column "Please select" --hide-column=1 --text="What do you want to do?" "bright" "Change LCD Brightness" "gamma" "Manage LCD Gamma" "filter" "Select current video filter" "filterdef" "Select default video filter" "sblank" "Enable/disable screen blanking" ); do
 
 case $mainsel in
 
@@ -86,5 +86,20 @@ case $mainsel in
       echo $videofilter > /etc/pandora/conf/filter.state
       zenity --info --title="Default Videofilter set" --text "The default video filter has been set." --timeout 6
     fi;;
+
+    "sblank")
+     user=$(cat /tmp/currentuser)
+     if zenity --question --title="Screen blanking" --text="Do you want to enable or disable the automatic screen blanking?" --ok-label="Enable it" --cancel-label="Disable it"; then 
+	sed -i "s/.*xset.*/# DISPLAY=:0 xset s off/g" /home/${user}/.xinitrc
+	 zenity --info --title="Screen blanking" --text "The automatic screen blanking has been enabled." --timeout 6
+	 DISPLAY=:0 xset s on
+	else
+	  sed -i "s/.*xset.*/DISPLAY=:0 xset s off/g" /home/${user}/.xinitrc
+	  zenity --info --title="Screen blanking" --text "The automatic screen blanking has been disabled." --timeout 6
+	  DISPLAY=:0 xset s off
+    fi;;
 esac
 done
+
+
+DISPLAY=:0 xset s off

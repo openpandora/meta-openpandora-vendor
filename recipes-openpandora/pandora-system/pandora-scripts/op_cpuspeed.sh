@@ -1,9 +1,9 @@
 #!/bin/bash
 #get value range
-minmhz="$(cat /etc/pandora/conf/cpu.conf | grep min | awk -F\: '{print $2}')"
-safemhz="$(cat /etc/pandora/conf/cpu.conf | grep safe | awk -F\: '{print $2}')"
-maxmhz="$(cat /etc/pandora/conf/cpu.conf | grep max | awk -F\: '{print $2}')"
-warn="$(cat /etc/pandora/conf/cpu.conf | grep warn | awk -F\: '{print $2}')"
+minmhz="$(cat /etc/pandora/conf/cpu.conf | grep 'min:' | awk -F\: '{print $2}')"
+safemhz="$(cat /etc/pandora/conf/cpu.conf | grep 'safe:' | awk -F\: '{print $2}')"
+maxmhz="$(cat /etc/pandora/conf/cpu.conf | grep 'max:' | awk -F\: '{print $2}')"
+warn="$(cat /etc/pandora/conf/cpu.conf | grep 'warn:' | awk -F\: '{print $2}')"
 curmhz="$(cat /proc/pandora/cpu_mhz_max)"
 newmhz="$(cat /proc/pandora/cpu_mhz_max)"
 device=/proc/pandora/cpu_mhz_max
