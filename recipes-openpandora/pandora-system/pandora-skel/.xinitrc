@@ -43,6 +43,9 @@ xmodmap ~/.pndXmodmap
 
 #Write the current user into /tmp/currentuser for any scripts or programs who want to make use of it
 whoami > /tmp/currentuser
+id -u > /tmp/currentuid
+chmod 777 /tmp/currentuser
+chmod 777 /tmp/currentuid
 
 # HUP pndnotifyd to make sure it picks up the users home.
 killall -1 pndnotifyd &
@@ -72,6 +75,9 @@ fi
 STOP_SESSION=$(grep $SESSION /etc/pandora/conf/gui.conf | awk -F\; '{print $4}')
 echo $STOP_SESSION > /tmp/gui.stop
 chmod +x /tmp/gui.stop
+
+# Disable screen blanking if uncommented
+# DISPLAY=:0 xset s off
 
 # Starts our session and checks if a new session should be loaded
 # after the old one is quit by simply executing the command that's in /tmp/gui.load
