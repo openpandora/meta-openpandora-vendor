@@ -22,7 +22,7 @@ ERROR_WINDOW='zenity --title="Error" --error --text="Sorry! Please try again." -
 
 RESET_ROOT="yes"
 
-xset s off
+DISPLAY=:0 xset s off
 
 # Greet the user.
 
@@ -243,7 +243,6 @@ touch /etc/pandora/first-boot
 # Make the control file writeable by all to allow the user to delete to rerun the wizard on next boot.
 chmod 0666 /etc/pandora/first-boot
 
-xset s on
 # ----
 else
 poweroff
