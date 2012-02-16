@@ -1,6 +1,6 @@
 require libsdl-image.inc
 
-PR = "${INC_PR}.2"
+PR = "${INC_PR}.1"
 
 DEPENDS += "tiff"
 
@@ -18,6 +18,6 @@ do_configure_prepend() {
 	rm -f acinclude/ltversion.m4
 }
 
-SRC_URI[md5sum] = "6c06584b31559e2b59f2b982d0d1f628"
-SRC_URI[sha256sum] = "75e05d1e95f6277b44797157d9e25a908ba8d08a393216ffb019b0d74de11876"
-LIC_FILES_CHKSUM = "file://COPYING;md5=27818cd7fd83877a8e3ef82b82798ef4"
+SRC_URI[md5sum] = "a0f9098ebe5400f0bdc9b62e60797ecb"
+SRC_URI[sha256sum] = "0b90722984561004de84847744d566809dbb9daf732a9e503b91a1b5a84e5699"
+LIC_FILES_CHKSUM = "file://COPYING;md5=613734b7586e1580ef944961c6d62227"

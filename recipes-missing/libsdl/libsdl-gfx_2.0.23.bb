@@ -4,13 +4,14 @@ PRIORITY = "optional"
 DEPENDS = "zlib libpng jpeg virtual/libsdl"
 LICENSE = "LGPL"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6b58fc50681593e1de3d0029b9bb3395"
-SRC_URI = "http://www.ferzkopp.net/~aschiffler/Software/SDL_gfx-2.0/SDL_gfx-${PV}.tar.gz"
+SRC_URI = "http://www.ferzkopp.net/Software/SDL_gfx-2.0/SDL_gfx-${PV}.tar.gz"
 S = "${WORKDIR}/SDL_gfx-${PV}"
 
 inherit autotools
 
 EXTRA_OECONF = "--disable-mmx"
+EXTRA_OECONF += "SDL_CONFIG=${STAGING_BINDIR_CROSS}/sdl-config "
 TARGET_CC_ARCH += "${LDFLAGS}"
 
-SRC_URI[md5sum] = "a7ab98ad530fdc59a23f7dff502db8d3"
-SRC_URI[sha256sum] = "d08d8477ff1c6639bc7193b76a415f996c98604600e9fa4e718fd4e9283f83f4"
+SRC_URI[md5sum] = "fcc3c4f2d1b4943409bf7e67dd65d03a"
+SRC_URI[sha256sum] = "41bd601d65bba19eeac80a62570ce120098414ece22de402a8ee81b10e07faea"
