@@ -8,5 +8,6 @@ LICENSE = "MIT"
 inherit task 
 
 RDEPENDS_${PN} = "\
+"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
