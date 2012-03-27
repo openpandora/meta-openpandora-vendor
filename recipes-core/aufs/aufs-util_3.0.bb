@@ -1,14 +1,14 @@
 DESCRIPTION = "Userspace utilites for aufs3"
 DEPENDS = "virtual/kernel"
-PR = "r2"
+PR = "r3"
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=892f569a555ba9c07a568a7c0c4fa63a"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-SRCREV = "a953b0218667e06b722f4c41df29edacd8dc8e1f"
-SRC_URI = "git://aufs.git.sourceforge.net/gitroot/aufs/aufs-util.git;branch=aufs3.0;protocol=http"
+SRCREV = "f86f9aa1474f51e07a26f14dfa0f8d24b79841cb"
+SRC_URI = "git://aufs.git.sourceforge.net/gitroot/aufs/aufs-util.git;branch=aufs3.0"
 
 S = "${WORKDIR}/git"
 
