@@ -6,7 +6,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 # Don't forget to bump the PR if you change it.
-PR = "r4"
+PR = "r5"
 
 inherit task 
 
@@ -58,7 +58,7 @@ MEDIA_LIBS = " \
 
 OPENGLES = " \
   omap3-sgx-modules devmem2 \
-  libgles-omap3 \
+  libgles-omap3-es2 \
 "
 
 PAM = " \

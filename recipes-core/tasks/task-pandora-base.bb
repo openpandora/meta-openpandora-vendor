@@ -5,7 +5,7 @@ DESCRIPTION = "Task file for base OpenPandora specific bits like libPND and firm
 
 # Don't forget to bump the PR if you change it.
 
-PR = "r2"
+PR = "r3"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3b58"
 inherit task 
@@ -29,7 +29,7 @@ WIRELESS = " \
 
 OPENGLES = " \
   omap3-sgx-modules devmem2 \
-  libgles-omap3 \
+  libgles-omap3-es2 \
 "
 
 PANDORA = " \
