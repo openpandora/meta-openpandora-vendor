@@ -2,7 +2,7 @@ DESCRIPTION = "Support for the PND format in Pandora images (lib, daemon, init s
 LICENSE = "lGPL"
 LIC_FILES_CHKSUM = "file://LGPL.txt;md5=fbc093901857fcd118f065f900982c24"
 
-PR = "r51"
+PR = "r63"
 
 PARALLEL_MAKE = ""
 
@@ -16,7 +16,7 @@ SRC_URI = " \
           file://op_pnd_run.desktop \
 "
 
-SRCREV = "5c3c97f377fd3be4ceecf16fba765852d1a9572b"
+SRCREV = "2bb1805c65b796796a701e2934ceddcbd568544a"
 
 S = "${WORKDIR}/git"
 
@@ -78,7 +78,9 @@ do_install() {
           install -d ${D}${sysconfdir}/pandora/mmenu/
           install -d ${D}${sysconfdir}/pandora/mmenu/skins/
           install -d ${D}${sysconfdir}/pandora/mmenu/skins/default/
+	  install -d ${D}${sysconfdir}/pandora/mmenu/skins/clean/
           install -m 0755 ${S}/deployment/etc/pandora/mmenu/skins/default/* ${D}${sysconfdir}/pandora/mmenu/skins/default
+	  install -m 0755 ${S}/deployment/etc/pandora/mmenu/skins/clean/* ${D}${sysconfdir}/pandora/mmenu/skins/clean
 
           install -d ${D}${sysconfdir}/init.d/
           install -m 0755 ${WORKDIR}/rc.pndnotifyd ${D}${sysconfdir}/init.d/pndnotifyd-init
