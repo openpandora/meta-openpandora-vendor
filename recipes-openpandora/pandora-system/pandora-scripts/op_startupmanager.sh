@@ -3,7 +3,7 @@
 # Startup-Manager, v1.1, written by Michael Mrozek aka EvilDragon 2010 with some help by vimacs.
 # This scripts allows you to change various settings of the Pandora startup process.
 
-while mainsel=$(zenity --title="Startup manager" --width="400" --height="250" --list --column "id" --column "Please select" --hide-column=1 --text="What do you want to do?" "gui" "Change Default GUI for current user" "login" "Enable/Disable auto login" "user" "Select default user" "service" "Enable/Disable services on boot"); do
+while mainsel=$(zenity --title="Startup manager" --width="400" --height="310" --list --column "id" --column "Please select" --hide-column=1 --text="Welcome to the Startup Settings\n\nHere you can change the default boot-up behaviour of your Pandora.\n\nWhat do you want to do?\n" "gui" "Change Default GUI for current user" "login" "Enable/Disable auto login" "user" "Select default user" "service" "Enable/Disable services on boot" --ok-label="Change Setting" --cancel-label="Exit"); do
 
 
 case $mainsel in

@@ -1,5 +1,8 @@
 #!/bin/bash
-cur=$(cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness);
+
+. /usr/pandora/scripts/op_paths.sh
+
+cur=$(cat $SYSFS_BACKLIGHT_BRIGHTNESS)
 if [ "$cur" -gt "40" ]; then
    new=$(($cur-10))
 elif [ "$cur" -gt "30" ]; then 
@@ -16,4 +19,4 @@ if [ "$new" -lt "3" ]; then
    new=0
 fi
 
-echo $new > /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness
+echo $new > $SYSFS_BACKLIGHT_BRIGHTNESS

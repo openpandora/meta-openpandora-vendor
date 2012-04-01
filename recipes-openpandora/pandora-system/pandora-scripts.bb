@@ -7,10 +7,11 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r64"
+PR = "r87"
 
 SRC_URI = " \
-          file://LICENSE \
+	  file://LICENSE \
+          file://op_paths.sh \
           file://op_bright.sh \
           file://op_cpuspeed.sh \
           file://op_cpuspeed.pnd \          
@@ -83,9 +84,10 @@ SRC_URI = " \
 
 do_install() {
           install -d ${D}${prefix}/pandora/scripts/
+          install -m 0755 ${WORKDIR}/op_paths.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_bright.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_cpuspeed.sh ${D}${prefix}/pandora/scripts/
-	  install -m 0755 ${WORKDIR}/op_cpusettings.sh ${D}${prefix}/pandora/scripts/
+	install -m 0755 ${WORKDIR}/op_cpusettings.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_wifi.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_bluetooth.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_startupmanager.sh ${D}${prefix}/pandora/scripts/
@@ -114,6 +116,8 @@ do_install() {
 	  install -m 0644 ${WORKDIR}/nubmode.glade ${D}${prefix}/pandora/scripts/ 
 	  install -m 0644 ${WORKDIR}/tvout.glade ${D}${prefix}/pandora/scripts/ 
 	  install -m 0755 ${WORKDIR}/op_lidsettings.sh ${D}${prefix}/pandora/scripts/ 
+
+
 
           install -d ${D}${prefix}/pandora/apps/
           install -m 0755 ${WORKDIR}/op_calibrate.pnd ${D}${prefix}/pandora/apps/
@@ -168,7 +172,6 @@ do_install() {
           install -m 0755 ${WORKDIR}/startpmenu ${D}${bindir}/
           install -m 0755 ${WORKDIR}/stopmmenu ${D}${bindir}/
 }
-
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 FILES_${PN} += "${prefix} ${datadir}"

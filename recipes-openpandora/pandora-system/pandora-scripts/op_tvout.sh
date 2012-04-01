@@ -46,7 +46,7 @@ enable_it()
     echo "1,2" > /sys/class/graphics/fb1/overlays
   else
     # assume layer 0 for now
-  echo "0,2" > /sys/class/graphics/fb0/overlays
+    echo "0,2" > /sys/class/graphics/fb0/overlays
     echo "1" > /sys/class/graphics/fb1/overlays
   fi
   echo $conn_type > display1/venc_type
@@ -215,14 +215,14 @@ else
     tv_type="ntsc"
     conn_type="svideo"
     enable_it
-  zenity --info --title="TV Out" --text "TV Out (NTSC Mode) has been enabled." --timeout 6  
-  ;;
+    zenity --info --title="TV Out" --text "TV Out (NTSC Mode) has been enabled." --timeout 6  
+    ;;
 
 
-  "disable")
+    "disable")
     disable_it
-  zenity --info --title="TV Out" --text "TV Out has been disabled." --timeout 6
-  ;;    
+    zenity --info --title="TV Out" --text "TV Out has been disabled." --timeout 6
+    ;;    
   esac
-done
+  done
 fi

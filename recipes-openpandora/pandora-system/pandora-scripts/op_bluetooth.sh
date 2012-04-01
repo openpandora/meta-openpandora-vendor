@@ -9,8 +9,7 @@ cd "$HOME"
 if [ "$1" = "startup" ]; then
 	[ -f "$LOCK" ] && sudo /usr/sbin/hciconfig "$INTERFACE" up pscan 1>/dev/null && sudo /usr/sbin/bluetoothd || echo "Bluetooth: User has not enabled Bluetooth." 
 
-else
-	
+else	
 	# Figure out if Bluetooth is running or not
 	
 	if hciconfig "$INTERFACE" | grep UP &>/dev/null
@@ -19,6 +18,11 @@ else
 		sudo /usr/sbin/hciconfig ${INTERFACE} down 1>/dev/null
 		rm -f "$LOCK"
 	else
+	     kernel_major=`uname -r | cut -c 1`
+	     if [ "$kernel_major" = "3" ]; then
+		zenity --info --title="Bluetooth not supported" --text "Sorry, the experimental kernel does not support Bluetooth (yet).\n\nIt could not be enabled."
+	      exit 1
+	     else
 		pgrep bluetoothd
 		echo $INTERFACE
                 if [ $? -ne 1 ]; then
@@ -30,4 +34,5 @@ else
 
 		fi
 	fi
+    fi
 fi
