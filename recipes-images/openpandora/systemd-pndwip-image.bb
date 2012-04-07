@@ -1,6 +1,7 @@
 require systemd-image.bb
 
 IMAGE_INSTALL += " \
+    openpandora-u-boot-autoboot-sd \
     task-base \
     task-pandora-base \
     task-xfce-base \
@@ -23,6 +24,7 @@ IMAGE_INSTALL += " \
     pandora-scripts \
     pandora-misc \
     file \
+    fbgrab \
 "
 
 export IMAGE_BASENAME = "systemd-pndwip-image"
