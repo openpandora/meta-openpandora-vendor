@@ -4,6 +4,8 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3
 
 inherit allarch systemd
 
+PR = "r0"
+
 SRC_URI = "file://zram.service \
            file://load-zram.sh \
           "

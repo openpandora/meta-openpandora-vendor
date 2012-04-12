@@ -9,7 +9,9 @@ mem_by_cpu=$(awk -v cpus=$num_cpus '/MemTotal/ { print (($2 * 1024) / cpus) }' /
 
 if [ "$1" = "--load" ] ; then
 	echo zram: Trying to load kernel module.
-	modprobe -q zram num_devices=$num_cpus
+	# Linux 3.2 workaround - value name changed :o.
+	modprobe -q zram zram_num_devices=$num_cpus
+	# modprobe -q zram num_devices=$num_cpus 
 
 	echo zram: Enable in-memory compressed swap of $mem_by_cpu bytes.
 	for i in $(seq 0 $last_cpu); do
