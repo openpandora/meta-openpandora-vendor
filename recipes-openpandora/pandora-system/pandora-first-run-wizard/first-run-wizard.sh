@@ -20,7 +20,7 @@ hsetroot -center $WALLPAPER
 # Default error message (should a user hit cancel, validation fail etc.).
 ERROR_WINDOW='zenity --title="Error" --error --text="Sorry! Please try again." --timeout 6'
 
-RESET_ROOT="yes"
+RESET_ROOT="no"
 
 DISPLAY=:0 xset s off
 
