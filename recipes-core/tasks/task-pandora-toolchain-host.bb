@@ -1,4 +1,4 @@
-require task-sdk-host.bb
+require recipes-core/tasks/task-sdk-host-nativesdk.bb
 
 DESCRIPTION = "Host packages for OpenPandora SDK"
 LICENSE = "MIT"
@@ -7,4 +7,4 @@ ALLOW_EMPTY = "1"
 PR = "r1"
 
 # Include this to get the native to target Qt4 tools.
-RDEPENDS_${PN} += "qt4-tools-sdk"
+#RDEPENDS_${PN} += "qt4-tools-sdk"
