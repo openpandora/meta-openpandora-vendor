@@ -118,6 +118,7 @@ XFCE46_BASE = " \
   \
   gtk-xfce-engine \
   \
+  xfce4-panel-plugin-applicationsmenu \
   xfce4-panel-plugin-actions \
   xfce4-panel-plugin-clock \
   xfce4-panel-plugin-launcher \
