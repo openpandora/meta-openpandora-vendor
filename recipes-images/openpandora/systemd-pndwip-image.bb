@@ -1,5 +1,7 @@
 require systemd-image.bb
 
+PR = "r1"
+
 IMAGE_INSTALL += " \
     openpandora-u-boot-autoboot-sd \
     task-base \
@@ -15,7 +17,7 @@ IMAGE_INSTALL += " \
     libsdl-mixer \
     libsdl-net \
     libmikmod \
-    libpam libpam-xtests\
+    libpam libpam-xtests  pam-plugin-mkhomedir\
     slim \
     coreutils \
     util-linux \
