@@ -6,7 +6,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 # Don't forget to bump the PR if you change it.
-PR = "r5"
+PR = "r6"
 
 inherit task 
 
@@ -63,6 +63,7 @@ OPENGLES = " \
 
 PAM = " \
   libpam \
+   pam-plugin-mkhomedir \
 "
 
 PANDORA_LIBS = " \
