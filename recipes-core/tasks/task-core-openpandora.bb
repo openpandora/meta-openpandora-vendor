@@ -6,7 +6,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 # Don't forget to bump the PR if you change it.
-PR = "r6"
+PR = "r7"
 
 inherit task 
 
@@ -140,7 +140,8 @@ RDEPENDS_${PN} = "\
   alsa-utils alsa-utils-alsactl alsa-utils-alsamixer alsa-utils-aplay \
   freerdp \
   \
-  led-config \ 
+  led-config \
+  udev-extra-rules \ 
 "
 
 # Make sure we install all kernel modules with the Pandora images

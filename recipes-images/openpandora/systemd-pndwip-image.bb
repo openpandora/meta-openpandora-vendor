@@ -1,6 +1,6 @@
 require systemd-image.bb
 
-PR = "r1"
+PR = "r2"
 
 IMAGE_INSTALL += " \
     openpandora-u-boot-autoboot-sd \
@@ -27,6 +27,7 @@ IMAGE_INSTALL += " \
     pandora-misc \
     file \
     fbgrab \
+    udev-extra-rules \
 "
 
 export IMAGE_BASENAME = "systemd-pndwip-image"
