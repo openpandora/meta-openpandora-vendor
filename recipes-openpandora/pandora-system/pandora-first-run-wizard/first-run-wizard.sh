@@ -22,7 +22,11 @@ ERROR_WINDOW='zenity --title="Error" --error --text="Sorry! Please try again." -
 
 RESET_ROOT="no"
 
-DISPLAY=:0 xset s off
+xset s off
+xset -dpms
+
+#Stop WiFi
+rmmod board_omap3pandora_wifi wl1251_sdio wl1251
 
 # Greet the user.
 
@@ -88,7 +92,7 @@ while ! username=$(zenity --title="Enter your username" --entry --text "Please c
 	zenity --title="Error" --error --text="Please try again." --timeout 6
 done
 
-while ! useradd -c "$name,,," -G adm,audio,video,netdev,wheel,plugdev,users "$username" ; do
+while ! useradd -c "$name,,," -G adm,audio,cdrom,netdev,plugdev,users,video,wheel "$username" ; do
 	username=$(zenity --title="Please check username" --entry --text "Please ensure that your username consists of only\nletters and numbers and is not already in use on the system." --entry-text "$username")
 done
 
@@ -133,7 +137,7 @@ hostname -F /etc/hostname
 
 # Set the correct user for Autologin and enable / disable it.
 
-if zenity --question --title="Autologin" --text="Do you wish to automatically login at startup?\n\nSecurity warning: This skips the password check on startup" --ok-label="Yes" --cancel-label="No"; then      	
+if zenity --question --title="Autologin" --text="If you like, you can setup your Pandora to autologin into the system at startup.\nWhile this is more convenient for most users, it features a potential security issue, as no password will be needed to access your desktop and personal files.\n\nDo you wish to automatically login at startup?" --ok-label="Yes" --cancel-label="No"; then      	
 	# echo "PREFERED_USER=$username" > /etc/default/autologin
 	sed -i "s/.*default_user.*/default_user $username/g" /etc/slim.conf
 	sed -i 's/.*auto_login.*/auto_login yes/g' /etc/slim.conf
@@ -153,7 +157,7 @@ fi
 
 selection=""
 while [ x$selection = x ]; do
-selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity --width=500 --height=300 --title="Select the Default GUI" --list --column "Name" --column "Description" --text "Please select the Default GUI" )
+selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity --width=500 --height=310 --title="Select the Default GUI" --list --column "Name" --column "Description" --text "You can now select your preferred GUI - the GUI that will be loaded automatically on startup of the unit.\n\nYou can either select XFCE4, which is a full desktop environment (similar to a normal PC).\nOr you could select MiniMenu, which is a minimal UI similar to gaming devices.\n\nIf you select the last choice (GUISwitch), you will be prompted to choose a GUI each time you boot your Pandora.\n\nThis setting can always be changed later by running the Startup-Settings." )
 if [ x$selection = x ]; then
   zenity --title="Error" --error --text="Please select a GUI." --timeout=6
 fi
@@ -169,7 +173,7 @@ echo $gui
 if [ $gui ]; then 
   sed -i "s/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=$gui/g" /home/$username/.xinitrc
   echo $selection selected as default interface
-  zenity --info --title="Selected session" --text "You selected $selection as default setting. You can always change your default GUI later." --timeout 6
+  zenity --info --title="Selected session" --text "You selected $selection as default setting." --timeout 6
 else
   sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=startxfce4/g' /home/$username/.xinitrc
 fi
@@ -203,22 +207,62 @@ echo $date
 time_h=`date +%H`
 time_m=`date +%M`
 
-while ! time=$(zenity --title="Enter actual time" --entry --text "Please enter the time in 24hour format (HH:MM):" --entry-text "$time_h:$time_m") || [ "x$time" = "x" ] ; do
+while ! time=$(zenity --title="Enter current time" --entry --text "Please enter the time in 24hour format (HH:MM).\n" --entry-text "$time_h:$time_m") || [ "x$time" = "x" ] ; do
         zenity --title="Error" --error --text="Please input the time." --timeout 6
 done
 
 while ! date -d $time ; do
-	time=$(zenity --title="Enter actual time" --entry --text "Please enter the time in 24hour format (HH:MM):" --entry-text "$time_h:$time_m")
+	time=$(zenity --title="Enter current time" --entry --text "Please enter the time in 24hour format (HH:MM).\n" --entry-text "$time_h:$time_m")
 done
  
 date +%Y%m%d -s $date
 date +%H:%M -s $time
+hwclock -u -w
 
-# ----
 
-# Finsh up and boot the system.
+#Let's ask the user about clockspeed
+while ! cpusel=$(zenity --title="Optional settings" --width="400" --height="350" --list --column "id" --column "Please select" --hide-column=1 --text="The CPU of the Pandora supports different speed settings.\nHigher speeds might make some units unstable and decrease the lifetime of your CPU.\n\nBelow are some quick profiles which will help you to configure your system the way you like it.\n" "1100" "Clockspeed: 1,1Ghz, OPP5 (should be stable on 1GHz units)" "1000" "Clockspeed: 1GHz, OPP5 (probably unstable on 600Mhz units)" "800" "Clockspeed: 800MHz, OPP5 (should be stable on all units)" "600" "Default Speed: 600MHz, OPP3 (stable on all units, longest battery time)" --ok-label="Select CPU Profile" ); do
+    zenity --title="Error" --error --text="Please select your desired CPU Speed profile." --timeout=6
+done
 
-zenity --info --title="Finished" --text "This concludes the First Boot Wizard.\n\nYour chosen interface will start in a few seconds\n\nThankyou for buying the OpenPandora. Enjoy using the device!" --timeout 6
+case $cpusel in
+  "1100")
+  echo 5 > /proc/pandora/cpu_opp_max
+  sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
+  sed -i "s/.*max:.*/max:1200/g" /etc/pandora/conf/cpu.conf
+  sed -i "s/.*default.*/default:1100/g" /etc/pandora/conf/cpu.conf
+  sed -i "s/.*safe.*/safe:1100/g" /etc/pandora/conf/cpu.conf
+  default_cpu=1100
+  ;;
+
+  "1000")
+  echo 5 > /proc/pandora/cpu_opp_max
+  sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
+  sed -i "s/.*max:.*/max:1100/g" /etc/pandora/conf/cpu.conf
+  sed -i "s/.*default.*/default:1000/g" /etc/pandora/conf/cpu.conf
+  sed -i "s/.*safe.*/safe:1000/g" /etc/pandora/conf/cpu.conf
+  default_cpu=1000
+  ;;
+
+  "800")
+  echo 5 > /proc/pandora/cpu_opp_max
+  sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
+  sed -i "s/.*max:.*/max:900/g" /etc/pandora/conf/cpu.conf
+  sed -i "s/.*default.*/default:800/g" /etc/pandora/conf/cpu.conf
+  sed -i "s/.*safe.*/safe:800/g" /etc/pandora/conf/cpu.conf
+  default_cpu=800
+  ;;
+
+  "600")
+  echo 3 > /proc/pandora/cpu_opp_max
+  sed -i "s/.*maxopp.*/maxopp:3/g" /etc/pandora/conf/cpu.conf
+  sed -i "s/.*max:.*/max:700/g" /etc/pandora/conf/cpu.conf
+  sed -i "s/.*default.*/default:600/g" /etc/pandora/conf/cpu.conf
+  sed -i "s/.*safe.*/safe:600/g" /etc/pandora/conf/cpu.conf
+  default_cpu=600
+  ;;
+
+esac
 
 # ----
 
@@ -235,6 +279,23 @@ update-rc.d -f blueprobe remove
 update-rc.d -f dropbear remove
 update-rc.d -f wl1251-init remove
 
+# prevent wifi from being autoloaded on later kernels, let wl1251-init script do it
+if ! grep -q 'blacklist wl1251_sdio' /etc/modprobe.conf 2> /dev/null; then
+  echo 'blacklist wl1251_sdio' >> /etc/modprobe.conf
+fi
+# we don't ship firmware for rtl8192cu, and it was reported not to work
+# with the right firmware anyway (not verified though)
+# vendor 8192cu is compiled instead for now
+if ! grep -q 'blacklist rtl8192cu' /etc/modprobe.conf 2> /dev/null; then
+  echo 'blacklist rtl8192cu' >> /etc/modprobe.conf
+fi
+
+# add Midi Module and zram
+echo snd-seq>>/etc/modules
+echo zram>>/etc/modules
+
+# get rid of some dirs in /media that OE creates but are unlikely to be used
+rmdir /media/card /media/cf /media/mmc1 /media/net /media/realroot /media/union 2> /dev/null
 
 # Write the control file so this script is not run on next boot 
 # (hackish I know but I want the flexability to drop a new script in later esp. in the early firmwares).
@@ -242,6 +303,31 @@ update-rc.d -f wl1251-init remove
 touch /etc/pandora/first-boot
 # Make the control file writeable by all to allow the user to delete to rerun the wizard on next boot.
 chmod 0666 /etc/pandora/first-boot
+
+
+# Let the user run optional config stuff.
+
+while mainsel=$(zenity --title="Optional settings" --width="400" --height="300" --list --column "id" --column "Please select" --hide-column=1 --text="This concludes the mandatory part of the First Boot Wizard.\n\nYou can now either continue to boot the system or change some more settings.\n\n\nThank you for buying the OpenPandora. Enjoy using the device." "speed" "Advanced CPU-Speed and Overclocking-Settings" "startup" "Advanced Startup-Settings" "lcd" "LCD-Settings" --ok-label="Change selected Setting" --cancel-label="Continue to Boot"); do
+
+case $mainsel in
+  "speed")
+  /usr/pandora/scripts/op_cpusettings.sh
+  ;;
+
+   "startup")
+  echo $username > /tmp/currentuser
+  /usr/pandora/scripts/op_startupmanager.sh
+  ;;
+
+   "lcd")
+  /usr/pandora/scripts/op_lcdsettings.sh
+  ;;
+
+esac
+done
+
+# ----
+
 
 # ----
 else
