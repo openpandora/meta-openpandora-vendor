@@ -5,29 +5,43 @@ options=$(grep "${selection2}" /proc/mounts | awk '{print $4}' | sed "s/,codepag
 device=$(grep "${selection2}" /proc/mounts | awk '{print substr($1,1,12)}')
 device2=$(grep "${selection2}" /proc/mounts | awk '{print $1}')
 
-if umount $device2
- 
-  then
-    # switch to mass storage
-   if lsmod | grep g_cdc &>/dev/null
-	then
-	echo Found g_cdc - removing...
-	rmmod g_cdc
-	sleep 2
-	ethernet=1
-    fi
-   modprobe g_file_storage file=$device stall=0
-   zenity --title="Mass Storage Mode" --info --text="SD Card $selection is currently in Mass Storage Mode.\n\nClick on OK when you're finished with your data transfer\nand want to go back to normal mode."
-    rmmod g_file_storage
-    if [ $ethernet=1 ]; then
-      echo Reloading g_cdc...
-      modprobe g_cdc
-    fi
-   if [ ! -d "$selection" ]; then
-    mkdir "$selection"
-   fi 
+if umount $device2; then
+	delay=0
+
+	# remove other gadget modules
+	modules="$(lsmod | awk '{print $1}' | xargs echo)"
+	blacklist="g_zero g_audio g_ether g_serial g_midi gadgetfs g_file_storage
+		g_mass_storage g_printer g_cdc g_multi g_hid g_dbgp g_nokia g_webcam g_ncm g_acm_ms"
+	restore_list=""
+	for mod in $modules; do
+		if echo $blacklist | grep -q "\<$mod\>"; then
+			restore_list="$restore_list $mod"
+			rmmod $mod
+			delay=1 # enough?
+		fi
+	done
+
+	# driver race condition workaround (some kernels crash without wait)
+	sleep $delay
+
+	# switch to mass storage
+	modprobe g_file_storage file=$device stall=0
+
+	zenity --title="Mass Storage Mode" --info --text="SD Card $selection is currently in Mass Storage Mode.\n\nClick on OK when you're finished with your data transfer\nand want to go back to normal mode."
+
+	rmmod g_file_storage
+
+	if [ ! -d "$selection" ]; then
+		mkdir "$selection"
+	fi 
 	mount $device2 "$selection" -o $options
-  else
-     zenity --title="Error" --error --text="Error.\nThe card could not be unmounted.\n\nPlease make sure to close any programs that currently access the SD Card." --timeout 10
+
+	if [ -n "$restore_list" ]; then
+		sleep $delay
+		modprobe $restore_list
+	fi
+else
+	zenity --title="Error" --error --text="Error.\nThe card could not be unmounted.\n\nPlease make sure to close any programs that currently access the SD Card." --timeout 10
 fi
+
 done

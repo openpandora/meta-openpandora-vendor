@@ -3,29 +3,66 @@
 # CPU-Settings, v1.1, written by Michael Mrozek aka EvilDragon 2011.
 # This scripts allows you to change Pandora CPU-Settings.
 
-if [ ! -e /proc/pandora/cpu_mhz_max ]; then
-    zenity --info --title="CPU-Settings not supported" --text "Sorry, the experimental kernel does not support overclocking (yet).\n\nTherefore, you cannot configure the CPU-Settings."
-    exit 1
-fi
-
-while mainsel=$(zenity --title="CPU-Settings" --width="400" --height="350" --list --column "id" --column "Please select" --hide-column=1 --text="Welcome to the CPU-Settings.\nHere, you can configure the behaviour of your CPU \nThis can make your Pandora run faster but also more unstable.\n\nDon't worry though, you cannot permanently damage your unit.\n\nWhat do you want to do?\n" "opp" "Set the max allowed OPP level" "mhz" "Set the minimum / maximum allowed MHz" "warning" "Change warning settings" "defaultmhz" "Set the default MHz" --ok-label="Change Setting" --cancel-label="Exit"); do
+while mainsel=$(zenity --title="CPU-Settings" --width="400" --height="380" --list --column "id" --column "Please select" --hide-column=1 --text="Welcome to the CPU-Settings.\nHere, you can configure the behaviour of your CPU \nThis can make your Pandora run faster but also more unstable.\n\nDon't worry though, you cannot permanently damage your unit.\n\nWhat do you want to do?\n" "profile" "Quick-Setup: Select from different profiles" "opp" "Set the max allowed OPP level" "mhz" "Set the minimum / maximum allowed MHz" "warning" "Change warning settings" "defaultmhz" "Set the default MHz" --ok-label="Change Setting" --cancel-label="Exit"); do
 
 case $mainsel in
+ 
+  "profile")
+    cpusel=$(zenity --title="Optional settings" --width="400" --height="350" --list --column "id" --column "Please select" --hide-column=1 --text="The CPU of the Pandora supports different speed settings.\nHigher speeds might make some units unstable and decrease the lifetime of your CPU.\n\nBelow are some quick profiles which will help you to configure your system the way you like it.\n" "1100" "Clockspeed: 1,1Ghz, OPP5 (should be stable on 1GHz units)" "1000" "Clockspeed: 1GHz, OPP5 (most probably unstable on 600Mhz units)" "800" "Clockspeed: 800MHz, OPP5 (should be stable on all units)" "600" "Clockspeed: 600MHz, OPP3 (stable on all units, longest battery time)" --ok-label="Select CPU Profile" )
+
+    case $cpusel in
+        "1100")
+	echo 5 > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*max:.*/max:1200/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*default.*/default:1100/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*safe.*/safe:1100/g" /etc/pandora/conf/cpu.conf
+	echo 1100 > /proc/pandora/cpu_mhz_max
+	zenity --info --title="CPU Speed set" --text "The CPU Speed has been set to 1,1GHz." --timeout 6
+	;;
+
+	"1000")
+	echo 5 > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*max:.*/max:1100/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*default.*/default:1000/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*safe.*/safe:1000/g" /etc/pandora/conf/cpu.conf
+	echo 1000 > /proc/pandora/cpu_mhz_max
+	zenity --info --title="CPU Speed set" --text "The CPU Speed has been set to 1GHz." --timeout 6
+	;;	
+
+	"800")
+	echo 5 > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*max:.*/max:900/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*default.*/default:800/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*safe.*/safe:800/g" /etc/pandora/conf/cpu.conf
+	echo 800 > /proc/pandora/cpu_mhz_max
+	zenity --info --title="CPU Speed set" --text "The CPU Speed has been set to 800MHz." --timeout 6
+	;;
+
+	"600")
+	echo 3 > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:3/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*max:.*/max:700/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*default.*/default:600/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*safe.*/safe:600/g" /etc/pandora/conf/cpu.conf
+	echo 600 > /proc/pandora/cpu_mhz_max
+	zenity --info --title="CPU Speed set" --text "The CPU Speed has been set to 600Mhz." --timeout 6
+	;;
+
+    esac
+    ;;
 
   "opp")
-    kernel_major=`uname -r | cut -c 1`
-    if [ "$kernel_major" = "3" ]; then	
-      zenity --info --title="OPP not supported" --text "Sorry, the experimental kernel does not support overvolting.\n\nTherefore, you cannot configure these CPU-Settings."
-    else
-      opp="$(cat /etc/pandora/conf/cpu.conf | grep opp | awk -F\: '{print $2}')"
-      if zenity --question --title="OPP Setting Info" --text="WARNING!\n\nIncreasing the maximum allowed OPP will allow you to overclock to higher values.\n\nHowever, besides using more power, it ALSO DECREASES THE LIFETIME OF YOUR CPU!\n\nBe absolutely sure you know what you are doing here. \n\nThe standard OPP setting is 3, everything above is out of the specification!" --ok-label="Yes, I know what I'm doing!" --cancel-label="I'm scared!"; then
-	if newopp=$(zenity --scale --text "Set the maximum allowed OPP" --min-value=3 --max-value=5 --value=$opp --step 1); then
-	  echo $newopp > /proc/pandora/cpu_opp_max
-	  sed -i "s/.*maxopp.*/maxopp:$newopp/g" /etc/pandora/conf/cpu.conf
-	  zenity --info --title="OPP Set" --text "The maximum allowed OPP value has been set to $newopp." --timeout 6
-	else
-	  zenity --info --title="No change" --text "The maximum OPP value has not been changed." --timeout 6
-	fi
+    opp="$(cat /etc/pandora/conf/cpu.conf | grep opp | awk -F\: '{print $2}')"
+    if zenity --question --title="OPP Setting Info" --text="WARNING!\n\nIncreasing the maximum allowed OPP will allow you to overclock to higher values.\n\nHowever, besides using more power, it ALSO DECREASES THE LIFETIME OF YOUR CPU!\n\nBe absolutely sure you know what you are doing here. \n\nThe standard OPP setting is 3, everything above is out of the specification!" --ok-label="Yes, I know what I'm doing!" --cancel-label="I'm scared!"; then
+      if newopp=$(zenity --scale --text "Set the maximum allowed OPP" --min-value=3 --max-value=5 --value=$opp --step 1); then
+	echo $newopp > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:$newopp/g" /etc/pandora/conf/cpu.conf
+	zenity --info --title="OPP Set" --text "The maximum allowed OPP value has been set to $newopp." --timeout 6
+      else
+	zenity --info --title="No change" --text "The maximum OPP value has not been changed." --timeout 6
       fi
     fi;;
 

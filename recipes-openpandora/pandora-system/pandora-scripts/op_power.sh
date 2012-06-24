@@ -56,6 +56,13 @@ resume_net() {
 display_on() {
 	echo 0 > /sys/class/graphics/fb0/blank
 
+	# only bother restoring brightness if it's 0
+	# (old kernel or user messed it up somehow)
+	brightness=$(cat $SYSFS_BACKLIGHT_BRIGHTNESS)
+	if [ $brightness -gt 0 ]; then
+		return 0
+	fi
+
 	maxbright=$(cat $SYSFS_BACKLIGHT/max_brightness)
 	oldbright=0
 	if [ -f /tmp/oldbright ]; then
@@ -76,7 +83,10 @@ display_off() {
 	if [ $brightness -gt 0 ]; then
 		echo $brightness > /tmp/oldbright
 	fi
-	echo 0 > $SYSFS_BACKLIGHT_BRIGHTNESS
+	kernel_major=`uname -r | cut -c 1`
+	if [ "$kernel_major" = "2" ]; then
+		echo 0 > $SYSFS_BACKLIGHT_BRIGHTNESS
+	fi
 
 	echo 1 > /sys/class/graphics/fb0/blank
 }
@@ -111,6 +121,13 @@ lowPowerOff(){ # switch from lowpower to normal mode
 	echo 255 > /sys/class/leds/pandora\:\:power/brightness #power LED bright
 }
 
+show_message() {
+	# TODO: check if desktop is visible; maybe use layer3?
+	xfceuser=$(ps u -C xfce4-session | tail -n1 | awk '{print $1}')
+	cmd="DISPLAY=:0.0 zenity --info --text \"$1\" --timeout 10"
+	su -c "$cmd" $xfceuser
+}
+
 suspend_real() {
 	delay=0
 
@@ -119,23 +136,52 @@ suspend_real() {
 		return 1
 	fi
 
+	current_now="$(cat /sys/class/power_supply/bq27500-0/current_now)"
+ 
+	if [ $current_now -gt 0 ]; then 
+		return 1 
+		#don't suspend while unit is charging
+	fi
+
 	# can't suspend while SGX is in use due to bugs
 	# (prevents low power states and potential lockup)
 	if lsof -t /dev/pvrsrvkm > /dev/null; then
 		return 1
 	fi
 
-	# TODO: we probably want to NOT do real suspend if:
-	# - cards don't unmount (running PNDs will break)
-	# - while charging too, since it stops on suspend?
+	if ! grep -q 'mmc_core.removable=0' /proc/cmdline; then
+		# must unmount cards because they will be "ejected" on suspend
+		# (some filesystems may even deadlock if we don't do this due to bugs)
+		mounts="$(grep "/dev/mmcblk" /proc/mounts | awk '{print $1}' | xargs echo)"
+		for mnt in $mounts; do
+			if ! umount $mnt; then
+				show_message "Could not unmount $mnt, using partial suspend only"
+				return 1
+			fi
+		done
+		swaps="$(grep "/dev/mmcblk" /proc/swaps | awk '{print $1}' | xargs echo)"
+		for swp in $swaps; do
+			if ! swapoff $swp; then
+				show_message "Could not unmount $swp, using partial suspend only"
+				return 1
+			fi
+		done
+	else
+		if [ ! -e /etc/pandora/suspend-warned ]; then
+			show_message "Pandora will now suspend.\n\n\
+Please do not remove SD cards while pandora is suspended, doing so will corrupt them."
+			touch /etc/pandora/suspend-warned
+		fi
+	fi
 
 	# FIXME: fix the kernel and get rid of this
 	suspend_net
 
 	# get rid of modules that prevent suspend due to bugs
 	modules="$(lsmod | awk '{print $1}' | xargs echo)"
-	blacklist="ehci_hcd g_zero g_audio g_ether g_serial g_midi gadgetfs g_file_storage
-		g_mass_storage g_printer g_cdc g_multi g_hid g_dbgp g_nokia g_webcam g_ncm g_acm_ms"
+	blacklist="g_zero g_audio g_ether g_serial g_midi gadgetfs g_file_storage
+		g_mass_storage g_printer g_cdc g_multi g_hid g_dbgp g_nokia g_webcam g_ncm g_acm_ms
+		ehci_hcd bridgedriver"
 	restore_list=""
 	for mod in $modules; do
 		if echo $blacklist | grep -q "\<$mod\>"; then
@@ -145,11 +191,8 @@ suspend_real() {
 		fi
 	done
 
-	# must unmount cards because they will be "ejected" on suspend
-	# (some filesystems may even deadlock if we don't do this due to bugs)
-	grep "/dev/mmcblk" /proc/mounts | awk '{print $1}' | xargs umount -r
-
 	sleep $delay
+	sync
 	echo mem > /sys/power/state
 
 	# if we are here, either we already resumed or the suspend failed
@@ -157,6 +200,7 @@ suspend_real() {
 		modprobe $restore_list
 	fi
 
+	display_on
 	resume_net
 	echo 255 > /sys/class/leds/pandora\:\:power/brightness
 
@@ -213,6 +257,9 @@ if [[ "$2" == "" ]]; then
 			(debug && echo "resume") || resume
 			powerstate="on"
 		elif [[ "$powerstate" == "on" ]]; then
+			powerstate="buttonlowpower"
+			(debug && echo "suspend") || suspend_
+		elif [[ "$powerstate" == "liddisplayoff" ]]; then
 			powerstate="buttonlowpower"
 			(debug && echo "suspend") || suspend_
 		fi

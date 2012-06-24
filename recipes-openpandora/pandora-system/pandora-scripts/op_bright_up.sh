@@ -23,4 +23,7 @@ if [ "$new" -gt "$max" ]; then
    new=$max
 fi
 
+# make sure we are not blanking (sometimes screensaver fails to unblank?)
+echo 0 > /sys/class/graphics/fb0/blank
+
 echo $new > $SYSFS_BACKLIGHT_BRIGHTNESS
