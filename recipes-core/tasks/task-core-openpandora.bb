@@ -58,7 +58,7 @@ MEDIA_LIBS = " \
 
 OPENGLES = " \
   omap3-sgx-modules devmem2 \
-  libgles-omap3-es2 \
+  libgles-omap3 \
 "
 
 PAM = " \
