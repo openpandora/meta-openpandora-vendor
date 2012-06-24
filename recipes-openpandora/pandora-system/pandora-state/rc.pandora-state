@@ -11,14 +11,16 @@
 DESC="OpenPandora Save and Restore LCD Settings"
 NAME="pandora-state"
 
+. /usr/pandora/scripts/op_paths.sh
+
 d_stop() {
 	echo "Saving Pandora specific settings"
-	bright=$(cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness)
+	bright=$(cat $SYSFS_BACKLIGHT_BRIGHTNESS)
 	if [ $bright != "0" ]; then
-	    cat /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness > /etc/pandora/conf/brightness.state
+	    echo $bright > /etc/pandora/conf/brightness.state
 	fi
 	touch /etc/pandora/shutdown
-	cat /sys/devices/platform/omap2_mcspi.1/spi1.1/gamma > /etc/pandora/conf/gamma.state
+	cat $SYSFS_GAMMA > /etc/pandora/conf/gamma.state
         cat -v /proc/pandora/nub0/mode | sed -n '1p' > /etc/pandora/conf/nubs.state
 	cat -v /proc/pandora/nub0/mouse_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
 	cat -v /proc/pandora/nub0/scrollx_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
@@ -35,12 +37,15 @@ d_stop() {
 
 d_start() {
 	echo "Restoring Pandora specific settings"
+	bright=$(cat /etc/pandora/conf/brightness.state)
+	if [ "$bright" -gt "0" ]; then
+		echo $bright > $SYSFS_BACKLIGHT_BRIGHTNESS
+	fi
 	cat /etc/pandora/conf/dirty_expire_centisecs >  /proc/sys/vm/dirty_expire_centisecs
-	cat /etc/pandora/conf/brightness.state > /sys/devices/platform/twl4030-pwm0-bl/backlight/twl4030-pwm0-bl/brightness 
-	cat /etc/pandora/conf/gamma.state > /sys/devices/platform/omap2_mcspi.1/spi1.1/gamma
+	cat /etc/pandora/conf/gamma.state > $SYSFS_GAMMA
 	if [ -f /etc/pandora/conf/filter.state ]; then
-	filter=$(cat /etc/pandora/conf/filter.state)
-	/usr/pandora/scripts/op_videofir.sh $filter 
+		filter=$(cat /etc/pandora/conf/filter.state)
+		/usr/pandora/scripts/op_videofir.sh $filter 
 	fi
 	cpuspeed="$(cat /etc/pandora/conf/cpu.conf | grep default | awk -F\: '{print $2}')"
 	oppmax="$(cat /etc/pandora/conf/cpu.conf | grep opp | awk -F\: '{print $2}')"
@@ -65,6 +70,14 @@ d_start() {
 	sed -n '10p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/scrolly_sensitivity
 	sed -n '11p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/scroll_rate
 	sed -n '12p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/mbutton_threshold
+	echo "Enabling ZRAM Swap"
+	mkswap /dev/zram0
+	swapon -p 5 /dev/zram0
+
+	# set audio powerdown delay (ms)
+	if [ -e /sys/devices/platform/soc-audio/PCM1773/pmdown_time ]; then
+		echo 60000 > /sys/devices/platform/soc-audio/PCM1773/pmdown_time
+	fi
 }
 
 case "$1" in
