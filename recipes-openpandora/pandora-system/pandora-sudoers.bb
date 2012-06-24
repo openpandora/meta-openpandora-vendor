@@ -1,12 +1,12 @@
 DESCRIPTION = "Custom sudoers files for the OpenPandora."
-LICENSE = "GPLV2"
+LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
 RDEPENDS = "sudo"
 
-PR = "r13"
+PR = "r16"
 
 SRC_URI = " \
           file://LICENSE \
