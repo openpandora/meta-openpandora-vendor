@@ -1,10 +1,9 @@
 DESCRIPTION = "Miscellaneous OpenPandora utilities"
 
-PR = "r9"
-LICENSE = "GPL"
+PR = "r12"
 
 PARALLEL_MAKE = ""
-LICENSE = "GPLV2"
+LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 DEPENDS = "virtual/libx11 tslib"
@@ -16,8 +15,7 @@ SRC_URI = " \
 
 TARGET_LDFLAGS += "-lpthread -lX11 -lts"
 
-#SRCREV = "51cdefeeb6c7d48c858689f0f7868b31039725b3"
-SRCREV = "3f6f7d2fe4161d7b3e310deb825bc6409b1b60e1"
+SRCREV = "b82c7b89a10b8f1f39244f947f5036eb25a39342"
 
 S = "${WORKDIR}/git"
 
