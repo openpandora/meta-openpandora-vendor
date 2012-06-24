@@ -1,7 +1,7 @@
 DESCRIPTION = "A tray applet to change various Pandora-related settings"
 LICENSE = "Zlib"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ca68c715b970233cac6617f93bab0593"
-PR = "r8"
+PR = "r10"
 
 PARALLEL_MAKE = ""
 DEPENDS = "gtk+"
@@ -18,7 +18,7 @@ SRC_URI = " \
 	  file://Pandora-Configtray.desktop \
 "
 
-SRCREV = "85cc7fb5eed20a77a660f89ca88e5a398c8f00b0"
+SRCREV = "2673d149ea5ed676e10e8ba18861b694bdd14fa4"
 
 S = "${WORKDIR}/git"
 
