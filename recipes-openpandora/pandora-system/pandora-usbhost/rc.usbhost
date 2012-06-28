@@ -1,0 +1,39 @@
+#!/bin/sh
+DESC="USB HOST"
+NAME="EHCI Driver"
+
+d_stop() {
+	if `grep -q ehci_hcd /proc/modules` ; then
+		rmmod ehci_hcd 2> /dev/null
+	fi
+}
+
+d_start() {
+	modprobe ehci-hcd
+	}
+
+case "$1" in
+  start)
+	echo -n "Starting $DESC: $NAME"
+	d_start &
+	echo "."
+	;;
+  stop)
+	echo -n "Stopping $DESC: $NAME"
+	d_stop
+	echo "."
+	;;
+  restart|force-reload)
+	echo -n "Restarting $DESC: $NAME"
+	d_stop
+	sleep 1
+	d_start
+	echo "."
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0
