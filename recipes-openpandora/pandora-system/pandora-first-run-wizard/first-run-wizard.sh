@@ -221,7 +221,7 @@ hwclock -u -w
 
 
 #Let's ask the user about clockspeed
-while ! cpusel=$(zenity --title="Optional settings" --width="400" --height="350" --list --column "id" --column "Please select" --hide-column=1 --text="The CPU of the Pandora supports different speed settings.\nHigher speeds might make some units unstable and decrease the lifetime of your CPU.\n\nBelow are some quick profiles which will help you to configure your system the way you like it.\n" "1100" "Clockspeed: 1,1Ghz, OPP5 (should be stable on 1GHz units)" "1000" "Clockspeed: 1GHz, OPP5 (probably unstable on 600Mhz units)" "800" "Clockspeed: 800MHz, OPP5 (should be stable on all units)" "600" "Default Speed: 600MHz, OPP3 (stable on all units, longest battery time)" --ok-label="Select CPU Profile" ); do
+while ! cpusel=$(zenity --title="Optional settings" --width="400" --height="350" --list --column "id" --column "Please select" --hide-column=1 --text="The CPU of the Pandora supports different speed settings.\nHigher speeds might make some units unstable and decrease the lifetime of your CPU.\n\nBelow are some quick profiles which will help you to configure your system the way you like it.\n" "1100" "Clockspeed: 1,1Ghz, OPP5 (should be stable on 1GHz units)" "1000" "Clockspeed: 1GHz, OPP5 (most probably unstable on 600Mhz units)" "800" "Clockspeed: 800MHz, OPP5 (should be stable on all units)" "600" "Clockspeed: 600MHz, OPP3 (600 MHz units only)" --ok-label="Select CPU Profile" ); do
     zenity --title="Error" --error --text="Please select your desired CPU Speed profile." --timeout=6
 done
 
@@ -252,6 +252,8 @@ case $cpusel in
   sed -i "s/.*safe.*/safe:800/g" /etc/pandora/conf/cpu.conf
   default_cpu=800
   ;;
+
+
 
   "600")
   echo 3 > /proc/pandora/cpu_opp_max
@@ -304,10 +306,14 @@ touch /etc/pandora/first-boot
 # Make the control file writeable by all to allow the user to delete to rerun the wizard on next boot.
 chmod 0666 /etc/pandora/first-boot
 
+if zenity --question --title="Calibrate Touchscreen" --text="It is recommended to calibrate the touchscreen to make sure it accurately works.\n\nIf you do so, you will see a moving crosshair.\nUse the stylus to press the crosshair as accurate as possible.\n\nYou can always (re-)calibrate it from the Settings-Menu later in the OS as well." --ok-label="Calibrate Touchscreen" --cancel-label="Don't calibrate it"; then
+  . /etc/profile
+  TSLIB_CONSOLEDEVICE=none op_runfbapp ts_calibrate
+fi
 
 # Let the user run optional config stuff.
 
-while mainsel=$(zenity --title="Optional settings" --width="400" --height="300" --list --column "id" --column "Please select" --hide-column=1 --text="This concludes the mandatory part of the First Boot Wizard.\n\nYou can now either continue to boot the system or change some more settings.\n\n\nThank you for buying the OpenPandora. Enjoy using the device." "speed" "Advanced CPU-Speed and Overclocking-Settings" "startup" "Advanced Startup-Settings" "lcd" "LCD-Settings" --ok-label="Change selected Setting" --cancel-label="Continue to Boot"); do
+while mainsel=$(zenity --title="Optional settings" --width="400" --height="300" --list --column "id" --column "Please select" --hide-column=1 --text="This concludes the mandatory part of the First Boot Wizard.\n\nYou can now either continue to boot the system or change some more settings.\n\n\nThank you for buying the OpenPandora. Enjoy using the device." "speed" "Advanced CPU-Speed and Overclocking-Settings" "startup" "Advanced Startup-Settings" "lcd" "LCD-Settings" --ok-label="Change selected Setting" --cancel-label="Finish Setup"); do
 
 case $mainsel in
   "speed")
@@ -325,7 +331,6 @@ case $mainsel in
 
 esac
 done
-
 # ----
 
 
