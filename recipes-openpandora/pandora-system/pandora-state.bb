@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 
 RDEPENDS = "pandora-scripts"
 
-PR = "r11"
+PR = "r13"
 inherit update-rc.d
 
 INITSCRIPT_NAME = "pandora-state"

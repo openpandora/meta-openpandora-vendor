@@ -53,10 +53,11 @@ d_start() {
 	if [ -f /etc/pandora/shutdown ]; then
 	      rm /etc/pandora/shutdown
 	      sync
-	      echo $cpuspeed > /proc/pandora/cpu_mhz_max
+	      /usr/pandora/scripts/op_cpuspeed.sh -n $cpuspeed
 	else
 	      echo "No clean shutdown - will not set CPU speed"
-	      touch /tmp/nocleanwarn
+	      echo "Yes" > /tmp/nocleanwarn
+	      chmod 777 /tmp/nocleanwarn
 	fi
 	sed -n '1p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mode
 	sed -n '2p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mouse_sensitivity
