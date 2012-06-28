@@ -7,7 +7,15 @@ warn="$(cat /etc/pandora/conf/cpu.conf | grep 'warn:' | awk -F\: '{print $2}')"
 device=/proc/pandora/cpu_mhz_max
 curmhz="$(cat $device)"
 newmhz="$(cat $device)"
-kernel_major=`uname -r | cut -c 1`
+
+if [ "$curmhz" -gt "$maxmhz" ]; then
+  curmhz=$maxmhz
+fi
+
+if [ "$1" = "-n" ]; then
+    shift
+    warn=no
+fi
 
 if [ ! -e $device ]; then
     if [ -z "$1" -a -n "$DISPLAY" ]; then
@@ -21,10 +29,15 @@ if [ ! $1 ]; then
 	if [ $DISPLAY ]; then
 		newmhz=$(zenity --scale --text "Set CPU clockspeed" --min-value=$minmhz --max-value=$maxmhz --value=$curmhz --step 1)
 	else
-		newmhz=$(read -p "Please enter the desired clockspeed")
+		read -p "Please enter the desired clockspeed: " newmhz
 	fi
 else
 	newmhz=$1
+fi
+
+if ! [ 0 -lt "$newmhz" -a "$newmhz" -lt 10000 ]; then
+	echo "invalid argument: $newmhz"
+	exit 1
 fi
 
 if [ $newmhz ]; then
@@ -45,12 +58,16 @@ if [ $newmhz ]; then
         if [ $newmhz -le $minmhz ]; then newmhz=$minmhz; fi
         if [ $newmhz -ge $maxmhz ]; then newmhz=$maxmhz; fi
 	echo $newmhz > $device
-	echo cpu_mhz_max set to $(cat $device)
+	echo "cpu_mhz_max set to $(cat $device)"
 
 	if [ -e /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor ]; then
 		# must poke cpufreq so it does the actual clock transition
 		# according to new limits
 		gov=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)
 		echo $gov > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+		if [ "$gov" = "userspace" ]; then
+			echo $[ $newmhz * 1000 ] > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed
+		fi
+		echo "current CPU clock is $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq)"
 	fi
 fi

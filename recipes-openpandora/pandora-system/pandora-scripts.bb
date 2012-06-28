@@ -7,8 +7,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 DEPENDS = "zenity dbus"
 RDEPENDS = "zenity dbus"
 
-PR = "r100"
-
+PR = "r107"
 SRC_URI = " \
     file://LICENSE \
     file://op_paths.sh \
@@ -85,15 +84,19 @@ SRC_URI = " \
     file://op_bright_up.sh \  
     file://op_menu.sh \ 
     file://op_xfcemenu.sh \
-        "
+"
+
 do_install() {
     install -d ${D}${prefix}/pandora/scripts/
     install -m 0755 ${WORKDIR}/op_paths.sh ${D}${prefix}/pandora/scripts/
     install -m 0755 ${WORKDIR}/op_bright.sh ${D}${prefix}/pandora/scripts/
     install -m 0755 ${WORKDIR}/op_cpuspeed.sh ${D}${prefix}/pandora/scripts/
+    install -m 0755 ${WORKDIR}/op_sysspeed.sh ${D}${prefix}/pandora/scripts/
     install -m 0755 ${WORKDIR}/op_cpusettings.sh ${D}${prefix}/pandora/scripts/
     install -m 0755 ${WORKDIR}/op_wifi.sh ${D}${prefix}/pandora/scripts/
+    install -m 0755 ${WORKDIR}/op_usbhost.sh ${D}${prefix}/pandora/scripts/
     install -m 0755 ${WORKDIR}/op_bluetooth.sh ${D}${prefix}/pandora/scripts/
+    install -m 0755 ${WORKDIR}/op_bluetooth_work.sh ${D}${prefix}/pandora/scripts/
     install -m 0755 ${WORKDIR}/op_startupmanager.sh ${D}${prefix}/pandora/scripts/
     install -m 0755 ${WORKDIR}/op_switchgui.sh ${D}${prefix}/pandora/scripts/
     install -m 0755 ${WORKDIR}/op_calibrate.sh ${D}${prefix}/pandora/scripts/
@@ -103,6 +106,7 @@ do_install() {
     install -m 0755 ${WORKDIR}/op_lcdrate.sh ${D}${prefix}/pandora/scripts/
     install -m 0755 ${WORKDIR}/op_videofir.sh ${D}${prefix}/pandora/scripts/
     install -m 0755 ${WORKDIR}/op_nubmode.py ${D}${prefix}/pandora/scripts/
+    install -m 0755 ${WORKDIR}/op_nubchange.sh ${D}${prefix}/pandora/scripts/
     install -m 0755 ${WORKDIR}/op_storage.sh ${D}${prefix}/pandora/scripts/
     install -m 0755 ${WORKDIR}/op_tvout.sh ${D}${prefix}/pandora/scripts/
     install -m 0755 ${WORKDIR}/op_bright_down.sh ${D}${prefix}/pandora/scripts/
@@ -135,6 +139,7 @@ do_install() {
     install -m 0755 ${WORKDIR}/op_switchgui.pnd ${D}${prefix}/pandora/apps/
     install -m 0755 ${WORKDIR}/op_usermanager.pnd ${D}${prefix}/pandora/apps/
     install -m 0755 ${WORKDIR}/op_wifi.pnd ${D}${prefix}/pandora/apps/
+    install -m 0755 ${WORKDIR}/op_usbhost.pnd ${D}${prefix}/pandora/apps/
     install -m 0755 ${WORKDIR}/op_tvout.pnd ${D}${prefix}/pandora/apps/
     install -m 0755 ${WORKDIR}/op_inputtest.pnd ${D}${prefix}/pandora/apps/
     install -m 0755 ${WORKDIR}/op_lidsettings.pnd ${D}${prefix}/pandora/apps/
@@ -176,6 +181,7 @@ do_install() {
     install -m 0755 ${WORKDIR}/startpmenu ${D}${bindir}/
     install -m 0755 ${WORKDIR}/stopmmenu ${D}${bindir}/
 }
+
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 FILES_${PN} += "${prefix} ${datadir}"
