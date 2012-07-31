@@ -23,6 +23,7 @@ IMAGE_INSTALL += " \
     task-core-openpandora \
     task-xfce-openpandora \
     ${SPLASH} \	
+    systemd-compat-units \
 "
 
 IMAGE_PREPROCESS_COMMAND = "rootfs_update_timestamp"
