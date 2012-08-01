@@ -1,6 +1,6 @@
 DESCRIPTION = "Userspace utilites for aufs3"
 DEPENDS = "virtual/kernel"
-PR = "r4"
+PR = "r5"
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=892f569a555ba9c07a568a7c0c4fa63a"
@@ -20,7 +20,7 @@ do_prepheaders() {
 	# START MASSIVE 'MAYBE' HACK: 
 	# Stage the userspace headers from our kernel WITH AUFS3 so we can use the tweaked userspace headers.
 	cd ${STAGING_KERNEL_DIR}
-	make headers_install ARCH=arm INSTALL_HDR_PATH=${WORKDIR}/user_headers
+	make headers_install ARCH=${TARGET_ARCH} INSTALL_HDR_PATH=${WORKDIR}/user_headers
 	# STOP MASSIVE 'MAYBE'  HACK: 
 }
 
