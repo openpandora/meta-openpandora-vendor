@@ -7,7 +7,7 @@ RDEPENDS = "hsetroot zenity dbus pandora-wallpaper-official tslib tslib-calibrat
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-PR = "r44"
+PR = "r46"
 
 SRC_URI = " \
           file://LICENSE \

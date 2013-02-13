@@ -2,7 +2,7 @@
 
 # Set the timezone and date/time
 
-while mainsel=$(zenity --title="Date / Time / Timezone" --width="400" --height="250" --list --column "id" --column "Please select" --hide-column=1 --text="You can set the time and date or select a different timezone.\n" "td" "Change Time and Date" "tz" "Select Timezone" --ok-label="Change Setting" --cancel-label="Exit"); do
+while mainsel=$(zenity --title="Date / Time / Timezone" --width="400" --height="250" --list --column "id" --column "Please select" --hide-column=1 --text="You can set the time and date or select a different timezone.\n" "td" "Change Time and Date" "tz" "Select Timezone" "sync" "Sync time over Internet" --ok-label="Change Setting" --cancel-label="Exit"); do
 
 
 case $mainsel in
@@ -61,6 +61,24 @@ case $mainsel in
     xset s on
   fi
   ;;
-
+  "sync")
+  screensaver_enabled=true
+  if xset q | grep -A2 'Screen Saver' | grep -q 'timeout:.*\<0\>.*cycle'; then
+    screensaver_enabled=false
+  fi
+  xset s off
+  (
+  test -e /etc/init.d/ntpd && sudo /etc/init.d/ntpd stop
+  sudo ntpdate pool.ntp.org
+  ) |
+	zenity --progress \
+	--title="Syncing..." \
+	--text="Syncing with time server...\nPlease wait a while..." \
+	--pulsate
+  test -e /etc/init.d/ntpd && sudo /etc/init.d/ntpd start
+  if $screensaver_enabled; then
+    xset s on
+  fi
+  ;;
 esac
 done 

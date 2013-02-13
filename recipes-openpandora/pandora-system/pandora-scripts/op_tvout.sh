@@ -96,7 +96,11 @@ while true; do
       ;;
     "-ps")
       shift
-      pal_size=$1
+      if [ "$1" != "0,0" ]; then
+        pal_size=$1
+      else
+        echo "warning: ignored pal_size: $1"
+      fi
       ;;
     "-pp")
       shift
@@ -104,7 +108,11 @@ while true; do
       ;;
     "-ns")
       shift
-      ntsc_size=$1
+      if [ "$1" != "0,0" ]; then
+        ntsc_size=$1
+      else
+        echo "warning: ignored ntsc_size: $1"
+      fi
       ;;
     "-np")
       shift

@@ -103,12 +103,13 @@ lowPowerOn(){ #switch from normal to lowpower mode
 	suspend_net
 
 	cat /proc/pandora/cpu_mhz_max > /tmp/oldspeed
-	/usr/pandora/scripts/op_cpuspeed.sh 125
+	/usr/pandora/scripts/op_cpuspeed.sh -n 125
 }
 
 lowPowerOff(){ # switch from lowpower to normal mode
 	oldspeed=$(cat /tmp/oldspeed)
-	/usr/pandora/scripts/op_cpuspeed.sh $oldspeed
+	/usr/pandora/scripts/op_cpuspeed.sh -n $oldspeed
+	rm -f /tmp/oldspeed
 
 	display_on
 	resume_net
@@ -119,6 +120,18 @@ lowPowerOff(){ # switch from lowpower to normal mode
 		kill -CONT $PID
 	done
 	echo 255 > /sys/class/leds/pandora\:\:power/brightness #power LED bright
+}
+
+display_on_with_checks() {
+	# after turning on the display, we don't want lowpower state
+	# (which could be active because of some races)
+	if [ "$powerstate" = "buttonlowpower" -o "$powerstate" = "lidlowpower" -o \
+	     -e /tmp/oldspeed ]
+	then
+		lowPowerOff
+	else
+		display_on
+	fi
 }
 
 show_message() {
@@ -197,7 +210,9 @@ Please do not remove SD cards while pandora is suspended, doing so will corrupt 
 
 	# if we are here, either we already resumed or the suspend failed
 	if [ -n "$restore_list" ]; then
-		modprobe $restore_list
+		for module in $restore_list; do
+			modprobe $module
+		done
 	fi
 
 	display_on
@@ -277,7 +292,7 @@ elif [[ "$2" == "lid" ]]; then
 					powerstate="on"
 				;;
 				*)
-					(debug && echo "display_on") || display_on
+					(debug && echo "display_on") || display_on_with_checks
 					powerstate="on"
 				;;
 			esac
@@ -299,7 +314,19 @@ elif [[ "$2" == "lid" ]]; then
 			esac
 		fi
 	fi
- fi
+elif [[ "$2" == "screensaver" ]]; then
+	# warning: don't try to interact with X or do real suspend here -
+	# will cause various deadlocks
+	unset DISPLAY
+
+	if [[ "$1" == 0 ]]; then # deactivate screensaver
+		display_on_with_checks
+		powerstate="on"
+	elif [[ "$1" == 1 ]]; then # activate screensaver
+		display_off
+	fi
+fi
+
 debug && echo "powerstate=$powerstate"
 echo "$powerstate" > /tmp/powerstate
 

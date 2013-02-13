@@ -1,11 +1,11 @@
 #!/bin/bash
 # Released under the GPL
-# LCD-Settings, v1.0, written by Michael Mrozek aka EvilDragon 2010. Brightness-Settings-Part written by vimacs.
+# LCD-Settings, v1.1, written by Michael Mrozek aka EvilDragon 2010. Brightness-Settings-Part written by vimacs.
 # This scripts allows you to create, load and save Gamma-Settings and to change the LCD Brightness.
 
-. /usr/pandora/scripts/op_paths.sh
+ . /usr/pandora/scripts/op_paths.sh
 
-while mainsel=$(zenity --title="LCD-Settings" --width="300" --height="300" --list --column "id" --column "Please select" --hide-column=1 --text="Welcome to the LCD-Settings-Dialogue.\n\nWhat do you want to do?\n" "bright" "Change LCD Brightness" "gamma" "Manage LCD Gamma" "filter" "Select current video filter" "filterdef" "Select default video filter" "sblank" "Enable/disable screen blanking" --ok-label="Change Setting" --cancel-label="Exit"); do
+while mainsel=$(zenity --title="LCD-Settings" --width="300" --height="370" --list --column "id" --column "Please select" --hide-column=1 --text="Welcome to the LCD-Settings-Dialogue.\n\nWhat do you want to do?\n" "bright" "Change LCD Brightness" "gammasimple" "Manage LCD Gamma (simple)" "gamma" "Manage LCD Gamma (Advanced)" "filter" "Select current video filter" "filterdef" "Select default video filter" "sblank" "Enable/disable screen blanking" "rightclickmode" "Select Right-Click-Mode for touchscreen" --ok-label="Change Setting" --cancel-label="Exit"); do
 
 case $mainsel in
 
@@ -98,9 +98,27 @@ case $mainsel in
 	  sed -i "s/.*xset.*/DISPLAY=:0 xset s off/g" /home/${user}/.xinitrc
 	  zenity --info --title="Screen blanking" --text "The automatic screen blanking has been disabled." --timeout 6
 	  DISPLAY=:0 xset s off
-    fi;;
+	fi;;
+
+     "gammasimple")
+      dsscurr=$(cat /etc/pandora/conf/dssgamma.state)
+      while dssgamma=$(zenity --scale --text "Set Quick Gamma (Standard: 100)\n\nPress Ok to apply and Cancel to go back to the main menu." --min-value=0 --max-value=200 --value=$dsscurr --step 1); do
+	dssgamma2=$(echo "scale=2;$dssgamma / 100" | bc)
+	dsscurr=$dssgamma
+	echo $dsscurr > /etc/pandora/conf/dssgamma.state
+	sudo /usr/pandora/scripts/op_gamma.sh $dssgamma2
+      done;;
+      
+      "rightclickmode")
+      user=$(cat /tmp/currentuser)
+      if zenity --question --title="Right-Click Mode" --text="Choose how you would like to do a right-click with the touchscreen: You can either use the click-and-hold-method to right click or to use ALT as modifier key." --ok-label="ALT as modifier" --cancel-label="Click-and-Hold"; then 
+	  echo 'mode = 1' > /home/$user/Applications/Settings/libgtkstylus.conf
+	  zenity --info --title="Right-Click" --text "To do a right-click with the stylus, press and hold the ALT button while clicking.\n\nYou need to restart X to enable this." --timeout 6
+	else
+	  echo 'mode = 0' > /home/$user/Applications/Settings/libgtkstylus.conf
+	  zenity --info --title="Right-Click" --text "To do a right-click with the stylus, press and hold the stylus on the screen.\n\nYou need to restart X to enable this." --timeout 6
+	fi;;     
+     
 esac
 done
 
-
-DISPLAY=:0 xset s off

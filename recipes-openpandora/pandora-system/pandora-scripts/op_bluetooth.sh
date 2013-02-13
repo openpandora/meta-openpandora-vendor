@@ -7,8 +7,13 @@ LOCK=".op_btenabled"
 cd "$HOME"
 
 if [ "$1" = "startup" ]; then
-	[ -f "$LOCK" ] && sudo /usr/sbin/hciconfig "$INTERFACE" up pscan 1>/dev/null && sudo /usr/sbin/bluetoothd || echo "Bluetooth: User has not enabled Bluetooth." 
-
+	if [ -f "$LOCK" ]; then
+		sudo /usr/pandora/scripts/op_bluetooth_work.sh 1
+		INTERFACE="`hciconfig | grep "^hci" | cut -d ':' -f 1`"
+		sudo /usr/sbin/hciconfig "$INTERFACE" up pscan 1>/dev/null && sudo /usr/sbin/bluetoothd
+	else
+		echo "Bluetooth: User has not enabled Bluetooth." 
+	fi
 else	
 	# Figure out if Bluetooth is running or not
 	

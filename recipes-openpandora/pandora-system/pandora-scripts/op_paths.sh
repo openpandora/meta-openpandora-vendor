@@ -19,3 +19,5 @@ else
 	echo "ERROR: gamma control not found" >&2
 	SYSFS_GAMMA=/dev/null
 fi
+
+SYSFS_DSS_GAMMA=/sys/devices/platform/omapdss/display0/dss_gamma

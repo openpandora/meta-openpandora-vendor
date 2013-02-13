@@ -17,6 +17,7 @@ case $mainsel in
 	sed -i "s/.*max:.*/max:1200/g" /etc/pandora/conf/cpu.conf
 	sed -i "s/.*default.*/default:1100/g" /etc/pandora/conf/cpu.conf
 	sed -i "s/.*safe.*/safe:1100/g" /etc/pandora/conf/cpu.conf
+	sync
 	/usr/pandora/scripts/op_cpuspeed.sh -n 1100
 	zenity --info --title="CPU Speed set" --text "The maximum CPU Speed has been set to 1,1GHz." --timeout 6
 	;;
@@ -27,6 +28,7 @@ case $mainsel in
 	sed -i "s/.*max:.*/max:1100/g" /etc/pandora/conf/cpu.conf
 	sed -i "s/.*default.*/default:1000/g" /etc/pandora/conf/cpu.conf
 	sed -i "s/.*safe.*/safe:1000/g" /etc/pandora/conf/cpu.conf
+	sync
 	/usr/pandora/scripts/op_cpuspeed.sh -n 1000
 	zenity --info --title="CPU Speed set" --text "The maximum CPU Speed has been set to 1GHz." --timeout 6
 	;;	
@@ -37,6 +39,7 @@ case $mainsel in
 	sed -i "s/.*max:.*/max:900/g" /etc/pandora/conf/cpu.conf
 	sed -i "s/.*default.*/default:800/g" /etc/pandora/conf/cpu.conf
 	sed -i "s/.*safe.*/safe:800/g" /etc/pandora/conf/cpu.conf
+	sync
 	/usr/pandora/scripts/op_cpuspeed.sh -n 800
 	zenity --info --title="CPU Speed set" --text "The maximum CPU Speed has been set to 800MHz." --timeout 6
 	;;
@@ -48,6 +51,7 @@ case $mainsel in
 	sed -i "s/.*max:.*/max:700/g" /etc/pandora/conf/cpu.conf
 	sed -i "s/.*default.*/default:600/g" /etc/pandora/conf/cpu.conf
 	sed -i "s/.*safe.*/safe:600/g" /etc/pandora/conf/cpu.conf
+	sync
 	/usr/pandora/scripts/op_cpuspeed.sh -n 600
 	zenity --info --title="CPU Speed set" --text "The maxmimum CPU Speed has been set to 600Mhz." --timeout 6
 	;;
@@ -61,6 +65,7 @@ case $mainsel in
       if newopp=$(zenity --scale --text "Set the maximum allowed OPP" --min-value=3 --max-value=5 --value=$opp --step 1); then
 	echo $newopp > /proc/pandora/cpu_opp_max
 	sed -i "s/.*maxopp.*/maxopp:$newopp/g" /etc/pandora/conf/cpu.conf
+	sync
 	zenity --info --title="OPP Set" --text "The maximum allowed OPP value has been set to $newopp." --timeout 6
       else
 	zenity --info --title="No change" --text "The maximum OPP value has not been changed." --timeout 6
@@ -77,6 +82,7 @@ case $mainsel in
 	  if [ "$defspeed" -gt "$newmax" ]; then
 	    sed -i "s/.*default.*/default:$newmax/g" /etc/pandora/conf/cpu.conf
 	    zenity --info --title="Default speed info" --text "As your default speed was set higher than your new maximum, it has been changed to the new maximum speed." --timeout 6
+	    sync
 	    /usr/pandora/scripts/op_cpuspeed.sh -n $newmax
 	  fi
 	  zenity --info --title="MHz range set" --text "The maximum allowed CPU Speed of your Pandora is now $newmax MHz.\n\n" --timeout 6
@@ -112,6 +118,7 @@ case $mainsel in
     max="$(cat /etc/pandora/conf/cpu.conf | grep max: | awk -F\: '{print $2}')"
     if zenity --question --title="Default CPU Speed" --text="WARNING!\n\nYou are about to change the default clockspeed your Pandora will be running when you start it.\nIf it is set too high, the Pandora will crash.\n\nIf that happens, the Pandora will NOT change the clockspeed on the next boot, so you can access the OS and fix the default clock speed.\n\nHowever, each crash can lead to data loss - so please be sure to absolutely know what you're doing!" --ok-label="Yes, I know what I'm doing!" --cancel-label="I'm scared!"; then
       if newdefault=$(zenity --scale --text "Set the default CPU speed" --min-value=$min --max-value=$max --value=$defspeed --step 1); then
+	sync
 	/usr/pandora/scripts/op_cpuspeed.sh -n $newdefault
 	sed -i "s/.*default.*/default:$newdefault/g" /etc/pandora/conf/cpu.conf
 	zenity --info --title="Default speed set" --text "The default clock speed has been set to $newdefault." --timeout 6

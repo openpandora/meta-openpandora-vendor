@@ -25,7 +25,7 @@ if umount $device2; then
 	sleep $delay
 
 	# switch to mass storage
-	modprobe g_file_storage file=$device stall=0
+	modprobe g_file_storage file=$device stall=0 removable=1
 
 	zenity --title="Mass Storage Mode" --info --text="SD Card $selection is currently in Mass Storage Mode.\n\nClick on OK when you're finished with your data transfer\nand want to go back to normal mode."
 

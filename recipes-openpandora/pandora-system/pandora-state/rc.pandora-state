@@ -33,6 +33,8 @@ d_stop() {
 	cat -v /proc/pandora/nub1/scrolly_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
 	cat -v /proc/pandora/nub1/scroll_rate | sed -n '1p' >> /etc/pandora/conf/nubs.state
 	cat -v /proc/pandora/nub1/mbutton_threshold | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub0/mbutton_delay | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub1/mbutton_delay | sed -n '1p' >> /etc/pandora/conf/nubs.state
 }
 
 d_start() {
@@ -43,6 +45,11 @@ d_start() {
 	fi
 	cat /etc/pandora/conf/dirty_expire_centisecs >  /proc/sys/vm/dirty_expire_centisecs
 	cat /etc/pandora/conf/gamma.state > $SYSFS_GAMMA
+	if [ -f /etc/pandora/conf/dssgamma.state ]; then
+		dssgamma=$(cat /etc/pandora/conf/dssgamma.state)
+		dssgamma2=$(echo "scale=2;$dssgamma / 100" | bc)
+		/usr/pandora/scripts/op_gamma.sh $dssgamma2
+	fi
 	if [ -f /etc/pandora/conf/filter.state ]; then
 		filter=$(cat /etc/pandora/conf/filter.state)
 		/usr/pandora/scripts/op_videofir.sh $filter 
@@ -71,6 +78,8 @@ d_start() {
 	sed -n '10p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/scrolly_sensitivity
 	sed -n '11p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/scroll_rate
 	sed -n '12p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/mbutton_threshold
+	sed -n '13p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mbutton_delay
+	sed -n '14p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/mbutton_delay
 	echo "Enabling ZRAM Swap"
 	mkswap /dev/zram0
 	swapon -p 5 /dev/zram0

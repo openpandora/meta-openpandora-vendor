@@ -29,3 +29,6 @@
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_tvout.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_bluetooth_work.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/pnd_run.sh
+%wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_touchinit.sh
+%wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_hugetlb.sh
+%wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_gamma.sh

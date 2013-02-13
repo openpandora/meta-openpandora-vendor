@@ -12,6 +12,7 @@ if [ "$1" = "1" ]; then
 		sleep 0.2
 		echo out > /sys/class/gpio/gpio15/direction
 	fi
+	echo 0 > /sys/devices/platform/omap_uart.0/sleep_timeout
 	echo 1 > /sys/class/gpio/gpio15/value
 	hciattach /dev/ttyO0 texasalt 3000000
 	INTERFACE="`hciconfig | grep "^hci" | cut -d ':' -f 1`"
@@ -26,6 +27,7 @@ elif [ "$1" = "0" ]; then
 	killall hciattach
 	echo 0 > /sys/class/gpio/gpio15/value
 	echo 0 > '/sys/class/leds/pandora::bluetooth/brightness'
+	echo 10 > /sys/devices/platform/omap_uart.0/sleep_timeout
 	exit 0
 else
 	echo "invalid argument"

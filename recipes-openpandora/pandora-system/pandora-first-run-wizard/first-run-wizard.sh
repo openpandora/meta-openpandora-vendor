@@ -309,7 +309,14 @@ chmod 0666 /etc/pandora/first-boot
 if zenity --question --title="Calibrate Touchscreen" --text="It is recommended to calibrate the touchscreen to make sure it accurately works.\n\nIf you do so, you will see a moving crosshair.\nUse the stylus to press the crosshair as accurate as possible.\n\nYou can always (re-)calibrate it from the Settings-Menu later in the OS as well." --ok-label="Calibrate Touchscreen" --cancel-label="Don't calibrate it"; then
   . /etc/profile
   TSLIB_CONSOLEDEVICE=none op_runfbapp ts_calibrate
+  /usr/pandora/scripts/op_touchinit.sh
+while ! zenity --question --title="Check Calibration" --text="Your new calibration setting has been applied.\n\nPlease check if the touchscreen is now working properly.\nIf not, you might want to try a recalibration.\n\n(Hint: use the nubs to press the button if the touchscreen is way off)" --ok-label="The touchscreen is fine" --cancel-label="Recalibrate"; do
+      TSLIB_CONSOLEDEVICE=none op_runfbapp ts_calibrate
+  /usr/pandora/scripts/op_touchinit.sh  
+done
 fi
+
+
 
 # Let the user run optional config stuff.
 

@@ -226,6 +226,17 @@ class TVoutModel(ConfigModel):
         settings['width'], settings['height'] = settings.pop('size').split(',')
         settings['x'], settings['y'] = settings.pop('position').split(',')
 
+        # The system may have 0,0 w,h; use last_written or defaults if it does
+        for key in 'width', 'height':
+            if settings[key] == '0':
+                settings[key] = (self.last_written[key] if self.last_written[key] != '0'
+                                 else DC_DISABLED_DICT[key])
+
+        # 0,0 pos is more likely to be intended, but still fallback to last_written
+        for key in 'x', 'y':
+            if settings[key] == '0':
+                settings[key] = self.last_written[key]
+
         # To determine the layer we interpret the framebuffer values
         fb0 = settings.pop('fb0')
         fb1 = settings.pop('fb1')

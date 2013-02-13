@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "omap3-pandora"
 
 RDEPENDS = "pandora-scripts"
 
-PR = "r13"
+PR = "r16"
 inherit update-rc.d
 
 INITSCRIPT_NAME = "pandora-state"
@@ -16,6 +16,7 @@ SRC_URI = " \
 	  file://LICENSE \
 	  file://rc.pandora-state \
 	  file://gamma.state \
+	  file://dssgamma.state \
 	  file://brightness.state \
 	  file://nubs.state \
 	  file://dirty_expire_centisecs \
@@ -26,6 +27,7 @@ do_install() {
           install -m 0755 ${WORKDIR}/rc.pandora-state ${D}${sysconfdir}/init.d/pandora-state
 	  install -d ${D}${sysconfdir}/pandora/conf/
           install -m 0644 ${WORKDIR}/gamma.state ${D}${sysconfdir}/pandora/conf/gamma.state
+	  install -m 0644 ${WORKDIR}/dssgamma.state ${D}${sysconfdir}/pandora/conf/dssgamma.state
           install -m 0644 ${WORKDIR}/brightness.state ${D}${sysconfdir}/pandora/conf/brightness.state
 	  install -m 0644 ${WORKDIR}/nubs.state ${D}${sysconfdir}/pandora/conf/nubs.state
 	  install -m 0644 ${WORKDIR}/dirty_expire_centisecs ${D}${sysconfdir}/pandora/conf/dirty_expire_centisecs
