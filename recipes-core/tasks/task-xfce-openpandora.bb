@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 # Don't forget to bump the PR if you change it.
-PR = "r3"
+PR = "r5"
 
 inherit task
 
@@ -136,6 +136,7 @@ XFCE46_EXTRAS = " \
   xfce4-notifyd \
   xfce4-appfinder \
   ristretto \
+  xfce4-power-manager \
 "
 
 XFCE_THEMES = " \
