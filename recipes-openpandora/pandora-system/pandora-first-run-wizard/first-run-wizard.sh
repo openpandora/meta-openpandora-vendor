@@ -338,6 +338,7 @@ case $mainsel in
 
 esac
 done
+systemctl restart slim
 # ----
 
 
