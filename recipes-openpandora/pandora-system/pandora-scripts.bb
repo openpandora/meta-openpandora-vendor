@@ -4,10 +4,10 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a42
 
 COMPATIBLE_MACHINE = "omap3-pandora"
 
-DEPENDS = "zenity dbus"
-RDEPENDS = "zenity dbus"
+DEPENDS = "zenity dbus xwininfo"
+RDEPENDS = "zenity dbus xwininfo"
 
-PR = "r131"
+PR = "r132"
 SRC_URI = " \
 	  file://LICENSE \
           file://op_paths.sh \
@@ -58,6 +58,7 @@ SRC_URI = " \
           file://op_tvout.sh \
 	  file://op_tvout.pnd \
 	  file://ConfigModel.py \
+          file://op_ctl.sh \
 	  file://TVoutConfig.py \
 	  file://op_inputtest.pnd \
           file://gui.conf \
@@ -136,6 +137,7 @@ do_install() {
 	  install -m 0644 ${WORKDIR}/nubmode.glade ${D}${prefix}/pandora/scripts/ 
 	  install -m 0644 ${WORKDIR}/tvout.glade ${D}${prefix}/pandora/scripts/ 
 	  install -m 0755 ${WORKDIR}/op_lidsettings.sh ${D}${prefix}/pandora/scripts/ 
+	  install -m 0755 ${WORKDIR}/op_ctl.sh ${D}${prefix}/pandora/scripts/ 
 
 
 
