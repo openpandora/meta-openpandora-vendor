@@ -9,7 +9,7 @@ IMAGE_LOGIN_MANAGER = "tinylogin shadow"
 
 inherit image
 
-PR = "r4"
+PR = "r5"
 
 export IMAGE_BASENAME = "openpandora-xfce-image"
 
@@ -24,6 +24,8 @@ IMAGE_INSTALL += " \
     task-xfce-openpandora \
     ${SPLASH} \	
     systemd-compat-units \
+    sysvinit \
+    initscripts \
 "
 
 IMAGE_PREPROCESS_COMMAND = "rootfs_update_timestamp"
