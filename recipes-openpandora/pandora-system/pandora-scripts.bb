@@ -58,8 +58,7 @@ SRC_URI = " \
           file://op_tvout.sh \
 	  file://op_tvout.pnd \
 	  file://ConfigModel.py \
-          file://op_ctl.sh \
-	  file://TVoutConfig.py \
+          file://TVoutConfig.py \
 	  file://op_inputtest.pnd \
           file://gui.conf \
 	  file://cpu.conf \
@@ -137,7 +136,6 @@ do_install() {
 	  install -m 0644 ${WORKDIR}/nubmode.glade ${D}${prefix}/pandora/scripts/ 
 	  install -m 0644 ${WORKDIR}/tvout.glade ${D}${prefix}/pandora/scripts/ 
 	  install -m 0755 ${WORKDIR}/op_lidsettings.sh ${D}${prefix}/pandora/scripts/ 
-	  install -m 0755 ${WORKDIR}/op_ctl.sh ${D}${prefix}/pandora/scripts/ 
 
 
 
