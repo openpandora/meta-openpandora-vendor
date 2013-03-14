@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Switch GUI
+Comment=Switch to a different GUI.
+StartupNotify=false
+Exec=/usr/pandora/scripts/op_switchgui.sh
+Icon=krfb
+Terminal=false
+Type=Application
+Categories=System;

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Set Date and Time
+Comment=You can also select the timezone.
+StartupNotify=false
+Exec=sudo /usr/pandora/scripts/op_datetime.sh
+Icon=document-open-recent
+Terminal=false
+Type=Application
+Categories=Settings;

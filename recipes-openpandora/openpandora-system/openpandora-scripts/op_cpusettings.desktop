@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=CPU Settings
+Comment=Manage CPU Settings on your Pandora
+StartupNotify=false
+Exec=sudo /usr/pandora/scripts/op_cpisettings.sh
+Icon=package_graphics
+Terminal=false
+Type=Application
+Categories=Settings;

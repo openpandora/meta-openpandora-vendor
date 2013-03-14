@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Usermanager
+Comment=A very simple usermanager
+StartupNotify=false
+Exec=gksudo /usr/pandora/scripts/op_usermanager.sh
+Icon=system-users
+Terminal=false
+Type=Application
+Categories=System;
