@@ -1,4 +1,3 @@
-%wheel    ALL=(ALL) ALL
 %wheel ALL=(ALL) NOPASSWD: /sbin/halt
 %wheel ALL=(ALL) NOPASSWD: /sbin/ifconfig
 %wheel ALL=(ALL) NOPASSWD: /sbin/iwconfig
@@ -22,6 +21,7 @@
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_wifi.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_usbhost.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_lcdsettings.sh
+%wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_ledsettings.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_cpusettings.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_lcdrate.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_videofir.sh
