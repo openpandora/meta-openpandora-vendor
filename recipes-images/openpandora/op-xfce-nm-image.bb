@@ -1,6 +1,6 @@
 require recipes-images/angstrom/systemd-image.bb
 
-CONMANPKGS = "networkmanager network-manager-applet"
+CONMANPKGS = "networkmanager network-manager-applet modemmanager"
 
 IMAGE_INSTALL += " \
 	packagegroup-xfce-base \
