@@ -8,13 +8,13 @@
 # Default-Stop:      0 1 6
 ### END INIT INFO
  
-PID=`pidof -o %PPID -x pndnotifyd`
 PNDNOTIFY='/usr/bin/pndnotifyd' #adjust
 
 DESC="Pandora PND Deamon"
 NAME="pndnotifyd"
 
 d_stop() {
+	PID=`pidof -o %PPID -x pndnotifyd`
 	if [ $PID ]
 	then
 		kill $PID
@@ -24,6 +24,7 @@ d_stop() {
 }
 
 d_start() {
+	PID=`pidof -o %PPID -x pndnotifyd`
 	if [ $PID ]
 	then
 		echo "$DESC: $NAME already running."
@@ -33,6 +34,7 @@ d_start() {
 }
 
 d_reload() {
+	PID=`pidof -o %PPID -x pndnotifyd`
 	if [ $PID ]
 	then
 		kill -HUP $PID
@@ -43,26 +45,22 @@ d_reload() {
 
 case "$1" in
   start)
-	echo -n "Starting $DESC: $NAME"
+	echo "Starting $DESC: $NAME"
 	d_start &
-	echo "."
 	;;
   stop)
-	echo -n "Stopping $DESC: $NAME"
+	echo "Stopping $DESC: $NAME"
 	d_stop
-	echo "."
 	;;
   reload)
-	echo -n "Reloading $DESC: $NAME"
+	echo "Reloading $DESC: $NAME"
 	d_reload
-	echo "."
 	;;	
   restart|force-reload)
-	echo -n "Restarting $DESC: $NAME"
+	echo "Restarting $DESC: $NAME"
 	d_stop
 	sleep 1
 	d_start
-	echo "."
 	;;
   *)
 	echo "Usage: $0 {start|stop|restart|reload|force-reload}" >&2

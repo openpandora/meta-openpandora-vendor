@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://LGPL.txt;md5=fbc093901857fcd118f065f900982c24"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "openpandora"
 
-PR = "r65"
+PR = "r67"
 
 
 PARALLEL_MAKE = ""
@@ -19,7 +19,7 @@ SRC_URI = " \
           file://op_pnd_run.desktop \
 "
 
-SRCREV = "4a43e7ab969cbb724244e84a164acbe14c7db4cf"
+SRCREV = "e0f2719a878776d63fb5a0993bb74e8c9b815bea"
 
 S = "${WORKDIR}/git"
 
@@ -62,7 +62,7 @@ do_install() {
 
           install -d ${D}${libdir}/
           install -m 0644 ${S}/deployment/usr/lib/libpnd* ${D}${libdir}/
-          ln -sf libpnd.so.1.0.1 ${D}${libdir}/libpnd.so.1  
+          install -m 0644 ${S}/deployment/usr/lib/libpnd.so.1.0.1 ${D}${libdir}/libpnd.so.1
 
           install -d ${D}${bindir}/
           install -m 0755 ${S}/deployment/usr/bin/pndnotifyd ${D}${bindir}/pndnotifyd
