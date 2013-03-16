@@ -21,12 +21,29 @@ if [ "$1" = "1" ]; then
 		echo 0 > /sys/class/gpio/gpio15/value
 		exit 1
 	fi
-	echo 255 > '/sys/class/leds/pandora::bluetooth/brightness'
+	if [ -e /sys/class/leds/ ] ; then
+		for led in /sys/class/leds/* ; do
+			trigger=$(grep "$(basename $led)" /etc/default/leds | grep bluetooth | \
+					awk '{print $2}' )
+			if [ "$trigger" = "bluetooth" ] ; then
+				echo default-on > "$led/trigger"
+				echo 255 > "$led/brightness"
+			fi
+		done
+	fi
 	exit 0
 elif [ "$1" = "0" ]; then
 	killall hciattach
 	echo 0 > /sys/class/gpio/gpio15/value
-	echo 0 > '/sys/class/leds/pandora::bluetooth/brightness'
+	if [ -e /sys/class/leds/ ] ; then
+		for led in /sys/class/leds/* ; do
+			trigger=$(grep "$(basename $led)" /etc/default/leds | grep bluetooth | \
+					awk '{print $2}' )
+			if [ "$trigger" = "bluetooth" ] ; then
+				echo 0 > "$led/brightness"
+			fi			
+		done
+	fi
 	echo 10 > /sys/devices/platform/omap_uart.0/sleep_timeout
 	exit 0
 else

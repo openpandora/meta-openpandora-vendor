@@ -5,6 +5,8 @@
 # XXX: better use lockfile (or something), but it's not in current firmware
 test -e /tmp/op_power.lock && exit 2
 touch /tmp/op_power.lock
+highpow="$(cat /etc/pandora/conf/led.conf | grep HighPowerLED: | awk -F\: '{print $2}')"
+lowpow="$(cat /etc/pandora/conf/led.conf | grep LowPowerLED: | awk -F\: '{print $2}')"
 
 debug(){
 	return 1 # 0 when debugging, 1 when not
@@ -119,7 +121,7 @@ lowPowerOff(){ # switch from lowpower to normal mode
 	do
 		kill -CONT $PID
 	done
-	echo 255 > /sys/class/leds/pandora\:\:power/brightness #power LED bright
+	echo $highpow > /sys/class/leds/pandora\:\:power/brightness #power LED bright
 }
 
 display_on_with_checks() {
@@ -217,7 +219,7 @@ Please do not remove SD cards while pandora is suspended, doing so will corrupt 
 
 	display_on
 	resume_net
-	echo 255 > /sys/class/leds/pandora\:\:power/brightness
+	echo $highpow > /sys/class/leds/pandora\:\:power/brightness
 
 	# wait here a bit to prevent this script from running again (keep op_power.lock)
 	# in case user did resume using the power switch.
@@ -228,7 +230,7 @@ Please do not remove SD cards while pandora is suspended, doing so will corrupt 
 
 suspend_() {
 	# dim power LED
-	echo 16 > /sys/class/leds/pandora\:\:power/brightness
+	echo $lowpow > /sys/class/leds/pandora\:\:power/brightness
 
 	if suspend_real; then
 		# resumed already

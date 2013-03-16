@@ -4,9 +4,9 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a42
 
 COMPATIBLE_MACHINE = "openpandora"
 
-RDEPENDS_${PN} = "zenity dbus xwininfo"
+RDEPENDS_${PN} = "zenity dbus xwininfo procps"
 
-PR = "r132"
+PR = "r135"
 SRC_URI = " \
 	  file://LICENSE \
           file://op_paths.sh \
@@ -30,6 +30,7 @@ SRC_URI = " \
           file://op_startupmanager.pnd \
           file://op_switchgui.sh \
           file://op_switchgui.pnd \
+          file://nettool.pnd \
           file://startnetbooklauncher \
           file://startmmenu \    
           file://startpmenu \ 
@@ -42,6 +43,8 @@ SRC_URI = " \
           file://op_usermanager.pnd \
           file://op_lcdsettings.sh \
           file://op_lcdsettings.pnd \
+          file://op_ledsettings.sh \
+          file://op_ledsettings.pnd \
 	  file://op_cpusettings.sh \
           file://op_cpusettings.pnd \
           file://op_lcdrate.sh \
@@ -57,10 +60,11 @@ SRC_URI = " \
           file://op_tvout.sh \
 	  file://op_tvout.pnd \
 	  file://ConfigModel.py \
-          file://TVoutConfig.py \
+	  file://TVoutConfig.py \
 	  file://op_inputtest.pnd \
           file://gui.conf \
 	  file://cpu.conf \
+	  file://led.conf \
           file://gamma.conf \
           file://service.conf \
 	  file://nub_profiles.conf \
@@ -91,7 +95,6 @@ SRC_URI = " \
 	  file://op_hugetlb.sh \
 	  file://op_gamma.sh \
 "
-
 do_install() {
           install -d ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_paths.sh ${D}${prefix}/pandora/scripts/
@@ -111,6 +114,7 @@ do_install() {
           install -m 0755 ${WORKDIR}/op_datetime.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_usermanager.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_lcdsettings.sh ${D}${prefix}/pandora/scripts/
+          install -m 0755 ${WORKDIR}/op_ledsettings.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_lcdrate.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_videofir.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_nubmode.py ${D}${prefix}/pandora/scripts/
@@ -144,6 +148,7 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_cpuspeed.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_datetime.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_lcdsettings.pnd ${D}${prefix}/pandora/apps/
+	  install -m 0755 ${WORKDIR}/op_ledsettings.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_cpusettings.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_nubmode.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_startupmanager.pnd ${D}${prefix}/pandora/apps/
@@ -166,6 +171,7 @@ do_install() {
           install -m 0755 ${WORKDIR}/thunar.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/xchat.pnd ${D}${prefix}/pandora/mmenu/
 	  install -m 0755 ${WORKDIR}/gcalctool.pnd ${D}${prefix}/pandora/mmenu/
+	  install -m 0755 ${WORKDIR}/nettool.pnd ${D}${prefix}/pandora/mmenu/
 
           install -d ${D}${datadir}/applications/
           install -m 0644 ${WORKDIR}/op_bluetooth.desktop ${D}${datadir}/applications/
@@ -175,6 +181,7 @@ do_install() {
 
           install -d ${D}${sysconfdir}/pandora/conf/
           install -m 0644 ${WORKDIR}/gui.conf ${D}${sysconfdir}/pandora/conf/gui.conf
+          install -m 0644 ${WORKDIR}/led.conf ${D}${sysconfdir}/pandora/conf/led.conf
 	  install -m 0644 ${WORKDIR}/cpu.conf ${D}${sysconfdir}/pandora/conf/cpu.conf
           install -m 0644 ${WORKDIR}/gamma.conf ${D}${sysconfdir}/pandora/conf/gamma.conf
           install -m 0644 ${WORKDIR}/service.conf ${D}${sysconfdir}/pandora/conf/service.conf
@@ -195,13 +202,19 @@ do_install() {
           install -m 0755 ${WORKDIR}/stopmmenu ${D}${bindir}/
 }
 
+
+
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 FILES_${PN} += "${prefix} ${datadir}"
 
-CONFFILES_${PN} += "${sysconfdir}/pandora/conf/gui.conf"
-CONFFILES_${PN} += "${sysconfdir}/pandora/conf/cpu.conf"
-CONFFILES_${PN} += "${sysconfdir}/pandora/conf/gamma.conf"
-CONFFILES_${PN} += "${sysconfdir}/pandora/conf/service.conf"
-CONFFILES_${PN} += "${sysconfdir}/pandora/conf/nub_profiles.conf"
-CONFFILES_${PN} += "${sysconfdir}/pandora/conf/tvout-profiles.conf"
+CONFFILES_${PN} += " ${sysconfdir}/pandora/conf/gui.conf \
+                     ${sysconfdir}/pandora/conf/cpu.conf \
+                     ${sysconfdir}/pandora/conf/led.conf \
+                     ${sysconfdir}/pandora/conf/gamma.conf \
+                     ${sysconfdir}/pandora/conf/service.conf \
+                     ${sysconfdir}/pandora/conf/nub_profiles.conf \ 
+                     ${sysconfdir}/pandora/conf/tvout-profiles.conf \
+"
+
+
