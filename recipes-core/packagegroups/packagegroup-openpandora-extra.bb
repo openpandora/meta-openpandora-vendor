@@ -26,5 +26,7 @@ RDEPENDS_${PN} = " \
 	midori \
 	fbgrab \
 	gnome-mplayer \
+	tar \
+	wget \
 "
 
