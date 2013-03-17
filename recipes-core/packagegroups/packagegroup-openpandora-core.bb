@@ -21,5 +21,6 @@ RDEPENDS_${PN} = " \
         openpandora-misc \
         openpandora-state \
         openpandora-xfce-defaults \
+	sudo-enable-wheel-group \
 "
 
