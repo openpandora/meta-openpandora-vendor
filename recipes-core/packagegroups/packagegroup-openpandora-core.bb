@@ -19,5 +19,7 @@ RDEPENDS_${PN} = " \
         openpandora-configtray \
         openpandora-libpnd \
         openpandora-misc \
+        openpandora-state \
+        openpandora-xfce-defaults \
 "
 
