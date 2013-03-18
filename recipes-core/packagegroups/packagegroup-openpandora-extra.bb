@@ -28,5 +28,6 @@ RDEPENDS_${PN} = " \
 	gnome-mplayer \
 	tar \
 	wget \
+	libsdl libsdl-mixer libsdl-image libsdl-gfx libsdl-net libsdl-ttf \
 "
 
