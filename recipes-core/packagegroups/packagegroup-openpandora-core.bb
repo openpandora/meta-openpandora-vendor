@@ -14,6 +14,7 @@ RDEPENDS_${PN} = " \
         squashfs-tools \
         libgles-omap3 \
         udev-extraconf \
+        util-linux-blkid \
         openpandora-first-run-wizard \
         openpandora-sudoers \
         openpandora-configtray \
