@@ -1,0 +1,25 @@
+From c9f6c7d8ed9327c45cbab217576b6e73829abd90 Mon Sep 17 00:00:00 2001
+From: aTc <aTc@k-n-p.org>
+Date: Fri, 29 Mar 2013 15:56:35 +0000
+Subject: [PATCH] b
+
+---
+ nautilus-gksu/libnautilus-gksu.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/nautilus-gksu/libnautilus-gksu.c b/nautilus-gksu/libnautilus-gksu.c
+index 8e44d29..4acf3f8 100644
+--- a/nautilus-gksu/libnautilus-gksu.c
++++ b/nautilus-gksu/libnautilus-gksu.c
+@@ -5,7 +5,7 @@
+ #include <string.h>
+ #include <pthread.h>
+ 
+-#include <glib/gkeyfile.h>
++#include <glib.h>
+ #include <gtk/gtk.h>
+ #include <gio/gio.h>
+ #include <libnautilus-extension/nautilus-extension-types.h>
+-- 
+1.7.7
+
