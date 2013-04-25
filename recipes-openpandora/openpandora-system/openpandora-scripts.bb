@@ -4,7 +4,8 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a42
 
 COMPATIBLE_MACHINE = "openpandora"
 
-RDEPENDS_${PN} = "zenity dbus xwininfo procps bc python-pygtk gksu"
+RDEPENDS_${PN} = "zenity dbus xwininfo procps bc python-pygtk"
+# rdepends failed recipes : gksu
 
 PR = "r135"
 SRC_URI = " \
