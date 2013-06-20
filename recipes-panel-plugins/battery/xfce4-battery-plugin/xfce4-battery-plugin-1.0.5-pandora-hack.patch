@@ -1,0 +1,96 @@
+--- xfce4-battery-plugin-1.0.5_orig/panel-plugin/battery.c	2013-06-20 19:04:02.899826843 +0000
++++ xfce4-battery-plugin-1.0.5/panel-plugin/battery.c	2013-06-20 19:07:04.555760719 +0000
+@@ -270,6 +270,7 @@
+ #endif
+ }
+ 
++#if 0
+ static gboolean
+ update_apm_status(t_battmon *battmon)
+ {
+@@ -456,6 +457,16 @@
+     DBG("method=%d, acline=%d, time_remaining=%d, charge=%d", battmon->method, acline, time_remaining, charge);
+ 
+     charge = CLAMP (charge, 0, 100);
++#endif
++
++static gboolean
++battmon_update_graph(t_battmon *battmon, int charge, int time_remaining, int acline, const char *temp)
++{
++    gchar buffer[128];
++    gboolean fan = FALSE;
++    static int old_state = -1, new_state = BM_MISSING;
++    gchar * icon_name = NULL;
++    
+     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(battmon->battstatus), charge / 100.0);
+     if(battmon->options.display_bar){
+         gtk_widget_show(GTK_WIDGET(battmon->battstatus));
+@@ -561,7 +572,7 @@
+       gtk_widget_show(GTK_WIDGET(battmon->temp));
+       gtk_widget_show_all(GTK_WIDGET(battmon->actempalignment));
+ 
+-      fan=get_fan_status();
++      //fan=get_fan_status();
+       if(acline && fan)
+         gtk_label_set_text(battmon->acfan,"AC FAN");
+       else if(acline && !fan)
+@@ -573,7 +584,7 @@
+           gtk_widget_hide(GTK_WIDGET(battmon->acfan));
+       }
+ 
+-      temp=get_temperature();
++      //temp=get_temperature();
+       DBG ("Temp: %s", temp);
+       if(temp)
+         gtk_label_set_text(battmon->temp,temp);
+@@ -657,6 +668,50 @@
+     return TRUE;
+ }
+ 
++#define SYS_DIR "/sys/class/power_supply/bq27500-0/"
++
++static gboolean
++update_apm_status(t_battmon *battmon)
++{
++    FILE *f;
++    int charge = 0;
++    int time_remaining = 0;
++    int acline = 0;
++    int temp = 0;
++    char temp_s[16];
++
++    
++    f = fopen(SYS_DIR "capacity", "r");
++    if (f) {
++        fscanf(f, "%d", &charge);
++        fclose(f);
++    }
++
++    f = fopen(SYS_DIR "time_to_empty_now", "r");
++    if (f) {
++        fscanf(f, "%d", &time_remaining);
++        fclose(f);
++    }
++
++    f = fopen(SYS_DIR "current_now", "r");
++    if (f) {
++        fscanf(f, "%d", &acline);
++        fclose(f);
++        acline = acline < -14000 ? 0 : 1;
++    }
++
++    f = fopen(SYS_DIR "temp", "r");
++    if (f) {
++        fscanf(f, "%d", &temp);
++        fclose(f);
++        snprintf(temp_s, sizeof(temp_s), "%d.%d°C", temp / 10, temp % 10);
++    }
++
++    battmon->method = BM_USE_APM;
++    return battmon_update_graph(battmon, charge, time_remaining / 60, acline, temp_s);
++}
++
++
+ static void setup_battmon(t_battmon *battmon)
+ {
+     GdkPixbuf *icon;
