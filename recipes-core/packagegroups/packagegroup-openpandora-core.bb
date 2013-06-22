@@ -17,7 +17,7 @@ RDEPENDS_${PN} = " \
         util-linux-blkid \
         openpandora-first-run-wizard \
         openpandora-sudoers \
-        openpandora-configtray \
+        openpandora-configtray openpandora-configtray-wifi \
         openpandora-libpnd \
         openpandora-misc \
         openpandora-state \

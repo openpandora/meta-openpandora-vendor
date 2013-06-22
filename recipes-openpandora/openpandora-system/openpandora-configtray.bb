@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ca68c715b970233cac6617f93bab0593"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "openpandora"
 
-PR = "r11"
+PR = "r14"
 
 PARALLEL_MAKE = ""
 DEPENDS = "gtk+"
@@ -20,7 +20,7 @@ SRC_URI = " \
 	  file://bt.png \
 	  file://Pandora-Configtray.desktop \
 "
-SRCREV = "3e3d2a636c6102ba8c6ab04aff9c5586aaa32fcb"
+SRCREV = "4cba5ccd41f759cea7b71167d38b7d9fc336da99"
 
 S = "${WORKDIR}/git"
 
@@ -46,4 +46,8 @@ do_install() {
 	install -m 0644 ${WORKDIR}/Pandora-Configtray.desktop ${D}${sysconfdir}/skel/Applications/Settings/autostart/Pandora-Configtray.desktop
 }
 
+PACKAGES =+ "${PN}-wifi"
+PROVIDES += "${PN}-wifi"
+FILES_${PN}-wifi = "${datadir}/configbutton/wifi.so ${datadir}/configbutton/bluetooth.so ${prefix}/share/icons/pandora/wifi.png ${prefix}/share/icons/pandora/bt.png"
 FILES_${PN} += "${prefix} ${datadir}"
+
