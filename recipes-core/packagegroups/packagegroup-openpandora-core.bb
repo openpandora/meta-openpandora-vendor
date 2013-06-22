@@ -23,5 +23,6 @@ RDEPENDS_${PN} = " \
         openpandora-state \
         openpandora-xfce-defaults \
 	sudo-enable-wheel-group \
+	mtd-utils \
 "
 
