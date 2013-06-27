@@ -11,6 +11,7 @@ RDEPENDS_${PN} = " \
         pam-plugin-mkhomedir libpam-xtests \
         aufs-util \
         util-linux \
+        bzip2 \
         squashfs-tools \
         libgles-omap3 \
         udev-extraconf \
@@ -24,5 +25,6 @@ RDEPENDS_${PN} = " \
         openpandora-xfce-defaults \
 	sudo-enable-wheel-group \
 	mtd-utils \
+	led-config \
 "
 
