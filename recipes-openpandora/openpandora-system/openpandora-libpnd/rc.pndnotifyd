@@ -29,6 +29,7 @@ d_start() {
 	then
 		echo "$DESC: $NAME already running."
 	else
+		systemctl start udisks-daemon
 		$PNDNOTIFY -d 3
 	fi
 }

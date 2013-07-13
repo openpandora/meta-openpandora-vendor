@@ -4,12 +4,15 @@ LIC_FILES_CHKSUM = "file://LGPL.txt;md5=fbc093901857fcd118f065f900982c24"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "openpandora"
 
+#old firmware version
 PR = "r67"
 
+#.next modification
+PRINC := "${@int(PRINC) + 5}"
 
 PARALLEL_MAKE = ""
 
-DEPENDS = "virtual/libsdl libsdl-image libsdl-gfx libsdl-ttf"
+DEPENDS = "virtual/libsdl libsdl-image libsdl-gfx libsdl-ttf udisks"
 
 SRC_URI = " \
           git://openpandora.org/pandora-libraries.git;protocol=git;branch=master \
@@ -17,9 +20,10 @@ SRC_URI = " \
           file://rc.pndnotifyd \
           file://rc.pndevmapperd \   
           file://op_pnd_run.desktop \
+	  file://udisks.patch \
 "
 
-SRCREV = "e0f2719a878776d63fb5a0993bb74e8c9b815bea"
+SRCREV = "6f277b9a9e9b4b6a642bc1e82028d5394faaae49"
 
 S = "${WORKDIR}/git"
 
@@ -61,8 +65,12 @@ do_install() {
           install -m 0644 ${S}/deployment/etc/pandora/conf/mmenu.conf ${D}${sysconfdir}/pandora/conf/mmenu.conf
 
           install -d ${D}${libdir}/
-          install -m 0644 ${S}/deployment/usr/lib/libpnd* ${D}${libdir}/
-          install -m 0644 ${S}/deployment/usr/lib/libpnd.so.1.0.1 ${D}${libdir}/libpnd.so.1
+          #install -m 0644 ${S}/deployment/usr/lib/libpnd* ${D}${libdir}/
+          #install -m 0644 ${S}/deployment/usr/lib/libpnd.so.1.0.1 ${D}${libdir}/libpnd.so.1
+	  install -m 0644 ${S}/libpnd.so.1  ${D}${libdir}/libpnd.so.1
+          ln -s libpnd.so.1 ${D}${libdir}/libpnd.so.1.0.1
+          install -m 0644 ${S}/libpnd.a  ${D}${libdir}/libpnd.a
+
 
           install -d ${D}${bindir}/
           install -m 0755 ${S}/deployment/usr/bin/pndnotifyd ${D}${bindir}/pndnotifyd
