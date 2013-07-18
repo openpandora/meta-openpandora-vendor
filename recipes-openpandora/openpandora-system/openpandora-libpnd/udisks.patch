@@ -1,0 +1,17 @@
+--- git/lib/pnd_dbusnotify.c	2013-06-26 13:23:12.982160390 +0000
++++ git_orig/lib/pnd_dbusnotify.c	2013-06-26 13:21:54.014452401 +0000
+@@ -22,10 +22,10 @@
+   int fd [ 2 ];            // pipe fd pair
+ } pnd_dbusnotify_t;
+ 
+-#define MONITOR "/usr/bin/dbus-monitor"
+-#define MONARG1 "--system"
+-#define MONARG2 "interface=org.freedesktop.Hal.Device"
+-#define MONGREP "volume.is_mounted"
++#define MONITOR "/usr/bin/udisks"
++#define MONARG1 "--monitor-detail"
++#define MONARG2 ""
++#define MONGREP "added"
+ 
+ pnd_dbusnotify_handle pnd_dbusnotify_init ( void ) {
+   pnd_dbusnotify_t *p;

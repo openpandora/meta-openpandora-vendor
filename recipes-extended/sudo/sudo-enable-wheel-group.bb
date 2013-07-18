@@ -13,9 +13,9 @@ PACKAGE_ARCH = "all"
  
 do_compile() {
         touch ${WORKDIR}/sudoers
-        echo '%wheel    ALL=(ALL) ALL' >> ${WORKDIR}/sudoers
-        echo '%users  ALL=/sbin/mount /cdrom,/sbin/umount /cdrom' >> ${WORKDIR}/sudoers
-        echo '%users  localhost=/sbin/shutdown -h now' >> ${WORKDIR}/sudoers
+        echo '%wheel ALL=(ALL) ALL' >> ${WORKDIR}/sudoers
+        echo '%users ALL=/sbin/mount /cdrom,/sbin/umount /cdrom' >> ${WORKDIR}/sudoers
+        echo '%users localhost=/sbin/shutdown -h now' >> ${WORKDIR}/sudoers
         echo '' >> ${WORKDIR}/sudoers
 }
 

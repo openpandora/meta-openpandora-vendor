@@ -1,0 +1,71 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          pndevmapperd
+# Required-Start:    udev
+# Required-Stop:     #adjust
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+### END INIT INFO
+ 
+PNDEVMAPPER='/usr/bin/pndevmapperd' #adjust
+
+DESC="Pandora PND Event Deamon"
+NAME="pndevmapperd"
+
+d_stop() {
+	PID=`pidof -o %PPID -x pndevmapperd`
+	if [ $PID ]
+	then
+		kill $PID
+	else
+		echo "$DESC: $NAME not running."
+	fi
+}
+
+d_start() {
+	PID=`pidof -o %PPID -x pndevmapperd`
+	if [ $PID ]
+	then
+		echo "$DESC: $NAME already running."
+	else
+		$PNDEVMAPPER -d
+	fi
+}
+
+d_reload() {
+	PID=`pidof -o %PPID -x pndevmapperd`
+	if [ $PID ]
+	then
+		kill -HUP $PID
+	else
+		echo "$DESC: $NAME not running."
+	fi
+}
+
+case "$1" in
+  start)
+	echo "Starting $DESC: $NAME"
+	d_start &
+	;;
+  stop)
+	echo "Stopping $DESC: $NAME"
+	d_stop
+	;;
+  reload)
+	echo "Reloading $DESC: $NAME"
+	d_reload
+	;;	
+  restart|force-reload)
+	echo "Restarting $DESC: $NAME"
+	d_stop
+	sleep 1
+	d_start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart|reload|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

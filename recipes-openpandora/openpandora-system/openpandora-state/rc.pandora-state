@@ -1,0 +1,124 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          pandora-lcd-state
+# Required-Start:    #adjust
+# Required-Stop:     #adjust
+# Default-Start:     5 3
+# Default-Stop:      0 1 6
+### END INIT INFO
+ 
+DESC="OpenPandora Save and Restore LCD Settings"
+NAME="pandora-state"
+
+. /usr/pandora/scripts/op_paths.sh
+
+d_stop() {
+	echo "Saving Pandora specific settings"
+	bright=$(cat $SYSFS_BACKLIGHT_BRIGHTNESS)
+	if [ $bright != "0" ]; then
+	    echo $bright > /etc/pandora/conf/brightness.state
+	fi
+	touch /etc/pandora/shutdown
+	cat $SYSFS_GAMMA > /etc/pandora/conf/gamma.state
+        cat -v /proc/pandora/nub0/mode | sed -n '1p' > /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub0/mouse_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub0/scrollx_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub0/scrolly_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub0/scroll_rate| sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub0/mbutton_threshold | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub1/mode | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub1/mouse_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub1/scrollx_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub1/scrolly_sensitivity | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub1/scroll_rate | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub1/mbutton_threshold | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub0/mbutton_delay | sed -n '1p' >> /etc/pandora/conf/nubs.state
+	cat -v /proc/pandora/nub1/mbutton_delay | sed -n '1p' >> /etc/pandora/conf/nubs.state
+}
+
+d_start() {
+	echo "Restoring Pandora specific settings"
+	highpow="$(cat /etc/pandora/conf/led.conf | grep HighPowerLED: | awk -F\: '{print $2}')"
+	echo $highpow > /sys/class/leds/pandora\:\:power/brightness #power LED bright
+	bright=$(cat /etc/pandora/conf/brightness.state)
+	if [ "$bright" -gt "0" ]; then
+		echo $bright > $SYSFS_BACKLIGHT_BRIGHTNESS
+	fi
+	cat /etc/pandora/conf/dirty_expire_centisecs >  /proc/sys/vm/dirty_expire_centisecs
+	cat /etc/pandora/conf/gamma.state > $SYSFS_GAMMA
+	if [ -f /etc/pandora/conf/dssgamma.state ]; then
+		dssgamma=$(cat /etc/pandora/conf/dssgamma.state)
+		dssgamma2=$(echo "scale=2;$dssgamma / 100" | bc)
+		/usr/pandora/scripts/op_gamma.sh $dssgamma2
+	fi
+	if [ -f /etc/pandora/conf/filter.state ]; then
+		filter=$(cat /etc/pandora/conf/filter.state)
+		/usr/pandora/scripts/op_videofir.sh $filter 
+	fi
+	cpuspeed="$(cat /etc/pandora/conf/cpu.conf | grep default | awk -F\: '{print $2}')"
+	oppmax="$(cat /etc/pandora/conf/cpu.conf | grep opp | awk -F\: '{print $2}')"
+	echo $oppmax > /proc/pandora/cpu_opp_max
+	if [ -f /etc/pandora/shutdown ]; then
+	      rm /etc/pandora/shutdown
+	      sync
+	      /usr/pandora/scripts/op_cpuspeed.sh -n $cpuspeed
+	else
+	      echo "No clean shutdown - will not set CPU speed"
+	      echo "Yes" > /tmp/nocleanwarn
+	      chmod 777 /tmp/nocleanwarn
+	fi
+	sed -n '1p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mode
+	sed -n '2p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mouse_sensitivity
+	sed -n '3p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/scrollx_sensitivity
+	sed -n '4p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/scrolly_sensitivity
+	sed -n '5p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/scroll_rate
+	sed -n '6p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mbutton_threshold
+	sed -n '7p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/mode
+	sed -n '8p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/mouse_sensitivity
+	sed -n '9p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/scrollx_sensitivity
+	sed -n '10p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/scrolly_sensitivity
+	sed -n '11p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/scroll_rate
+	sed -n '12p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/mbutton_threshold
+	sed -n '13p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mbutton_delay
+	sed -n '14p' /etc/pandora/conf/nubs.state > /proc/pandora/nub1/mbutton_delay
+	echo "Enabling ZRAM Swap"
+	mkswap /dev/zram0
+	swapon -p 5 /dev/zram0
+
+	# set audio powerdown delay (ms)
+	if [ -e /sys/devices/platform/soc-audio/PCM1773/pmdown_time ]; then
+		echo 60000 > /sys/devices/platform/soc-audio/PCM1773/pmdown_time
+	fi
+}
+
+case "$1" in
+  start)
+	echo -n "Starting $DESC: $NAME - "
+	d_start
+	echo "."
+	;;
+  stop)
+	echo -n "Stopping $DESC: $NAME - "
+	d_stop
+	echo "."
+	;;
+  reload)
+	echo -n "Reloading $DESC: $NAME - "
+	d_start
+	echo "."
+	;;	
+  restart|force-reload)
+	echo -n "Restarting $DESC: $NAME - "
+	d_stop
+	sleep 1
+	d_start
+	echo "."
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart|reload|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

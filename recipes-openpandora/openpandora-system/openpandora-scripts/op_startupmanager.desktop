@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Startup Manager
+Comment=Change startup settings of your Pandora.
+StartupNotify=false
+Exec=gksudo /usr/pandora/scripts/op_startupmanager.sh
+Icon=krfb
+Terminal=false
+Type=Application
+Categories=Settings;

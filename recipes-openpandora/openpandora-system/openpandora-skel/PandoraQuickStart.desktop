@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Quickstart Guide
+Icon=accessories-dictionary
+StartupNotify=false
+Exec=evince -s /etc/pandora/PandoraQuickStart.pdf
+Terminal=false
+Type=Application
+Categories=Documentation

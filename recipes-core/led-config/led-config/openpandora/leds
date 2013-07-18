@@ -1,0 +1,8 @@
+pandora::bluetooth 
+pandora::charger 
+pandora::keypad_bl
+pandora::power
+pandora::sd1 
+pandora::sd2 
+pandora::wifi phy0tx
+

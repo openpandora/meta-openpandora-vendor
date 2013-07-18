@@ -1,0 +1,576 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkWindow" id="window">
+    <property name="title" translatable="yes">Nub configuration</property>
+    <property name="window_position">center</property>
+    <signal name="destroy" handler="on_window_destroy"/>
+    <child>
+      <object class="GtkTable" id="table">
+        <property name="visible">True</property>
+        <property name="n_rows">11</property>
+        <property name="n_columns">3</property>
+        <property name="column_spacing">4</property>
+        <child>
+          <object class="GtkFrame" id="leftmode">
+            <property name="visible">True</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment1">
+                <property name="visible">True</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkVBox" id="vbox1">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkRadioButton" id="Rmouse0">
+                        <property name="label" translatable="yes">mouse movement</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="Rmbuttons0">
+                        <property name="label" translatable="yes">mouse buttons</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">Rmouse0</property>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="Rscroll0">
+                        <property name="label" translatable="yes">scrolling</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">Rmouse0</property>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="Rabsolute0">
+                        <property name="label" translatable="yes">joystick</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">Rmouse0</property>
+                      </object>
+                      <packing>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="LeftModeLabel">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&lt;b&gt;Left nub mode&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkFrame" id="rmode">
+            <property name="visible">True</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment2">
+                <property name="visible">True</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkVBox" id="vbox2">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkRadioButton" id="Rmouse1">
+                        <property name="label" translatable="yes">mouse movement</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="Rmbuttons1">
+                        <property name="label" translatable="yes">mouse buttons</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">Rmouse1</property>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="Rscroll1">
+                        <property name="label" translatable="yes">scrolling</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">Rmouse1</property>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="Rabsolute1">
+                        <property name="label" translatable="yes">joystick</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">Rmouse1</property>
+                      </object>
+                      <packing>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="RightModeLabel">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&lt;b&gt;Right nub mode&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="right_attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHScale" id="LeftButtonThreshold">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="adjustment">button0</property>
+            <property name="digits">0</property>
+          </object>
+          <packing>
+            <property name="top_attach">3</property>
+            <property name="bottom_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHScale" id="LeftMouseSpeed">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="adjustment">mouse0</property>
+            <property name="digits">0</property>
+          </object>
+          <packing>
+            <property name="top_attach">2</property>
+            <property name="bottom_attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHSeparator" id="hseparator1">
+            <property name="height_request">8</property>
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="right_attach">3</property>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="ScrollYLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Scroll sensitivity (y-axis)</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">6</property>
+            <property name="bottom_attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="ScrollXLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Scroll sensitivity (x-axis)</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">5</property>
+            <property name="bottom_attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="ScrollLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Scroll speed</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">4</property>
+            <property name="bottom_attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="MouseButtonLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Mouse button sensitivity</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">3</property>
+            <property name="bottom_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="MouseSpeedLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Mouse speed</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">2</property>
+            <property name="bottom_attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHScale" id="LeftScrollRate">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="adjustment">rate0</property>
+            <property name="digits">0</property>
+          </object>
+          <packing>
+            <property name="top_attach">4</property>
+            <property name="bottom_attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHScale" id="LeftScrollX">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="adjustment">scrollx0</property>
+            <property name="digits">0</property>
+          </object>
+          <packing>
+            <property name="top_attach">5</property>
+            <property name="bottom_attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHScale" id="LeftScrollY">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="adjustment">scrolly0</property>
+            <property name="digits">0</property>
+          </object>
+          <packing>
+            <property name="top_attach">6</property>
+            <property name="bottom_attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHScale" id="RightMouseSpeed">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="adjustment">mouse1</property>
+            <property name="digits">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="right_attach">3</property>
+            <property name="top_attach">2</property>
+            <property name="bottom_attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHScale" id="RightButtonThreshold">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="adjustment">button1</property>
+            <property name="digits">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="right_attach">3</property>
+            <property name="top_attach">3</property>
+            <property name="bottom_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHScale" id="RightScrollRate">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="adjustment">rate1</property>
+            <property name="digits">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="right_attach">3</property>
+            <property name="top_attach">4</property>
+            <property name="bottom_attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHScale" id="RightScrollX">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="adjustment">scrollx1</property>
+            <property name="digits">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="right_attach">3</property>
+            <property name="top_attach">5</property>
+            <property name="bottom_attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHScale" id="RightScrollY">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="update_policy">delayed</property>
+            <property name="adjustment">scrolly1</property>
+            <property name="digits">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="right_attach">3</property>
+            <property name="top_attach">6</property>
+            <property name="bottom_attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHSeparator" id="hseparator2">
+            <property name="height_request">6</property>
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="right_attach">3</property>
+            <property name="top_attach">7</property>
+            <property name="bottom_attach">8</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxEntry" id="ProfileComboEntry">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">9</property>
+            <property name="bottom_attach">10</property>
+            <property name="y_padding">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkStatusbar" id="statusbar">
+            <property name="visible">True</property>
+            <property name="spacing">2</property>
+          </object>
+          <packing>
+            <property name="right_attach">3</property>
+            <property name="top_attach">10</property>
+            <property name="bottom_attach">11</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="LogoImage">
+            <property name="height_request">84</property>
+            <property name="visible">True</property>
+            <property name="pixbuf">pndlogo.png</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="SaveProfile">
+            <property name="label" translatable="yes">Save profile</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <signal name="clicked" handler="on_SaveProfile_clicked"/>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="right_attach">3</property>
+            <property name="top_attach">9</property>
+            <property name="bottom_attach">10</property>
+            <property name="y_padding">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="DeleteProfile">
+            <property name="label" translatable="yes">Delete profile</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <signal name="clicked" handler="on_DeleteProfile_clicked"/>
+          </object>
+          <packing>
+            <property name="top_attach">9</property>
+            <property name="bottom_attach">10</property>
+            <property name="y_padding">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="WriteNubConfig">
+            <property name="label" translatable="yes">Write nub settings</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <signal name="clicked" handler="on_WriteNubConfig_clicked"/>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="right_attach">3</property>
+            <property name="top_attach">8</property>
+            <property name="bottom_attach">9</property>
+            <property name="y_padding">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="ReadNubConfig">
+            <property name="label" translatable="yes">Read nub settings</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="image_position">top</property>
+            <signal name="clicked" handler="on_ReadNubConfig_clicked"/>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">8</property>
+            <property name="bottom_attach">9</property>
+            <property name="y_padding">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="ResetNubs">
+            <property name="label" translatable="yes">Reset nubs...</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <signal name="clicked" handler="on_ResetNubs_clicked"/>
+          </object>
+          <packing>
+            <property name="top_attach">8</property>
+            <property name="bottom_attach">9</property>
+            <property name="y_padding">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkAdjustment" id="mouse0">
+    <property name="value">150</property>
+    <property name="lower">50</property>
+    <property name="upper">300</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="mouse1">
+    <property name="value">150</property>
+    <property name="lower">50</property>
+    <property name="upper">300</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="button0">
+    <property name="value">20</property>
+    <property name="lower">1</property>
+    <property name="upper">40</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="button1">
+    <property name="value">20</property>
+    <property name="lower">1</property>
+    <property name="upper">40</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="rate0">
+    <property name="value">20</property>
+    <property name="lower">1</property>
+    <property name="upper">40</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="rate1">
+    <property name="value">20</property>
+    <property name="lower">1</property>
+    <property name="upper">40</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="scrollx0">
+    <property name="value">7</property>
+    <property name="lower">-32</property>
+    <property name="upper">32</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="scrollx1">
+    <property name="value">7</property>
+    <property name="lower">-32</property>
+    <property name="upper">32</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="scrolly0">
+    <property name="value">7</property>
+    <property name="lower">-32</property>
+    <property name="upper">32</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="scrolly1">
+    <property name="value">7</property>
+    <property name="lower">-32</property>
+    <property name="upper">32</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+</interface>

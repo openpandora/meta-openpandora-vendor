@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Check Bluetooth Status
+Comment=Check the status of your Bluetooth device and enable if desired.
+StartupNotify=false
+Exec=/usr/pandora/scripts/op_bluetooth.sh startup
+Icon=bluetooth
+Terminal=false
+Type=Application
+Categories=System;

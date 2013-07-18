@@ -1,0 +1,67 @@
+" begin ~/.vimrc
+
+" don't use vi mode as default
+" have vim behave in a more useful way that is not vi compatible
+set nocompatible
+
+" show the current row and column at the bottom right of the screen.
+set ruler
+
+" minimum width for  line numbers in the ruler
+set numberwidth=3
+
+" tell vim to use colors which look good on a dark background (default terminal on pandora is dark!)
+set background=dark
+
+" configure backspace behaviour:
+"  value   effect  ~
+"  indent  allow backspacing over autoindent
+"  eol     allow backspacing over line breaks (join lines)
+"  start   allow backspacing over the start of insert; CTRL-W and CTRL-U
+"          stop once at the start of insert.
+set backspace=indent,eol,start
+
+
+"The following config settings are taken from gentoo and meant to eg make
+"special encodings work better, some might require the user to change the
+"locale setting as well as adding additional fonts.
+
+" {{{ Locale settings
+" Try to come up with some nice sane GUI fonts. Also try to set a sensible
+" value for fileencodings based upon locale. These can all be overridden in
+" the user vimrc file.
+if v:lang =~? "^ko"
+  set fileencodings=euc-kr
+  set guifontset=-*-*-medium-r-normal--16-*-*-*-*-*-*-*
+elseif v:lang =~? "^ja_JP"
+  set fileencodings=euc-jp
+  set guifontset=-misc-fixed-medium-r-normal--14-*-*-*-*-*-*-*
+elseif v:lang =~? "^zh_TW"
+  set fileencodings=big5
+  set guifontset=-sony-fixed-medium-r-normal--16-150-75-75-c-80-iso8859-1,-taipei-fixed-medium-r-normal--16-150-75-75-c-160-big5-0
+elseif v:lang =~? "^zh_CN"
+  set fileencodings=gb2312
+  set guifontset=*-r-*
+endif
+
+" If we have a BOM, always honour that rather than trying to guess.
+if &fileencodings !~? "ucs-bom"
+  set fileencodings^=ucs-bom
+endif
+
+" Always check for UTF-8 when trying to determine encodings.
+if &fileencodings !~? "utf-8"
+  " If we have to add this, the default encoding is not Unicode.
+  " We use this fact later to revert to the default encoding in plaintext/empty
+  " files.
+  let g:added_fenc_utf8 = 1
+  set fileencodings+=utf-8
+endif
+
+" Make sure we have a sane fallback for encoding detection
+if &fileencodings !~? "default"
+  set fileencodings+=default
+endif
+" }}}
+
+" end ~/.vimrc

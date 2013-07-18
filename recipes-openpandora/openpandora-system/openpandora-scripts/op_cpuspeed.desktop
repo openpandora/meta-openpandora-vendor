@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Set CPU speed
+Comment=Under or overclock your OpenPandora CPU.
+StartupNotify=false
+Exec=sudo /usr/pandora/scripts/op_cpuspeed.sh
+Icon=xfce4-mixer
+Terminal=false
+Type=Application
+Categories=System;

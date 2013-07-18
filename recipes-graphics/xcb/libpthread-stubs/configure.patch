@@ -1,0 +1,21 @@
+--- libpthread-stubs-0.3-orig/configure	2013-06-26 20:04:18.420074056 +0000
++++ libpthread-stubs-0.3/configure	2013-06-26 20:05:02.204002192 +0000
+@@ -11011,13 +11011,13 @@
+ done
+ 
+ 
+- if test "x$PKG_CONFIG_LIBS" != x; then
++# if test "x$PKG_CONFIG_LIBS" != x; then
+   BUILD_LIB_TRUE=
+   BUILD_LIB_FALSE='#'
+-else
+-  BUILD_LIB_TRUE='#'
+-  BUILD_LIB_FALSE=
+-fi
++#else
++#  BUILD_LIB_TRUE='#'
++#  BUILD_LIB_FALSE=
++#fi
+ 
+ 
+ ac_config_files="$ac_config_files Makefile pthread-stubs.pc"

@@ -1,0 +1,24 @@
+ 
+# Transparent background for desktop icon text.
+
+style "xfdesktop-icon-view" {
+XfdesktopIconView::label-alpha = 0
+
+#Text colors (delete these if you want you use gtk theme colors):
+
+fg[NORMAL] = "#ffffff"
+fg[SELECTED] = "#000000"
+fg[ACTIVE] = "#000000"
+
+}
+widget_class "*XfdesktopIconView*" style "xfdesktop-icon-view"
+
+
+# Make scrollbars wider
+
+style "scroll"
+{
+        GtkScrollbar::slider-width              = 20
+}
+
+class "*" style "scroll"

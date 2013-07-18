@@ -1,0 +1,10 @@
+[Unit]
+Description=OpenPandora settings (nubs, cpu, brightness)
+
+[Service]
+Type=simple
+ExecStart=/usr/pandora/scripts/pandora-state start
+ExecStop=/usr/pandora/scripts/pandora-state stop
+
+[Install]
+WantedBy=multi-user.target
