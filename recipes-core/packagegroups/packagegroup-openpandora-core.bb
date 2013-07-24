@@ -27,5 +27,6 @@ RDEPENDS_${PN} = " \
 	sudo-enable-wheel-group \
 	mtd-utils \
 	led-config \
+	wl1251-init \
 "
 
