@@ -8,6 +8,8 @@ RDEPENDS_${PN} = "zenity dbus xwininfo procps bc python-pygtk"
 # rdepends failed recipes : gksu
 
 PR = "r135"
+PRINC := "${@int(PRINC) + 2}"
+
 SRC_URI = " \
 	  file://LICENSE \
           file://op_paths.sh \
