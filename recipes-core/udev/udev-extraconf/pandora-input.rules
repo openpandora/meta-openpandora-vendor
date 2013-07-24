@@ -1,0 +1,3 @@
+KERNEL=="event*",       NAME="input/%k", MODE="664", GROUP="users"
+KERNEL=="js*",          NAME="input/%k", MODE="664", GROUP="users"
+KERNEL=="mouse*",	NAME="input/%k", MODE="664", GROUP="users"
