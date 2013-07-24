@@ -170,13 +170,9 @@ stopcommand=$(grep $selection /etc/pandora/conf/gui.conf | awk -F\; '{print $4}'
 
 echo $gui
 
-if [ $gui ]; then 
-  sed -i "s/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=$gui/g" /home/$username/.xinitrc
+  sed -i "s/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=\"$gui\"/g" /home/$username/.xinitrc
   echo $selection selected as default interface
   zenity --info --title="Selected session" --text "You selected $selection as default setting." --timeout 6
-else
-  sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=startxfce4/g' /home/$username/.xinitrc
-fi
 
 # ----
 
@@ -338,7 +334,7 @@ case $mainsel in
 
 esac
 done
-systemctl restart slim
+systemctl reboot
 # ----
 
 

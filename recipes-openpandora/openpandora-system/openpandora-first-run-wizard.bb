@@ -10,6 +10,7 @@ RDEPENDS_${PN} = "hsetroot zenity dbus openpandora-wallpaper-official tslib tsli
 COMPATIBLE_MACHINE = "openpandora"
 
 PR = "r47"
+PRINC := "${@int(PRINC) + 1}"
 
 SRC_URI = " \
           file://LICENSE \
