@@ -4,13 +4,13 @@ DEPENDS = "openbox glib-2.0 gtk+ menu-cache"
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
-PR="r2"
+PR="r3"
 
 #SRC_URI = "file://git_openbox_menu/"
 #S = "${WORKDIR}/git_openbox_menu"
 
-SRCREV = "26670717bed31b70dd1e386bd9e9163cabb59b5f"
-          
+SRCREV = "6a684325d6be780b3355a4ee993b174e0a2e3103"
+
 SRC_URI = "git://code.google.com/p/pandora-openbox-menu/;protocol=https"
 S = "${WORKDIR}/git"
 
