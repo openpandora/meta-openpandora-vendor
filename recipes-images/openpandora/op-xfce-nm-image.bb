@@ -11,6 +11,7 @@ IMAGE_INSTALL += " \
 	angstrom-gnome-icon-theme-enable gtk-engine-clearlooks gtk-theme-clearlooks angstrom-clearlooks-theme-enable \
 	packagegroup-openpandora-core \
 	packagegroup-openpandora-extra \
+	packagegroup-openpandora-openboxgui \
 "
 
 export IMAGE_BASENAME = "OP-XFCE-NetworkManager-image"
