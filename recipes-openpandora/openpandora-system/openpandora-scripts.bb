@@ -7,7 +7,7 @@ COMPATIBLE_MACHINE = "openpandora"
 RDEPENDS_${PN} = "bash sed gawk zenity dbus xwininfo procps bc python-pygtk"
 # rdepends failed recipes : gksu
 
-PR = "r146"
+PR = "r147"
 PRINC := "${@int(PRINC) + 1}"
 
 SRC_URI = " \
@@ -89,6 +89,7 @@ SRC_URI = " \
 	  file://op_hugetlb.sh \
 	  file://op_gamma.sh \
 	  file://op_dsp.sh \
+	  file://openbox-functions.sh \
 "
 #          file://compo4all-manager.pnd \
 
@@ -133,7 +134,8 @@ do_install() {
 	  install -m 0644 ${WORKDIR}/nubmode.glade ${D}${prefix}/pandora/scripts/ 
 	  install -m 0644 ${WORKDIR}/tvout.glade ${D}${prefix}/pandora/scripts/ 
 	  install -m 0755 ${WORKDIR}/op_lidsettings.sh ${D}${prefix}/pandora/scripts/ 
-	  install -m 0755 ${WORKDIR}/op_dsp.sh ${D}${prefix}/pandora/scripts/ 
+	  install -m 0755 ${WORKDIR}/op_dsp.sh ${D}${prefix}/pandora/scripts/
+	  install -m 0755 ${WORKDIR}/openbox-functions.sh ${D}${prefix}/pandora/scripts/ 
 
 
           install -d ${D}${prefix}/pandora/apps/
