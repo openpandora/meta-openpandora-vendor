@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openbox_menu xmlns="http://openbox.org/3.4/menu">
+
+<menu id="PNDs-menu"
+	label="Programs"
+	execute="cat /tmp/obcache/progmenu" />
+
+<menu id="Toggle-menu"
+	label="Connectivity"
+	execute="/usr/pandora/scripts/openbox-functions.sh togglemenu" />
+
+<menu id="Settings-menu"
+	label="Pandora Settings"
+	execute="/usr/pandora/scripts/openbox-functions.sh settingsmenu" />
+
+<menu id="Config-menu"
+	label="Openbox Config"
+	execute="/usr/pandora/scripts/openbox-functions.sh configmenu" />
+
+<menu id="Shutdown-menu"
+	label="Power Off"
+	execute="/usr/pandora/scripts/openbox-functions.sh shutdownmenu" />
+
+<menu id="root-menu" label="Openbox 3">
+	<menu id="PNDs-menu" />
+	<separator />
+
+	<item label="Web Browser" icon="/usr/share/icons/gnome/48x48/apps/web-browser.png">
+    	<action name="Execute">
+    		<command>/usr/pandora/scripts/openbox-functions.sh webbrowser</command>
+    	</action>
+  	</item>
+
+	<item label="PND Installer" icon="/usr/share/icons/gnome/48x48/status/software-update-available.png">
+	    <action name="Execute">
+			<command>/usr/pandora/scripts/openbox-functions.sh pndinstaller</command>
+		</action>
+  	</item>
+
+	<separator />
+	<menu id="Toggle-menu" />
+	<separator />
+	<menu id="Settings-menu" />
+	<separator />
+	<menu id="Config-menu" />
+	<separator />	
+
+	<item label="Toggle Tint2 Panel" icon="/usr/share/icons/gnome/48x48/actions/remove.png">
+    	<action name="Execute">
+      		<command>/usr/pandora/scripts/openbox-functions.sh toggletint2</command>
+    	</action>
+	</item>
+	<item label="Toggle Warlock Bar" icon="/usr/share/pixmaps/wbar/wbar.png">
+    	<action name="Execute">
+      		<command>/usr/pandora/scripts/openbox-functions.sh togglewbar</command>
+    	</action>
+	</item>      	
+
+	<separator />
+
+  	<item label="Text Editor" icon="/usr/share/icons/gnome/48x48/apps/accessories-text-editor.png">
+    	<action name="Execute">
+      		<command>mousepad</command>
+    	</action>
+  	</item>    
+
+  	<item label="File Manager" icon="/usr/share/icons/gnome/48x48/apps/system-file-manager.png">
+    	<action name="Execute">
+      		<command>Thunar</command>
+    	</action>
+  	</item>    
+
+  	<item label="Terminal" icon="/usr/share/icons/gnome/48x48/apps/terminal.png">
+    	<action name="Execute">
+      		<command>lxterminal</command>
+    	</action>
+  	</item>    
+  
+  	<separator />
+
+  	<item label="Switch GUI" icon="/usr/share/icons/hicolor/48x48/apps/xfce4-splash.png">
+    	<action name="Execute">
+      		<command>/usr/pandora/scripts/op_switchgui.sh</command>
+    	</action>
+  	</item>
+
+	<menu id="Shutdown-menu" />
+
+</menu>
+
+</openbox_menu>

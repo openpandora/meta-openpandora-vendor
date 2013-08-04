@@ -1,0 +1,91 @@
+#!/bin/bash
+
+#if test -n "$1"; then
+#    echo "Syntax: openbox-session"
+#    echo
+#    echo "See the openbox-session(1) manpage for help."
+#  exit
+#fi
+
+# Clean up after MiniMenu / XFCE
+
+killall -9 xfconfd
+
+if [ $? -eq 0 ]		# xfwm4 for MinimMenu or XFCE was running
+then
+	xprop -root -remove _NET_NUMBER_OF_DESKTOPS \
+                    -remove _NET_DESKTOP_NAMES \
+                    -remove _NET_CURRENT_DESKTOP \
+                    -remove _NET_DESKTOP_LAYOUT 2> /dev/null
+	
+#	killall --signal 9 xfsettingsd
+#	if [ $? -eq 0 ]		# XFCE was running
+#	then
+#		killall --signal 9 gvfsd
+#		killall --signal 9 gconfd-2
+#		killall --signal 9 xfce4-notifyd
+#		killall --signal 9 configbutton
+		
+		# don't kill active connection
+#		if ! (ifconfig | grep 'inet addr:' | grep -v '127.0.0.1' > /dev/null)
+#		then
+#			#killall --signal 9 bluetooth-applet
+#			killall --signal 9 nm-applet
+#		fi
+#	fi
+#
+fi
+
+# use memory instead of HOME/Applications/Cache to fix slow media problems
+if [ ! -d /tmp/obcache ]
+then
+	mkdir -p /tmp/obcache/menus
+fi
+export OPENBOX_OLD_CACHEDIR=$XDG_CACHE_HOME	
+export XDG_CACHE_HOME=/tmp/obcache
+
+# run openbox-menu as a daemon so Programs menu responds quicker
+(openbox-menu -p -o progmenu /etc/xdg/menus/openbox-pnd.menu &)
+
+# fill wbar's config with desktop stuff
+/usr/pandora/scripts/openbox-functions.sh reloadwbar
+
+# copy our gtk theme 
+# (openbox-exit copies xfwm4's .gtkrc-2.0 back when switching GUIs, 
+# but files are left alone if we're just restarting or booting to this as a default GUI )
+#cmp -s $HOME/.gtkrc-2.0 $HOME/.gtkrc-2.0_xfwm4
+#if [ $? -eq 0 ]
+#then
+#	cp $XDG_CONFIG_HOME/openbox/gtkrc $HOME/.gtkrc-2.0
+#fi
+
+# Set up the environment
+A="$XDG_CONFIG_HOME/openbox/environment"
+test -r $A && . $A
+
+# hang on a bit if openbox-menu's not finished yet 
+#while [ ! -f $XDG_CACHE_HOME/progmenu ]
+#do
+#	sleep .5
+#done
+
+# set wallpaper (last in script to show we're ready to accept input)
+if [ -f $XDG_CONFIG_HOME/openbox/nitrogen-wallpaper ]
+then
+	. $XDG_CONFIG_HOME/openbox/nitrogen-wallpaper
+else
+	hsetroot -center /usr/share/backgrounds/openbox_default.jpg
+fi
+
+# Run Openbox, with autostart stuff if present
+
+AUTOSTART="$XDG_CONFIG_HOME/openbox/autostart"
+if test -f $AUTOSTART
+then
+	exec /usr/bin/openbox --startup $AUTOSTART "$@"
+else
+	exec /usr/bin/openbox "$@"
+fi
+
+
+

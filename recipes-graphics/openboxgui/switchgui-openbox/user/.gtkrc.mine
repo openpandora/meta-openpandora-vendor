@@ -1,0 +1,8 @@
+# Uncomment to make scrollbars wider
+
+#style "scroll"
+#{
+#        GtkScrollbar::slider-width              = 20
+#}
+
+#class "*" style "scroll"

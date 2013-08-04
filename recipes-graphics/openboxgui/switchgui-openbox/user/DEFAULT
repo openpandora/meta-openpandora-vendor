@@ -1,0 +1,188 @@
+  <keyboard>
+    <!-- Keybinding for root menu (Pandora button) -->
+    <keybind key="C-XF86MenuKB">
+      <action name="ShowMenu">
+        <menu>root-menu</menu>
+      </action>
+    </keybind>
+    <!-- Keybindings for desktop switching -->
+    <keybind key="C-Left">
+      <action name="GoToDesktop">
+        <to>left</to>
+        <wrap>no</wrap>
+      </action>
+    </keybind>
+    <keybind key="C-Right">
+      <action name="GoToDesktop">
+        <to>right</to>
+        <wrap>no</wrap>
+      </action>
+    </keybind>
+    <keybind key="C-A-Left">
+      <action name="SendToDesktop">
+        <to>left</to>
+        <wrap>no</wrap>
+      </action>
+    </keybind>
+    <keybind key="C-A-Right">
+      <action name="SendToDesktop">
+        <to>right</to>
+        <wrap>no</wrap>
+      </action>
+    </keybind>
+    <!-- Keybindings for window switching -->
+    <keybind key="C-Up">
+    	<action name="PreviousWindow">
+        <finalactions>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+      	</finalactions>
+    	</action>
+  	</keybind>
+    <keybind key="S-A-Tab">
+    	<action name="PreviousWindow">
+      	<finalactions>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+      	</finalactions>
+    	</action>
+  	</keybind>
+    <keybind key="C-Down">
+      <action name="NextWindow">
+        <finalactions>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+        </finalactions>
+      </action>
+    </keybind>
+    <keybind key="A-Tab">
+      <action name="NextWindow">
+        <finalactions>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+        </finalactions>
+      </action>
+    </keybind>
+    <!-- Keybindings for windows -->
+    <keybind key="C-q">
+      <action name="Close"/>
+    </keybind>
+    <keybind key="A-space">
+      <action name="ShowMenu">
+        <menu>client-menu</menu>
+      </action>
+    </keybind>
+    <keybind key="C-1">
+      <action name="ShowMenu">
+        <menu>client-menu</menu>
+      </action>
+    </keybind>
+    <keybind key="C-2">
+      <action name="ToggleShade"/>
+    </keybind>
+    <keybind key="C-3">
+      <action name="Iconify"/>
+    </keybind>
+    <keybind key="C-4">
+      <action name="ToggleMaximizeFull"/>
+    </keybind>
+    <keybind key="C-5">
+      <action name="ToggleFullscreen"/>
+    </keybind>
+      <keybind key="C-6">
+      <action name="Execute">
+        <command>lxterminal</command> 
+      </action>
+    </keybind>
+    <keybind key="C-7">
+      <action name="Execute">
+        <command>openbox-functions webbrowser</command> 
+      </action>
+    </keybind>
+    <keybind key="C-8">
+      <action name="Execute">
+        <command>thunar</command> 
+      </action>
+    </keybind>
+    <keybind key="C-9">
+      <action name="ShowMenu">
+        <menu>client-list-combined-menu</menu>
+      </action>
+    </keybind>
+    <keybind key="C-0">
+      <action name="ToggleShowDesktop"/>
+    </keybind>
+		<keybind key="C-S-Up">
+      <action name="Execute">
+        <command>openbox-functions toggletint2</command> 
+      </action>
+    </keybind>
+    <keybind key="C-S-Down">
+      <action name="Execute">
+        <command>openbox-functions togglewbar</command> 
+      </action>
+    </keybind>
+    <!-- Keybindings for pseudo tiling windows manager
+    (disabled due to interference with jumanji)
+    <keybind key="C-k">
+      <action name="MoveResizeTo">
+        <x>-0</x>
+        <y>0</y>
+        <width>50%</width>
+        <height>460</height>
+        <finalactions>
+          <action name="Unmaximize"/>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+        </finalactions>
+      </action>
+    </keybind>
+    <keybind key="C-j">
+      <action name="MoveResizeTo">
+        <x>0</x>
+        <y>0</y>
+        <width>50%</width>
+        <height>460</height>
+        <finalactions>
+          <action name="Unmaximize"/>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+        </finalactions>
+      </action>
+    </keybind>
+    <keybind key="C-i">
+      <action name="MoveResizeTo">
+        <x>0</x>
+        <y>0</y>
+        <width>100%</width>
+        <height>230</height>
+        <finalactions>
+          <action name="Unmaximize"/>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+        </finalactions>
+      </action>
+    </keybind>
+    <keybind key="C-m">
+      <action name="MoveResizeTo">
+        <x>0</x>
+        <y>-0</y>
+        <width>100%</width>
+        <height>230</height>
+        <finalactions>
+          <action name="Unmaximize"/>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+        </finalactions>
+      </action>
+    </keybind>
+    -->
+  </keyboard>

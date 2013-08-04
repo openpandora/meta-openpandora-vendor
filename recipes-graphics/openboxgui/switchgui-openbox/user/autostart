@@ -1,0 +1,11 @@
+# this file is for commands to start programs after openbox loads 
+
+# comment out to not load warlock bar
+/usr/pandora/scripts/openbox-functions.sh togglewbar
+
+# comment out to not load tint2 panel
+/usr/pandora/scripts/openbox-functions.sh toggletint2
+
+
+
+
