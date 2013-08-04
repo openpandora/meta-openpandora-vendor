@@ -8,7 +8,7 @@
 # Default-Stop:      0 1 6
 ### END INIT INFO
  
-DESC="OpenPandora Save and Restore LCD Settings"
+DESC="OpenPandora Save and Restore various settings"
 NAME="pandora-state"
 
 . /usr/pandora/scripts/op_paths.sh
@@ -38,6 +38,9 @@ d_stop() {
 }
 
 d_start() {
+	# Determine Pandora type
+	pnd_version=$(dmesg | grep OMAP3 | grep ES | awk '{print $3}')
+	echo $pnd_version > /tmp/pnd_version
 	echo "Restoring Pandora specific settings"
 	highpow="$(cat /etc/pandora/conf/led.conf | grep HighPowerLED: | awk -F\: '{print $2}')"
 	echo $highpow > /sys/class/leds/pandora\:\:power/brightness #power LED bright
@@ -61,13 +64,18 @@ d_start() {
 	echo $oppmax > /proc/pandora/cpu_opp_max
 	if [ -f /etc/pandora/shutdown ]; then
 	      rm /etc/pandora/shutdown
-	      sync
-	      /usr/pandora/scripts/op_cpuspeed.sh -n $cpuspeed
+	      sync      
 	else
-	      echo "No clean shutdown - will not set CPU speed"
+	      echo "No clean shutdown - will CPU Speed will be set to safe value."
 	      echo "Yes" > /tmp/nocleanwarn
 	      chmod 777 /tmp/nocleanwarn
+		if [ "$pnd_version" == "OMAP3630" ]; then
+		  cpuspeed="1000"
+		else
+		  cpuspeed="600"
+		fi
 	fi
+	/usr/pandora/scripts/op_cpuspeed.sh -n $cpuspeed
 	sed -n '1p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mode
 	sed -n '2p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/mouse_sensitivity
 	sed -n '3p' /etc/pandora/conf/nubs.state > /proc/pandora/nub0/scrollx_sensitivity

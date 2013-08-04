@@ -8,7 +8,7 @@ COMPATIBLE_MACHINE = "openpandora"
 PR = "r67"
 
 #.next modification
-PRINC := "${@int(PRINC) + 5}"
+PRINC := "${@int(PRINC) + 6}"
 
 PARALLEL_MAKE = ""
 
@@ -23,8 +23,8 @@ SRC_URI = " \
 	  file://udisks.patch \
 "
 
-SRCREV = "6f277b9a9e9b4b6a642bc1e82028d5394faaae49"
-
+#SRCREV = "6f277b9a9e9b4b6a642bc1e82028d5394faaae49"
+SRCREV  = "a677d5c0db43949d38bd48c3418b90e70bed2461"
 S = "${WORKDIR}/git"
 
 inherit update-rc.d

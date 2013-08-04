@@ -2,7 +2,7 @@ DESCRIPTION = "Openpandora extra packages"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3b58"
 
-PR = "r3"
+PR = "r6"
 
 inherit packagegroup
 
@@ -29,5 +29,10 @@ RDEPENDS_${PN} = " \
 	tar \
 	wget \
 	libsdl libsdl-mixer libsdl-image libsdl-gfx libsdl-net libsdl-ttf \
+	python-pygame python-crypt python-netclient python-subprocess \
+	qt4-common  libqtsvg4 libqtsql4 \
+	tremor \
+	libpthread-stubs \
+        libfaad libmikmod directfb polkit-gnome \
+	gksu \
 "
-

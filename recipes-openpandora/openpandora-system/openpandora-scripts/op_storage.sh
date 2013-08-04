@@ -1,11 +1,17 @@
 #!/bin/bash
-while selection=$(grep "/dev/mmcblk" /proc/mounts | cut -f 2 -d " " | sed 's/\\040/ /g' | zenity --title="SD Card Mass Storage" --width="380" --height="200" --list --text="Enable mass storage" --column="Select card"); do
-selection2=$(echo "$selection" | sed 's/ /\\\\040/g')
-options=$(grep "${selection2}" /proc/mounts | awk '{print $4}' | sed "s/,codepage=[A-Za-z0-9]*,/,/g" | sed 's/\\040/\\ /g' )
-device=$(grep "${selection2}" /proc/mounts | awk '{print substr($1,1,12)}')
-device2=$(grep "${selection2}" /proc/mounts | awk '{print $1}')
 
-if umount $device2; then
+mountmassstorage()
+{
+	selection2=$(echo "$selection" | sed 's/ /\\\\040/g')
+	options=$(grep "${selection2}" /proc/mounts | awk '{print $4}' | sed "s/,codepage=[A-Za-z0-9]*,/,/g" | sed 's/\\040/\\ /g' )
+	device=$(grep "${selection2}" /proc/mounts | awk '{print substr($1,1,12)}')
+	device2=$(grep "${selection2}" /proc/mounts | awk '{print $1}')
+
+	if ! umount $device2; then
+		zenity --title="Error" --error --text="Error.\nThe card could not be unmounted.\n\nPlease make sure to close any programs that currently access the SD Card." --timeout 10
+		return 1
+	fi
+
 	delay=0
 
 	# remove other gadget modules
@@ -40,8 +46,20 @@ if umount $device2; then
 		sleep $delay
 		modprobe $restore_list
 	fi
+}
+
+
+if [ -z $1 ]; then
+	while selection=$(grep "/dev/mmcblk" /proc/mounts | cut -f 2 -d " " | sed 's/\\040/ /g' | zenity --title="SD Card Mass Storage" --width="380" --height="200" --list --text="Enable mass storage" --column="Select card"); do
+		mountmassstorage
+	done
 else
-	zenity --title="Error" --error --text="Error.\nThe card could not be unmounted.\n\nPlease make sure to close any programs that currently access the SD Card." --timeout 10
+
+	if [ "$1" == "list" ]; then
+		grep "/dev/mmcblk" /proc/mounts | cut -f 2 -d " " | sed 's/\\040/ /g'
+	else
+		selection=$1
+		mountmassstorage
+	fi
 fi
 
-done

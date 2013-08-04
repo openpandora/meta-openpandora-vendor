@@ -4,12 +4,14 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a42
 
 COMPATIBLE_MACHINE = "openpandora"
 
-RDEPENDS_${PN} = "zenity dbus xwininfo procps bc python-pygtk"
+RDEPENDS_${PN} = "bash sed gawk zenity dbus xwininfo procps bc python-pygtk"
 # rdepends failed recipes : gksu
 
-PR = "r135"
+PR = "r146"
+PRINC := "${@int(PRINC) + 1}"
+
 SRC_URI = " \
-	  file://LICENSE \
+          file://LICENSE \
           file://op_paths.sh \
           file://op_bright.sh \
           file://op_cpuspeed.sh \
@@ -21,20 +23,11 @@ SRC_URI = " \
           file://op_sysspeed.sh \
 	  file://op_createsd.sh \
 	  file://op_createsd.pnd \
-          file://op_wifi.sh \
-          file://op_wifi.pnd \  
-          file://op_bluetooth.sh \
-          file://op_bluetooth_work.sh \
-          file://op_bluetooth-check.desktop \
-          file://op_bluetooth.desktop \          
           file://op_startupmanager.sh \
           file://op_startupmanager.pnd \
           file://op_switchgui.sh \
           file://op_switchgui.pnd \
-          file://nettool.pnd \
-          file://startnetbooklauncher \
           file://startmmenu \    
-          file://startpmenu \ 
           file://stopmmenu \
           file://op_calibrate.sh \
           file://op_calibrate.pnd \
@@ -95,7 +88,10 @@ SRC_URI = " \
 	  file://op_xfcemenu.sh \
 	  file://op_hugetlb.sh \
 	  file://op_gamma.sh \
+	  file://op_dsp.sh \
 "
+#          file://compo4all-manager.pnd \
+
 do_install() {
           install -d ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_paths.sh ${D}${prefix}/pandora/scripts/
@@ -105,10 +101,7 @@ do_install() {
           install -m 0755 ${WORKDIR}/op_createsd.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_sysspeed.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_cpusettings.sh ${D}${prefix}/pandora/scripts/
-          install -m 0755 ${WORKDIR}/op_wifi.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_usbhost.sh ${D}${prefix}/pandora/scripts/
-          install -m 0755 ${WORKDIR}/op_bluetooth.sh ${D}${prefix}/pandora/scripts/
-          install -m 0755 ${WORKDIR}/op_bluetooth_work.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_startupmanager.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_switchgui.sh ${D}${prefix}/pandora/scripts/
           install -m 0755 ${WORKDIR}/op_calibrate.sh ${D}${prefix}/pandora/scripts/
@@ -140,7 +133,7 @@ do_install() {
 	  install -m 0644 ${WORKDIR}/nubmode.glade ${D}${prefix}/pandora/scripts/ 
 	  install -m 0644 ${WORKDIR}/tvout.glade ${D}${prefix}/pandora/scripts/ 
 	  install -m 0755 ${WORKDIR}/op_lidsettings.sh ${D}${prefix}/pandora/scripts/ 
-
+	  install -m 0755 ${WORKDIR}/op_dsp.sh ${D}${prefix}/pandora/scripts/ 
 
 
           install -d ${D}${prefix}/pandora/apps/
@@ -156,12 +149,12 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_storage.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_switchgui.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_usermanager.pnd ${D}${prefix}/pandora/apps/
-	  install -m 0755 ${WORKDIR}/op_wifi.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_usbhost.pnd ${D}${prefix}/pandora/apps/
           install -m 0755 ${WORKDIR}/op_tvout.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_inputtest.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_lidsettings.pnd ${D}${prefix}/pandora/apps/
 	  install -m 0755 ${WORKDIR}/op_osupgrade.pnd ${D}${prefix}/pandora/apps/
+#	  install -m 0755 ${WORKDIR}/compo4all-manager.pnd ${D}${prefix}/pandora/apps/
 
 	  install -d ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/evince.pnd ${D}${prefix}/pandora/mmenu/
@@ -172,13 +165,6 @@ do_install() {
           install -m 0755 ${WORKDIR}/thunar.pnd ${D}${prefix}/pandora/mmenu/
           install -m 0755 ${WORKDIR}/xchat.pnd ${D}${prefix}/pandora/mmenu/
 	  install -m 0755 ${WORKDIR}/gcalctool.pnd ${D}${prefix}/pandora/mmenu/
-	  install -m 0755 ${WORKDIR}/nettool.pnd ${D}${prefix}/pandora/mmenu/
-
-          install -d ${D}${datadir}/applications/
-          install -m 0644 ${WORKDIR}/op_bluetooth.desktop ${D}${datadir}/applications/
-          
-          install -d ${D}${sysconfdir}/xdg/autostart/
-          install -m 0644 ${WORKDIR}/op_bluetooth-check.desktop ${D}${sysconfdir}/xdg/autostart/op_bluetooth-check.desktop
 
           install -d ${D}${sysconfdir}/pandora/conf/
           install -m 0644 ${WORKDIR}/gui.conf ${D}${sysconfdir}/pandora/conf/gui.conf
@@ -197,9 +183,7 @@ do_install() {
           install -m 0755 ${WORKDIR}/op_env.sh ${D}${sysconfdir}/profile.d/
 
           install -d ${D}${bindir}/
-          install -m 0755 ${WORKDIR}/startnetbooklauncher ${D}${bindir}/
           install -m 0755 ${WORKDIR}/startmmenu ${D}${bindir}/
-          install -m 0755 ${WORKDIR}/startpmenu ${D}${bindir}/
           install -m 0755 ${WORKDIR}/stopmmenu ${D}${bindir}/
 }
 

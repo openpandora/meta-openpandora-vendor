@@ -6,7 +6,7 @@ COMPATIBLE_MACHINE = "openpandora"
 
 RDEPENDS = "sudo"
 
-PR = "r20"
+PR = "r21"
 
 SRC_URI = " \
           file://LICENSE \

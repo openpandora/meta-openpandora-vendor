@@ -5,7 +5,7 @@ COMPATIBLE_MACHINE = "openpandora"
 # /etc/skel is used by Shadow's useradd so you really have that installed for this to make sense ;)
 RDEPENDS = "shadow"
 
-PR = "r20"
+PR = "r22"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=956931f56ef227f7d172a149ddb40b48"
 

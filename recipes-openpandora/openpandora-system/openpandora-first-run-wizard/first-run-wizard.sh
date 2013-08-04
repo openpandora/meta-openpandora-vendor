@@ -17,6 +17,19 @@ groupadd wheel
 export WALLPAPER='/usr/share/xfce4/backdrops/op-firstrun.png'
 hsetroot -center $WALLPAPER
 
+# Find out what unit the user has.
+pnd_version=$(dmesg | grep OMAP3 | grep ES | awk '{print $3}')
+es_version=$(dmesg | grep OMAP3 | grep ES | awk '{print $4}')
+if [ "$pnd_version" == "OMAP3630" ]; then
+    pnd_version="1GHz"
+fi
+  if [ "$pnd_version" == "OMAP3430/3530" ]; then
+    pnd_version="Rebirth"
+  if [ "$es_version" == "ES2.1" ]; then
+    pnd_version="Classic"
+  fi
+fi
+
 # Default error message (should a user hit cancel, validation fail etc.).
 ERROR_WINDOW='zenity --title="Error" --error --text="Sorry! Please try again." --timeout 6'
 
@@ -30,8 +43,20 @@ rmmod board_omap3pandora_wifi wl1251_sdio wl1251
 
 # Greet the user.
 
-if zenity --question --title="Pandoras Box has been opened." --text="Welcome!\n\nPandora's Box has been opened.\n\nThis wizard will help you setting up your new OpenPandora handheld before the first use.\n\nYou will be asked a few simple questions to personalise and configure your device.\n\nDo you want to set up your unit now or shut the unit down and do it later?" --ok-label="Start now" --cancel-label="Shutdown" ; then
+if zenity --question --title="Pandoras Box has been opened." --text="Welcome!\n\nPandora's Box has been opened.\n\nThis wizard will help you setting up your $pnd_version OpenPandora handheld before the first use.\n\nYou will be asked a few simple questions to personalise and configure your device.\n\nDo you want to set up your unit now or shut the unit down and do it later?" --ok-label="Start now" --cancel-label="Shutdown" ; then
 # ----
+
+# Calibrate touchscreen.
+
+if zenity --question --title="Calibrate Touchscreen" --text="It is recommended to calibrate the touchscreen to make sure it accurately works.\n\nIf you do so, you will see a moving crosshair.\nUse the stylus to press the crosshair as accurate as possible.\n\nYou can always (re-)calibrate it from the Settings-Menu later in the OS as well." --ok-label="Calibrate Touchscreen" --cancel-label="Don't calibrate it"; then
+  . /etc/profile
+  TSLIB_CONSOLEDEVICE=none op_runfbapp ts_calibrate
+  /usr/pandora/scripts/op_touchinit.sh
+while ! zenity --question --title="Check Calibration" --text="Your new calibration setting has been applied.\n\nPlease check if the touchscreen is now working properly.\nIf not, you might want to try a recalibration.\n\n(Hint: use the nubs to press the button if the touchscreen is way off)" --ok-label="The touchscreen is fine" --cancel-label="Recalibrate"; do
+      TSLIB_CONSOLEDEVICE=none op_runfbapp ts_calibrate
+  /usr/pandora/scripts/op_touchinit.sh  
+done
+fi
 
 # Reset ROOT's password to something random 
 
@@ -46,37 +71,6 @@ $rootpwd
 EOF
 	rootpwd=""
 fi
-
-# ----
-
-# Ask the user to calibrate the touchscreen.
-
-#if zenity --question --title="Touchscreen calibration" --text="It is recommended to calibrate and test the device touchscreen.\n\nDo you wish to calibrate the touchscreen now?" --ok-label="Yes" --cancel-label="No"; then 
-#	# Make sure we have a sane environment as this script will be run long before any /etc/profile stuff.
-#	. /etc/profile.d/tslib.sh
-#	# Delete the pointercal file (do we want to do that?)
-#	# rm /etc/pointercal
-#	# Spawn the ts_* tools as subprocesses that will return to the script.
-#	echo Running ts_calibrate	
-#	/usr/bin/ts_calibrate
-#	wait
-#	echo Running ts_test
-#	/usr/bin/ts_test
-#	wait
-#fi
-
-# ----
-
-# Setup swap partition if the user has placed an SD with a swap partition on it.
-
-#swap_part=$(sfdisk -l /dev/mmcblk? | grep swap | cut -d" " -f1)
-#if [ x$swap_part != x ] ; then
-#	use_swap=$(zenity --title="Enable swap?" --text "Swap partition found on SD card. Would you like to use it?\n\nWarning: This SD must remain in the system to use the swap." --list --radiolist --column " " --column "Answer" TRUE "Use swap on $swap_part" FALSE "Do not use swap")
-#	if [ "$use_swap" = "Use swap on $swap_part" ] ; then
-#		swapon $swap_part
-#       		echo "$swap_part none swap sw 0 0" >> /etc/fstab
-#	fi
-#fi
 
 # ----
 
@@ -170,13 +164,9 @@ stopcommand=$(grep $selection /etc/pandora/conf/gui.conf | awk -F\; '{print $4}'
 
 echo $gui
 
-if [ $gui ]; then 
-  sed -i "s/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=$gui/g" /home/$username/.xinitrc
+  sed -i "s/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=\"$gui\"/g" /home/$username/.xinitrc
   echo $selection selected as default interface
   zenity --info --title="Selected session" --text "You selected $selection as default setting." --timeout 6
-else
-  sed -i 's/.*DEFAULT_SESSION=.*/DEFAULT_SESSION=startxfce4/g' /home/$username/.xinitrc
-fi
 
 # ----
 
@@ -220,49 +210,81 @@ date +%H:%M -s $time
 hwclock -u -w
 
 
-#Let's ask the user about clockspeed
-while ! cpusel=$(zenity --title="Optional settings" --width="400" --height="350" --list --column "id" --column "Please select" --hide-column=1 --text="The CPU of the Pandora supports different speed settings.\nHigher speeds might make some units unstable and decrease the lifetime of your CPU.\n\nBelow are some quick profiles which will help you to configure your system the way you like it.\n" "1100" "Clockspeed: 1,1Ghz, OPP5 (should be stable on 1GHz units)" "1000" "Clockspeed: 1GHz, OPP5 (most probably unstable on 600Mhz units)" "800" "Clockspeed: 800MHz, OPP5 (should be stable on all units)" "600" "Clockspeed: 600MHz, OPP3 (600 MHz units only)" --ok-label="Select CPU Profile" ); do
-    zenity --title="Error" --error --text="Please select your desired CPU Speed profile." --timeout=6
-done
+# Let the user choose his desired clockspeed.
 
-case $cpusel in
-  "1100")
-  echo 5 > /proc/pandora/cpu_opp_max
-  sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
-  sed -i "s/.*max:.*/max:1200/g" /etc/pandora/conf/cpu.conf
-  sed -i "s/.*default.*/default:1100/g" /etc/pandora/conf/cpu.conf
-  sed -i "s/.*safe.*/safe:1100/g" /etc/pandora/conf/cpu.conf
-  default_cpu=1100
-  ;;
+if [ "$pnd_version" == "1GHz" ]; then 
+      cpusel=$(zenity --title="Optional settings" --width="400" --height="300" --list --column "id" --column "Please select" --hide-column=1 --text="The CPU of the Pandora supports different speed settings.\nHigher speeds might make some units unstable and decrease the lifetime of your CPU.\n\nBelow are some quick profiles which will help you to configure your system the way you like it.\n" "1200" "Clockspeed: 1,2Ghz, OPP4 (probably unstable)" "1100" "Clockspeed: 1,1Ghz, OPP4 (should be stable)" "1000" "Clockspeed: 1GHz, OPP4 (Default Speed)" --ok-label="Select CPU Profile" )
+    else
+      cpusel=$(zenity --title="Optional settings" --width="400" --height="300" --list --column "id" --column "Please select" --hide-column=1 --text="The CPU of the Pandora supports different speed settings.\nHigher speeds might make some units unstable and decrease the lifetime of your CPU.\n\nBelow are some quick profiles which will help you to configure your system the way you like it.\n" "900" "Clockspeed: 900Mhz, OPP5 (probably unstable)" "800" "Clockspeed: 800Mhz, OPP5 (should be stable)" "600" "Clockspeed: 600MHz, OPP3 (Default Speed)" --ok-label="Select CPU Profile" )
+    fi
+    
+    case $cpusel in
+	"1200")
+	echo 4 > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:4/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*max:.*/max:1300/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*default.*/default:1200/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*safe.*/safe:1200/g" /etc/pandora/conf/cpu.conf
+	sync
+	/usr/pandora/scripts/op_cpuspeed.sh -n 1200
+	zenity --info --title="CPU Speed set" --text "The maximum CPU Speed has been set to 1,2GHz." --timeout 6
+	;;
+    
+        "1100")
+	echo 4 > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:4/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*max:.*/max:1200/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*default.*/default:1100/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*safe.*/safe:1100/g" /etc/pandora/conf/cpu.conf
+	sync
+	/usr/pandora/scripts/op_cpuspeed.sh -n 1100
+	zenity --info --title="CPU Speed set" --text "The maximum CPU Speed has been set to 1,1GHz." --timeout 6
+	;;
 
-  "1000")
-  echo 5 > /proc/pandora/cpu_opp_max
-  sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
-  sed -i "s/.*max:.*/max:1100/g" /etc/pandora/conf/cpu.conf
-  sed -i "s/.*default.*/default:1000/g" /etc/pandora/conf/cpu.conf
-  sed -i "s/.*safe.*/safe:1000/g" /etc/pandora/conf/cpu.conf
-  default_cpu=1000
-  ;;
+	"1000")
+	echo 4 > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:4/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*max:.*/max:1100/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*default.*/default:1000/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*safe.*/safe:1000/g" /etc/pandora/conf/cpu.conf
+	sync
+	/usr/pandora/scripts/op_cpuspeed.sh -n 1000
+	zenity --info --title="CPU Speed set" --text "The maximum CPU Speed has been set to 1GHz." --timeout 6
+	;;	
 
-  "800")
-  echo 5 > /proc/pandora/cpu_opp_max
-  sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
-  sed -i "s/.*max:.*/max:900/g" /etc/pandora/conf/cpu.conf
-  sed -i "s/.*default.*/default:800/g" /etc/pandora/conf/cpu.conf
-  sed -i "s/.*safe.*/safe:800/g" /etc/pandora/conf/cpu.conf
-  default_cpu=800
-  ;;
+	"900")
+	echo 5 > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*max:.*/max:950/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*default.*/default:900/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*safe.*/safe:900/g" /etc/pandora/conf/cpu.conf
+	sync
+	/usr/pandora/scripts/op_cpuspeed.sh -n 900
+	zenity --info --title="CPU Speed set" --text "The maximum CPU Speed has been set to 900MHz." --timeout 6
+	;;
+	
+	"800")
+	echo 5 > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*max:.*/max:900/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*default.*/default:800/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*safe.*/safe:800/g" /etc/pandora/conf/cpu.conf
+	sync
+	/usr/pandora/scripts/op_cpuspeed.sh -n 800
+	zenity --info --title="CPU Speed set" --text "The maximum CPU Speed has been set to 800MHz." --timeout 6
+	;;
 
 
-
-  "600")
-  echo 3 > /proc/pandora/cpu_opp_max
-  sed -i "s/.*maxopp.*/maxopp:3/g" /etc/pandora/conf/cpu.conf
-  sed -i "s/.*max:.*/max:700/g" /etc/pandora/conf/cpu.conf
-  sed -i "s/.*default.*/default:600/g" /etc/pandora/conf/cpu.conf
-  sed -i "s/.*safe.*/safe:600/g" /etc/pandora/conf/cpu.conf
-  default_cpu=600
-  ;;
+	"600")
+	echo 3 > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:3/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*max:.*/max:700/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*default.*/default:600/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*safe.*/safe:600/g" /etc/pandora/conf/cpu.conf
+	sync
+	/usr/pandora/scripts/op_cpuspeed.sh -n 600
+	zenity --info --title="CPU Speed set" --text "The maxmimum CPU Speed has been set to 600Mhz." --timeout 6
+	;;
 
 esac
 
@@ -273,13 +295,14 @@ update-rc.d -f samba remove
 update-rc.d -f xinetd remove
 update-rc.d -f avahi-daemon remove
 update-rc.d -f apmd remove
-update-rc.d -f usb-gadget remove
 update-rc.d -f banner remove
 update-rc.d -f portmap remove
 update-rc.d -f mountnfs remove
 update-rc.d -f blueprobe remove
 update-rc.d -f dropbear remove
 update-rc.d -f wl1251-init remove
+# leave this one alone, needed for OTG host mode, powersaving should be ok on 3.2.39 at least
+#update-rc.d -f usb-gadget remove
 
 # prevent wifi from being autoloaded on later kernels, let wl1251-init script do it
 if ! grep -q 'blacklist wl1251_sdio' /etc/modprobe.conf 2> /dev/null; then
@@ -306,15 +329,7 @@ touch /etc/pandora/first-boot
 # Make the control file writeable by all to allow the user to delete to rerun the wizard on next boot.
 chmod 0666 /etc/pandora/first-boot
 
-if zenity --question --title="Calibrate Touchscreen" --text="It is recommended to calibrate the touchscreen to make sure it accurately works.\n\nIf you do so, you will see a moving crosshair.\nUse the stylus to press the crosshair as accurate as possible.\n\nYou can always (re-)calibrate it from the Settings-Menu later in the OS as well." --ok-label="Calibrate Touchscreen" --cancel-label="Don't calibrate it"; then
-  . /etc/profile
-  TSLIB_CONSOLEDEVICE=none op_runfbapp ts_calibrate
-  /usr/pandora/scripts/op_touchinit.sh
-while ! zenity --question --title="Check Calibration" --text="Your new calibration setting has been applied.\n\nPlease check if the touchscreen is now working properly.\nIf not, you might want to try a recalibration.\n\n(Hint: use the nubs to press the button if the touchscreen is way off)" --ok-label="The touchscreen is fine" --cancel-label="Recalibrate"; do
-      TSLIB_CONSOLEDEVICE=none op_runfbapp ts_calibrate
-  /usr/pandora/scripts/op_touchinit.sh  
-done
-fi
+
 
 
 
@@ -338,10 +353,10 @@ case $mainsel in
 
 esac
 done
-systemctl restart slim
 # ----
 
-
+rm /tmp/nocleanwarn
+systemctl reboot
 # ----
 else
 poweroff

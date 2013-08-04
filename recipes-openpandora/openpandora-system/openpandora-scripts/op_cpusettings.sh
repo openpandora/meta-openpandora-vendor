@@ -3,17 +3,42 @@
 # CPU-Settings, v1.1, written by Michael Mrozek aka EvilDragon 2011.
 # This scripts allows you to change Pandora CPU-Settings.
 
+# First, check for the unit type and set maximum possible OPP.
+
+pnd_version=$(cat /tmp/pnd_version)
+if [ "$pnd_version" == "OMAP3630" ]; then
+    oppsys="4"
+  else
+    oppsys="5"
+fi
+
 while mainsel=$(zenity --title="CPU-Settings" --width="400" --height="380" --list --column "id" --column "Please select" --hide-column=1 --text="Welcome to the CPU-Settings.\nHere, you can configure the behaviour of your CPU \nThis can make your Pandora run faster but also more unstable.\n\nDon't worry though, you cannot permanently damage your unit.\n\nWhat do you want to do?\n" "profile" "Quick-Setup: Select from different profiles" "opp" "Set the max allowed OPP level" "mhz" "Set the maximum allowed MHz" "warning" "Change warning settings" "defaultmhz" "Set the default maximum MHz" --ok-label="Change Setting" --cancel-label="Exit"); do
 
 case $mainsel in
  
   "profile")
-    cpusel=$(zenity --title="Optional settings" --width="400" --height="350" --list --column "id" --column "Please select" --hide-column=1 --text="The CPU of the Pandora supports different speed settings.\nHigher speeds might make some units unstable and decrease the lifetime of your CPU.\n\nBelow are some quick profiles which will help you to configure your system the way you like it.\n" "1100" "Clockspeed: 1,1Ghz, OPP5 (should be stable on 1GHz units)" "1000" "Clockspeed: 1GHz, OPP5 (most probably unstable on 600Mhz units)" "800" "Clockspeed: 800MHz, OPP5 (should be stable on all units)" "600" "Clockspeed: 600MHz, OPP3 (600 MHz units only)" --ok-label="Select CPU Profile" )
-
+  
+    if [ "$pnd_version" == "OMAP3630" ]; then 
+      cpusel=$(zenity --title="Optional settings" --width="400" --height="300" --list --column "id" --column "Please select" --hide-column=1 --text="The CPU of the Pandora supports different speed settings.\nHigher speeds might make some units unstable and decrease the lifetime of your CPU.\n\nBelow are some quick profiles which will help you to configure your system the way you like it.\n" "1200" "Clockspeed: 1,2Ghz, OPP4 (probably unstable)" "1100" "Clockspeed: 1,1Ghz, OPP4 (should be stable)" "1000" "Clockspeed: 1GHz, OPP4 (Default Speed)" --ok-label="Select CPU Profile" )
+    else
+      cpusel=$(zenity --title="Optional settings" --width="400" --height="300" --list --column "id" --column "Please select" --hide-column=1 --text="The CPU of the Pandora supports different speed settings.\nHigher speeds might make some units unstable and decrease the lifetime of your CPU.\n\nBelow are some quick profiles which will help you to configure your system the way you like it.\n" "900" "Clockspeed: 900Mhz, OPP5 (probably unstable)" "800" "Clockspeed: 800Mhz, OPP5 (should be stable)" "600" "Clockspeed: 600MHz, OPP3 (Default Speed)" --ok-label="Select CPU Profile" )
+    fi
+    
     case $cpusel in
+	"1200")
+	echo 4 > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:4/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*max:.*/max:1300/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*default.*/default:1200/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*safe.*/safe:1200/g" /etc/pandora/conf/cpu.conf
+	sync
+	/usr/pandora/scripts/op_cpuspeed.sh -n 1200
+	zenity --info --title="CPU Speed set" --text "The maximum CPU Speed has been set to 1,2GHz." --timeout 6
+	;;
+    
         "1100")
-	echo 5 > /proc/pandora/cpu_opp_max
-	sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
+	echo 4 > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:4/g" /etc/pandora/conf/cpu.conf
 	sed -i "s/.*max:.*/max:1200/g" /etc/pandora/conf/cpu.conf
 	sed -i "s/.*default.*/default:1100/g" /etc/pandora/conf/cpu.conf
 	sed -i "s/.*safe.*/safe:1100/g" /etc/pandora/conf/cpu.conf
@@ -23,8 +48,8 @@ case $mainsel in
 	;;
 
 	"1000")
-	echo 5 > /proc/pandora/cpu_opp_max
-	sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
+	echo 4 > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:4/g" /etc/pandora/conf/cpu.conf
 	sed -i "s/.*max:.*/max:1100/g" /etc/pandora/conf/cpu.conf
 	sed -i "s/.*default.*/default:1000/g" /etc/pandora/conf/cpu.conf
 	sed -i "s/.*safe.*/safe:1000/g" /etc/pandora/conf/cpu.conf
@@ -33,6 +58,17 @@ case $mainsel in
 	zenity --info --title="CPU Speed set" --text "The maximum CPU Speed has been set to 1GHz." --timeout 6
 	;;	
 
+	"900")
+	echo 5 > /proc/pandora/cpu_opp_max
+	sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*max:.*/max:950/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*default.*/default:900/g" /etc/pandora/conf/cpu.conf
+	sed -i "s/.*safe.*/safe:900/g" /etc/pandora/conf/cpu.conf
+	sync
+	/usr/pandora/scripts/op_cpuspeed.sh -n 900
+	zenity --info --title="CPU Speed set" --text "The maximum CPU Speed has been set to 900MHz." --timeout 6
+	;;
+	
 	"800")
 	echo 5 > /proc/pandora/cpu_opp_max
 	sed -i "s/.*maxopp.*/maxopp:5/g" /etc/pandora/conf/cpu.conf
@@ -62,7 +98,7 @@ case $mainsel in
   "opp")
     opp="$(cat /etc/pandora/conf/cpu.conf | grep opp | awk -F\: '{print $2}')"
     if zenity --question --title="OPP Setting Info" --text="WARNING!\n\nIncreasing the maximum allowed OPP will allow you to overclock to higher values.\n\nHowever, besides using more power, it ALSO DECREASES THE LIFETIME OF YOUR CPU!" --ok-label="Yes, I know what I'm doing!" --cancel-label="I'm scared!"; then
-      if newopp=$(zenity --scale --text "Set the maximum allowed OPP" --min-value=3 --max-value=5 --value=$opp --step 1); then
+      if newopp=$(zenity --scale --text "Set the maximum allowed OPP" --min-value=3 --max-value=$oppsys --value=$opp --step 1); then
 	echo $newopp > /proc/pandora/cpu_opp_max
 	sed -i "s/.*maxopp.*/maxopp:$newopp/g" /etc/pandora/conf/cpu.conf
 	sync
