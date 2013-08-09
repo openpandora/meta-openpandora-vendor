@@ -1,7 +1,7 @@
 DESCRIPTION = "Openbox Configuration Manager"
 LICENSE = "LGPLv2"
 DEPENDS = "openbox glib-2.0"
-PR = "r0"
+PR = "r1"
 
 SRCREV = "cfde28714e55f76c817d050b0d008123e029aa18"
           

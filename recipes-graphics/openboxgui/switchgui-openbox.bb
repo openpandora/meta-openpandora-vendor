@@ -2,7 +2,7 @@ DESCRIPTION = "Config files for Openbox-based GUI"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 
-PR = "r0"
+PR = "r1"
 SRC_URI = " \
 	file://COPYING \
 	file://desktop-directories/openbox-accessories.directory \
@@ -40,9 +40,11 @@ SRC_URI = " \
 	file://user/wbar_custom.cfg \
 	file://user/webbrowser \
 	file://user/.gtkrc-2.0_openbox \
+	file://user/.gtkrc-2.0_xfwm4 \
 	file://user/.gtkrc.mine \
 	file://openbox-pandora-session \
 	file://openbox-exit \
+	file://openbox_default.jpg \
 	"
 	
 do_install() {
@@ -80,6 +82,7 @@ do_install() {
 	
 	install -d ${D}${sysconfdir}/skel/
 	install -m 0644 ${WORKDIR}/user/.gtkrc-2.0_openbox ${D}${sysconfdir}/skel/
+	install -m 0644 ${WORKDIR}/user/.gtkrc-2.0_xfwm4 ${D}${sysconfdir}/skel/
 	install -m 0644 ${WORKDIR}/user/.gtkrc.mine ${D}${sysconfdir}/skel/
 	
 	install -d ${D}${sysconfdir}/skel/Applications/Settings/openbox/
@@ -99,6 +102,9 @@ do_install() {
 	install -d ${D}${bindir}
 	install -m 0755 ${WORKDIR}/openbox-pandora-session ${D}${bindir}
 	install -m 0755 ${WORKDIR}/openbox-exit ${D}${bindir}
+	
+	install -d ${D}${prefix}/share/backgrounds/
+	install -m 0644 ${WORKDIR}/openbox_default.jpg ${D}${prefix}/share/backgrounds/
 	
 }
 

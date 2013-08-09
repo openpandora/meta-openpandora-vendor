@@ -53,11 +53,11 @@ export XDG_CACHE_HOME=/tmp/obcache
 # copy our gtk theme 
 # (openbox-exit copies xfwm4's .gtkrc-2.0 back when switching GUIs, 
 # but files are left alone if we're just restarting or booting to this as a default GUI )
-#cmp -s $HOME/.gtkrc-2.0 $HOME/.gtkrc-2.0_xfwm4
-#if [ $? -eq 0 ]
-#then
-#	cp $XDG_CONFIG_HOME/openbox/gtkrc $HOME/.gtkrc-2.0
-#fi
+cmp -s $HOME/.gtkrc-2.0 $HOME/.gtkrc-2.0_xfwm4
+if [ $? -eq 0 ]
+then
+	cp $HOME/.gtkrc-2.0_openbox $HOME/.gtkrc-2.0
+fi
 
 # Set up the environment
 A="$XDG_CONFIG_HOME/openbox/environment"

@@ -12,10 +12,13 @@ hsetroot
 
 
 # if we're switching to another GUI rather than just restarting
-#if ! grep "openbox-pandora-session" /tmp/gui.load > /dev/null
-#then
+if ! grep "openbox-pandora-session" /tmp/gui.load > /dev/null
+then
 	# save our gtkrc
-#	cp $HOME/.gtkrc-2.0 $XDG_CONFIG_HOME/openbox/gtkrc
+	cp $HOME/.gtkrc-2.0 $HOME/.gtkrc-2.0_openbox
+	
+	# give XFCE / MiniMenu their GTK+ theme back
+	cp $HOME/.gtkrc-2.0_xfwm4 $HOME/.gtkrc-2.0
 
 	# delete ON/OFF values for usb, bluetooth and wifi
 #	rm $XDG_CACHE_HOME/usb $XDG_CACHE_HOME/bluetooth $XDG_CACHE_HOME/wifi 	
@@ -23,8 +26,7 @@ hsetroot
 	# give XFCE / MiniMenu their cache directory back
 	export XDG_CACHE_HOME=$OPENBOX_OLD_CACHEDIR
 
-	# give XFCE / MiniMenu their GTK+ theme back
-#	cp $HOME/.gtkrc-2.0_xfwm4 $HOME/.gtkrc-2.0
+
 
 	# bluetooth-applet is now in XFCE autostart
 	# kill it so there isn't 2 of them

@@ -34,3 +34,4 @@
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_hugetlb.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_gamma.sh
 %wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/op_dsp.sh
+%wheel ALL=(ALL) NOPASSWD: /usr/pandora/scripts/openbox-functions.sh

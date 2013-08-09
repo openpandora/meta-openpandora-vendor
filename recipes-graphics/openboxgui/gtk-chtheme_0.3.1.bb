@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 SECTION = "x11/utils"
 DEPENDS = "glib-2.0 gtk+"
 
-PR = "r1"
+PR = "r2"
 
 SRC_URI = "http://plasmasturm.org/code/gtk-chtheme/gtk-chtheme-${PV}.tar.bz2 \
 		file://gtk-chtheme_gtkapi.patch \

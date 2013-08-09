@@ -12,7 +12,12 @@ debug(){
 	return 1 # 0 when debugging, 1 when not
 }
 
-test -e $(grep /etc/passwd -e $(ps u -C xfce4-session | tail -n1 | awk '{print $1}')| cut -f 6 -d ":")/.lidconfig && lidconfig=$(cat $(grep /etc/passwd -e $(ps u -C xfce4-session | tail -n1 | awk '{print $1}')| cut -f 6 -d ":")/.lidconfig) # read lid conf. file if it exists
+user=$(cat /tmp/currentuser)
+
+if [ -e /home/$user/.lidconfig ]
+then
+	lidconfig=$(cat /home/$user/.lidconfig) # read lid conf. file if it exists
+fi
 
 #powerbuttonconfig=$(cat $(grep /etc/passwd -e $(ps u -C xfce4-session | tail -n1 | awk '{print $1}')| cut -f 6 -d ":")/.powerbuttonconfig)
 
@@ -138,9 +143,9 @@ display_on_with_checks() {
 
 show_message() {
 	# TODO: check if desktop is visible; maybe use layer3?
-	xfceuser=$(ps u -C xfce4-session | tail -n1 | awk '{print $1}')
+	user=$(cat /tmp/currentuser)
 	cmd="DISPLAY=:0.0 zenity --info --text \"$1\" --timeout 10"
-	su -c "$cmd" $xfceuser
+	su -c "$cmd" $user
 }
 
 suspend_real() {
@@ -231,7 +236,7 @@ Please do not remove SD cards while pandora is suspended, doing so will corrupt 
 suspend_() {
 	# dim power LED
 	echo $lowpow > /sys/class/leds/pandora\:\:power/brightness
-
+	
 	if suspend_real; then
 		# resumed already
 		powerstate="on"
@@ -250,7 +255,7 @@ resume() {
 }
 
 shutdown(){ # warns the user and shuts the pandora down
-	xfceuser=$(ps u -C xfce4-session | tail -n1 | awk '{print $1}')
+	user=$(cat /tmp/currentuser)
 	time=5
 	countdown () {
 		for i in $(seq $time); do
@@ -260,11 +265,11 @@ shutdown(){ # warns the user and shuts the pandora down
 			sleep 1
 		done
 	}
-	countdown | su -c 'DISPLAY=:0.0 zenity --progress --auto-close --text "Shutdown in X" --title "Shutdown"' $xfceuser
+	countdown | su -c 'DISPLAY=:0.0 zenity --progress --auto-close --text "Shutdown in X" --title "Shutdown"' $user
 	if [ $? -eq 0 ]; then
 	/sbin/shutdown -h now
 	else
-	su -c 'DISPLAY=:0.0 zenity --error --text "Shutdown aborted!"' $xfceuser
+	su -c 'DISPLAY=:0.0 zenity --error --text "Shutdown aborted!"' $user
 	fi
 }
 

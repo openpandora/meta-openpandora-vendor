@@ -7,7 +7,7 @@ COMPATIBLE_MACHINE = "openpandora"
 RDEPENDS_${PN} = "bash sed gawk zenity dbus xwininfo procps bc python-pygtk"
 # rdepends failed recipes : gksu
 
-PR = "r147"
+PR = "r148"
 PRINC := "${@int(PRINC) + 1}"
 
 SRC_URI = " \

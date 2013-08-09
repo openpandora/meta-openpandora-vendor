@@ -487,7 +487,7 @@ case $1 in
 		
 		/etc/init.d/wl1251-init start
 		
-		echo -n "OFF" > /var/volatile/tmp/obcache/wifi		
+		echo -n "OFF" > /tmp/obcache/wifi		
 		;;
 	wifi_OFF)
 		user=$(cat /tmp/currentuser)		
@@ -496,27 +496,27 @@ case $1 in
 		ifconfig wlan0 down
 		rmmod wl1251_sdio wl1251
 
-		echo -n "ON" > /var/volatile/tmp/obcache/wifi
+		echo -n "ON" > /tmp/obcache/wifi
 		;;
 	bluetooth_ON)
 		/usr/pandora/scripts/op_bluetooth.sh
 
-		echo -n "OFF" > /var/volatile/tmp/obcache/bluetooth
+		echo -n "OFF" > /tmp/obcache/bluetooth
 		;;
 	bluetooth_OFF)
 		/usr/pandora/scripts/op_bluetooth.sh
 
-		echo -n "ON" > /var/volatile/tmp/obcache/bluetooth
+		echo -n "ON" > /tmp/obcache/bluetooth
 		;;
 	usbhost_ON)
 		modprobe ehci-hcd
 		
-		echo -n "OFF" > /var/volatile/tmp/obcache/usb
+		echo -n "OFF" > /tmp/obcache/usb
 		;;
 	usbhost_OFF)
 		rmmod ehci-hcd
 	
-		echo -n "ON" > /var/volatile/tmp/obcache/usb
+		echo -n "ON" > /tmp/obcache/usb
 		;;
 	settingsmenu)
 		settingsmenu;;
@@ -549,7 +549,7 @@ case $1 in
 		shutdown -r now
 		;;
 	suspend)
-		rm -f /var/volatile/tmp/obcache/wifi /var/volatile/tmp/obcache/bluetooth
+		rm -f /tmp/obcache/wifi /tmp/obcache/bluetooth
 		# pretend the power switch has been held for 1 second
 		/usr/pandora/scripts/op_power.sh 1
 		;;
