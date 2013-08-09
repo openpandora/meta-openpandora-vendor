@@ -1,0 +1,668 @@
+diff -Naur a/src/obconf.glade b/src/obconf.glade
+--- a/src/obconf.glade	2013-07-28 15:24:47.766866313 +0100
++++ b/src/obconf.glade	2013-07-28 15:25:14.030218585 +0100
+@@ -11,13 +11,13 @@
+       <widget class="GtkVBox" id="vbox33">
+         <property name="visible">True</property>
+         <property name="can_focus">False</property>
+-        <property name="border_width">12</property>
+-        <property name="spacing">12</property>
++        <property name="border_width">4</property>
++        <property name="spacing">4</property>
+         <child>
+           <widget class="GtkVBox" id="vbox1">
+             <property name="visible">True</property>
+             <property name="can_focus">False</property>
+-            <property name="spacing">6</property>
++            <property name="spacing">2</property>
+             <child>
+               <widget class="GtkLabel" id="title_label">
+                 <property name="visible">True</property>
+@@ -110,8 +110,8 @@
+       <widget class="GtkVBox" id="vbox49">
+         <property name="visible">True</property>
+         <property name="can_focus">False</property>
+-        <property name="border_width">12</property>
+-        <property name="spacing">18</property>
++        <property name="border_width">4</property>
++        <property name="spacing">6</property>
+         <child>
+           <widget class="GtkLabel" id="label117">
+             <property name="visible">True</property>
+@@ -148,7 +148,7 @@
+   </widget>
+   <widget class="GtkWindow" id="main_window">
+     <property name="can_focus">False</property>
+-    <property name="border_width">6</property>
++    <property name="border_width">2</property>
+     <property name="title" translatable="yes">Openbox Configuration Manager</property>
+     <property name="icon_name">preferences-system-windows</property>
+     <signal name="delete_event" handler="on_main_window_delete_event" swapped="no"/>
+@@ -156,7 +156,7 @@
+       <widget class="GtkVBox" id="vbox8">
+         <property name="visible">True</property>
+         <property name="can_focus">False</property>
+-        <property name="spacing">6</property>
++        <property name="spacing">2</property>
+         <child>
+           <widget class="GtkNotebook" id="notebook1">
+             <property name="visible">True</property>
+@@ -167,13 +167,13 @@
+               <widget class="GtkVBox" id="vbox20">
+                 <property name="visible">True</property>
+                 <property name="can_focus">False</property>
+-                <property name="border_width">12</property>
+-                <property name="spacing">6</property>
++                <property name="border_width">4</property>
++                <property name="spacing">2</property>
+                 <child>
+                   <widget class="GtkVBox" id="vbox21">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label59">
+                         <property name="visible">True</property>
+@@ -208,7 +208,7 @@
+                           <widget class="GtkVBox" id="vbox22">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="spacing">6</property>
++                            <property name="spacing">2</property>
+                             <child>
+                               <widget class="GtkScrolledWindow" id="scrolledwindow3">
+                                 <property name="visible">True</property>
+@@ -403,13 +403,13 @@
+               <widget class="GtkVBox" id="vbox36">
+                 <property name="visible">True</property>
+                 <property name="can_focus">False</property>
+-                <property name="border_width">12</property>
+-                <property name="spacing">18</property>
++                <property name="border_width">4</property>
++                <property name="spacing">6</property>
+                 <child>
+                   <widget class="GtkVBox" id="vbox40">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label99">
+                         <property name="visible">True</property>
+@@ -452,7 +452,7 @@
+                                   <widget class="GtkVBox" id="vbox70">
+                                     <property name="visible">True</property>
+                                     <property name="can_focus">False</property>
+-                                    <property name="spacing">6</property>
++                                    <property name="spacing">2</property>
+                                     <child>
+                                       <widget class="GtkHBox" id="hbox51">
+                                         <property name="visible">True</property>
+@@ -537,7 +537,7 @@
+                   <widget class="GtkVBox" id="vbox38">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label88">
+                         <property name="visible">True</property>
+@@ -572,12 +572,12 @@
+                           <widget class="GtkVBox" id="vbox83">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="spacing">6</property>
++                            <property name="spacing">2</property>
+                             <child>
+                               <widget class="GtkHBox" id="hbox44">
+                                 <property name="visible">True</property>
+                                 <property name="can_focus">False</property>
+-                                <property name="spacing">6</property>
++                                <property name="spacing">2</property>
+                                 <child>
+                                   <widget class="GtkLabel" id="label90">
+                                     <property name="visible">True</property>
+@@ -626,7 +626,7 @@
+                               <widget class="GtkHBox" id="hbox114">
+                                 <property name="visible">True</property>
+                                 <property name="can_focus">False</property>
+-                                <property name="spacing">6</property>
++                                <property name="spacing">2</property>
+                                 <child>
+                                   <widget class="GtkLabel" id="label233">
+                                     <property name="visible">True</property>
+@@ -643,7 +643,7 @@
+                                   <widget class="GtkHBox" id="hbox115">
+                                     <property name="visible">True</property>
+                                     <property name="can_focus">False</property>
+-                                    <property name="spacing">6</property>
++                                    <property name="spacing">2</property>
+                                     <child>
+                                       <widget class="GtkLabel" id="label229">
+                                         <property name="visible">True</property>
+@@ -760,7 +760,7 @@
+                   <widget class="GtkVBox" id="vbox39">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label91">
+                         <property name="visible">True</property>
+@@ -1040,13 +1040,13 @@
+               <widget class="GtkVBox" id="vbox12">
+                 <property name="visible">True</property>
+                 <property name="can_focus">False</property>
+-                <property name="border_width">12</property>
+-                <property name="spacing">18</property>
++                <property name="border_width">4</property>
++                <property name="spacing">6</property>
+                 <child>
+                   <widget class="GtkVBox" id="vbox65">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label164">
+                         <property name="visible">True</property>
+@@ -1081,7 +1081,7 @@
+                           <widget class="GtkVBox" id="vbox66">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="spacing">6</property>
++                            <property name="spacing">2</property>
+                             <child>
+                               <widget class="GtkCheckButton" id="focus_new">
+                                 <property name="label" translatable="yes">Focus _new windows when they appear</property>
+@@ -1124,7 +1124,7 @@
+                   <widget class="GtkVBox" id="vbox34">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label82">
+                         <property name="visible">True</property>
+@@ -1159,7 +1159,7 @@
+                           <widget class="GtkVBox" id="vbox35">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="spacing">6</property>
++                            <property name="spacing">2</property>
+                             <child>
+                               <widget class="GtkCheckButton" id="place_mouse">
+                                 <property name="label" translatable="yes">_Place new windows under the mouse pointer</property>
+@@ -1184,7 +1184,7 @@
+                               <widget class="GtkHBox" id="hbox107">
+                                 <property name="visible">True</property>
+                                 <property name="can_focus">False</property>
+-                                <property name="spacing">12</property>
++                                <property name="spacing">4</property>
+                                 <child>
+                                   <widget class="GtkLabel" id="label220">
+                                     <property name="visible">True</property>
+@@ -1289,7 +1289,7 @@
+                   <widget class="GtkVBox" id="vbox86">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label243">
+                         <property name="visible">True</property>
+@@ -1324,7 +1324,7 @@
+                           <widget class="GtkVBox" id="vbox87">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="spacing">6</property>
++                            <property name="spacing">2</property>
+                             <child>
+                               <widget class="GtkHBox" id="hbox122">
+                                 <property name="visible">True</property>
+@@ -1356,7 +1356,7 @@
+                               <widget class="GtkHBox" id="hbox121">
+                                 <property name="visible">True</property>
+                                 <property name="can_focus">False</property>
+-                                <property name="spacing">6</property>
++                                <property name="spacing">2</property>
+                                 <child>
+                                   <widget class="GtkLabel" id="label245">
+                                     <property name="visible">True</property>
+@@ -1430,7 +1430,7 @@
+                               <widget class="GtkHBox" id="hbox123">
+                                 <property name="visible">True</property>
+                                 <property name="can_focus">False</property>
+-                                <property name="spacing">6</property>
++                                <property name="spacing">2</property>
+                                 <child>
+                                   <widget class="GtkLabel" id="label249">
+                                     <property name="visible">True</property>
+@@ -1528,13 +1528,13 @@
+               <widget class="GtkVBox" id="vbox78">
+                 <property name="visible">True</property>
+                 <property name="can_focus">False</property>
+-                <property name="border_width">12</property>
+-                <property name="spacing">18</property>
++                <property name="border_width">4</property>
++                <property name="spacing">6</property>
+                 <child>
+                   <widget class="GtkVBox" id="vbox14">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label34">
+                         <property name="visible">True</property>
+@@ -1569,7 +1569,7 @@
+                           <widget class="GtkVBox" id="vbox16">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="spacing">6</property>
++                            <property name="spacing">2</property>
+                             <child>
+                               <widget class="GtkCheckButton" id="resize_contents">
+                                 <property name="label" translatable="yes">Update the window contents while _resizing</property>
+@@ -1591,7 +1591,7 @@
+                               <widget class="GtkHBox" id="hbox86">
+                                 <property name="visible">True</property>
+                                 <property name="can_focus">False</property>
+-                                <property name="spacing">6</property>
++                                <property name="spacing">2</property>
+                                 <child>
+                                   <widget class="GtkLabel" id="drag_threshold_label">
+                                     <property name="visible">True</property>
+@@ -1649,7 +1649,7 @@
+                               <widget class="GtkHBox" id="hbox17">
+                                 <property name="visible">True</property>
+                                 <property name="can_focus">False</property>
+-                                <property name="spacing">6</property>
++                                <property name="spacing">2</property>
+                                 <child>
+                                   <widget class="GtkLabel" id="resist_window_label">
+                                     <property name="visible">True</property>
+@@ -1707,7 +1707,7 @@
+                               <widget class="GtkHBox" id="hbox18">
+                                 <property name="visible">True</property>
+                                 <property name="can_focus">False</property>
+-                                <property name="spacing">6</property>
++                                <property name="spacing">2</property>
+                                 <child>
+                                   <widget class="GtkLabel" id="resist_edge_label">
+                                     <property name="visible">True</property>
+@@ -1798,7 +1798,7 @@
+                                   <widget class="GtkHBox" id="hbox104">
+                                     <property name="visible">True</property>
+                                     <property name="can_focus">False</property>
+-                                    <property name="spacing">6</property>
++                                    <property name="spacing">2</property>
+                                     <child>
+                                       <widget class="GtkLabel" id="label215">
+                                         <property name="visible">True</property>
+@@ -1884,7 +1884,7 @@
+                   <widget class="GtkVBox" id="vbox79">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label222">
+                         <property name="visible">True</property>
+@@ -1903,12 +1903,12 @@
+                       <widget class="GtkVBox" id="vbox80">
+                         <property name="visible">True</property>
+                         <property name="can_focus">False</property>
+-                        <property name="spacing">6</property>
++                        <property name="spacing">2</property>
+                         <child>
+                           <widget class="GtkHBox" id="hbox90">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="spacing">12</property>
++                            <property name="spacing">4</property>
+                             <child>
+                               <widget class="GtkLabel" id="label166">
+                                 <property name="visible">True</property>
+@@ -1998,12 +1998,12 @@
+                               <widget class="GtkVBox" id="vbox81">
+                                 <property name="visible">True</property>
+                                 <property name="can_focus">False</property>
+-                                <property name="spacing">6</property>
++                                <property name="spacing">2</property>
+                                 <child>
+                                   <widget class="GtkHBox" id="hbox91">
+                                     <property name="visible">True</property>
+                                     <property name="can_focus">False</property>
+-                                    <property name="spacing">12</property>
++                                    <property name="spacing">4</property>
+                                     <child>
+                                       <widget class="GtkLabel" id="label167">
+                                         <property name="visible">True</property>
+@@ -2093,12 +2093,12 @@
+                                       <widget class="GtkVBox" id="vbox82">
+                                         <property name="visible">True</property>
+                                         <property name="can_focus">False</property>
+-                                        <property name="spacing">6</property>
++                                        <property name="spacing">2</property>
+                                         <child>
+                                           <widget class="GtkHBox" id="hbox110">
+                                             <property name="visible">True</property>
+                                             <property name="can_focus">False</property>
+-                                            <property name="spacing">12</property>
++                                            <property name="spacing">4</property>
+                                             <child>
+                                               <widget class="GtkLabel" id="label224">
+                                                 <property name="visible">True</property>
+@@ -2165,7 +2165,7 @@
+                                               <widget class="GtkHBox" id="hbox112">
+                                                 <property name="visible">True</property>
+                                                 <property name="can_focus">False</property>
+-                                                <property name="spacing">6</property>
++                                                <property name="spacing">2</property>
+                                                 <child>
+                                                   <widget class="GtkSpinButton" id="fixed_x_pos">
+                                                     <property name="visible">True</property>
+@@ -2215,7 +2215,7 @@
+                                           <widget class="GtkHBox" id="hbox111">
+                                             <property name="visible">True</property>
+                                             <property name="can_focus">False</property>
+-                                            <property name="spacing">12</property>
++                                            <property name="spacing">4</property>
+                                             <child>
+                                               <widget class="GtkLabel" id="label225">
+                                                 <property name="visible">True</property>
+@@ -2282,7 +2282,7 @@
+                                               <widget class="GtkHBox" id="hbox113">
+                                                 <property name="visible">True</property>
+                                                 <property name="can_focus">False</property>
+-                                                <property name="spacing">6</property>
++                                                <property name="spacing">2</property>
+                                                 <child>
+                                                   <widget class="GtkSpinButton" id="fixed_y_pos">
+                                                     <property name="visible">True</property>
+@@ -2394,13 +2394,13 @@
+               <widget class="GtkVBox" id="vbox56">
+                 <property name="visible">True</property>
+                 <property name="can_focus">False</property>
+-                <property name="border_width">12</property>
+-                <property name="spacing">18</property>
++                <property name="border_width">4</property>
++                <property name="spacing">6</property>
+                 <child>
+                   <widget class="GtkVBox" id="vbox13">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label32">
+                         <property name="visible">True</property>
+@@ -2435,7 +2435,7 @@
+                           <widget class="GtkVBox" id="vbox15">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="spacing">6</property>
++                            <property name="spacing">2</property>
+                             <child>
+                               <widget class="GtkCheckButton" id="focus_mouse">
+                                 <property name="label" translatable="yes">_Focus windows when the mouse pointer moves over them</property>
+@@ -2473,7 +2473,7 @@
+                                   <widget class="GtkVBox" id="vbox25">
+                                     <property name="visible">True</property>
+                                     <property name="can_focus">False</property>
+-                                    <property name="spacing">6</property>
++                                    <property name="spacing">2</property>
+                                     <child>
+                                       <widget class="GtkCheckButton" id="focus_notlast">
+                                         <property name="label" translatable="yes">Move focus under the mouse when _switching desktops</property>
+@@ -2529,7 +2529,7 @@
+                                       <widget class="GtkHBox" id="hbox16">
+                                         <property name="visible">True</property>
+                                         <property name="can_focus">False</property>
+-                                        <property name="spacing">6</property>
++                                        <property name="spacing">2</property>
+                                         <child>
+                                           <widget class="GtkLabel" id="focus_delay_label">
+                                             <property name="visible">True</property>
+@@ -2621,7 +2621,7 @@
+                   <widget class="GtkVBox" id="vbox61">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label155">
+                         <property name="visible">True</property>
+@@ -2656,12 +2656,12 @@
+                           <widget class="GtkVBox" id="vbox62">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="spacing">6</property>
++                            <property name="spacing">2</property>
+                             <child>
+                               <widget class="GtkHBox" id="hbox87">
+                                 <property name="visible">True</property>
+                                 <property name="can_focus">False</property>
+-                                <property name="spacing">12</property>
++                                <property name="spacing">4</property>
+                                 <child>
+                                   <widget class="GtkLabel" id="titlebar_doubleclick_label">
+                                     <property name="visible">True</property>
+@@ -2725,7 +2725,7 @@
+                               <widget class="GtkHBox" id="hbox85">
+                                 <property name="visible">True</property>
+                                 <property name="can_focus">False</property>
+-                                <property name="spacing">6</property>
++                                <property name="spacing">2</property>
+                                 <child>
+                                   <widget class="GtkLabel" id="doubleclick_time_label">
+                                     <property name="visible">True</property>
+@@ -2858,8 +2858,8 @@
+               <widget class="GtkVBox" id="vbox18">
+                 <property name="visible">True</property>
+                 <property name="can_focus">False</property>
+-                <property name="border_width">12</property>
+-                <property name="spacing">6</property>
++                <property name="border_width">4</property>
++                <property name="spacing">2</property>
+                 <child>
+                   <widget class="GtkLabel" id="label51">
+                     <property name="visible">True</property>
+@@ -2894,7 +2894,7 @@
+                       <widget class="GtkVBox" id="vbox19">
+                         <property name="visible">True</property>
+                         <property name="can_focus">False</property>
+-                        <property name="spacing">6</property>
++                        <property name="spacing">2</property>
+                         <child>
+                           <widget class="GtkCheckButton" id="desktop_popup">
+                             <property name="label" translatable="yes">_Show a notification when switching desktops</property>
+@@ -2932,7 +2932,7 @@
+                               <widget class="GtkHBox" id="hbox106">
+                                 <property name="visible">True</property>
+                                 <property name="can_focus">False</property>
+-                                <property name="spacing">6</property>
++                                <property name="spacing">2</property>
+                                 <child>
+                                   <widget class="GtkLabel" id="label218">
+                                     <property name="visible">True</property>
+@@ -2997,7 +2997,7 @@
+                           <widget class="GtkHBox" id="hbox25">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="spacing">6</property>
++                            <property name="spacing">2</property>
+                             <child>
+                               <widget class="GtkLabel" id="label53">
+                                 <property name="visible">True</property>
+@@ -3112,8 +3112,8 @@
+               <widget class="GtkVBox" id="vbox71">
+                 <property name="visible">True</property>
+                 <property name="can_focus">False</property>
+-                <property name="border_width">12</property>
+-                <property name="spacing">6</property>
++                <property name="border_width">4</property>
++                <property name="spacing">2</property>
+                 <child>
+                   <widget class="GtkLabel" id="label173">
+                     <property name="visible">True</property>
+@@ -3148,7 +3148,7 @@
+                       <widget class="GtkVBox" id="vbox72">
+                         <property name="visible">True</property>
+                         <property name="can_focus">False</property>
+-                        <property name="spacing">6</property>
++                        <property name="spacing">2</property>
+                         <child>
+                           <widget class="GtkLabel" id="label212">
+                             <property name="visible">True</property>
+@@ -3217,7 +3217,7 @@
+                                       <widget class="GtkHBox" id="hbox101">
+                                         <property name="visible">True</property>
+                                         <property name="can_focus">False</property>
+-                                        <property name="spacing">6</property>
++                                        <property name="spacing">2</property>
+                                         <child>
+                                           <widget class="GtkLabel" id="label196">
+                                             <property name="visible">True</property>
+@@ -3359,7 +3359,7 @@
+                                   <widget class="GtkHBox" id="hbox96">
+                                     <property name="visible">True</property>
+                                     <property name="can_focus">False</property>
+-                                    <property name="spacing">6</property>
++                                    <property name="spacing">2</property>
+                                     <child>
+                                       <widget class="GtkLabel" id="label186">
+                                         <property name="visible">True</property>
+@@ -3485,7 +3485,7 @@
+                                   <widget class="GtkHBox" id="hbox97">
+                                     <property name="visible">True</property>
+                                     <property name="can_focus">False</property>
+-                                    <property name="spacing">6</property>
++                                    <property name="spacing">2</property>
+                                     <child>
+                                       <widget class="GtkLabel" id="label190">
+                                         <property name="visible">True</property>
+@@ -3620,7 +3620,7 @@
+                                   <widget class="GtkHBox" id="hbox102">
+                                     <property name="visible">True</property>
+                                     <property name="can_focus">False</property>
+-                                    <property name="spacing">6</property>
++                                    <property name="spacing">2</property>
+                                     <child>
+                                       <widget class="GtkLabel" id="label202">
+                                         <property name="visible">True</property>
+@@ -3766,13 +3766,13 @@
+               <widget class="GtkVBox" id="vbox26">
+                 <property name="visible">True</property>
+                 <property name="can_focus">False</property>
+-                <property name="border_width">12</property>
+-                <property name="spacing">18</property>
++                <property name="border_width">4</property>
++                <property name="spacing">6</property>
+                 <child>
+                   <widget class="GtkVBox" id="vbox84">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label234">
+                         <property name="visible">True</property>
+@@ -3837,7 +3837,7 @@
+                   <widget class="GtkVBox" id="vbox27">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label70">
+                         <property name="visible">True</property>
+@@ -3872,12 +3872,12 @@
+                           <widget class="GtkVBox" id="vbox30">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="spacing">6</property>
++                            <property name="spacing">2</property>
+                             <child>
+                               <widget class="GtkHBox" id="hbox19">
+                                 <property name="visible">True</property>
+                                 <property name="can_focus">False</property>
+-                                <property name="spacing">12</property>
++                                <property name="spacing">4</property>
+                                 <child>
+                                   <widget class="GtkLabel" id="dock_position_label">
+                                     <property name="visible">True</property>
+@@ -4027,7 +4027,7 @@
+                                   <widget class="GtkHBox" id="hbox20">
+                                     <property name="visible">True</property>
+                                     <property name="can_focus">False</property>
+-                                    <property name="spacing">6</property>
++                                    <property name="spacing">2</property>
+                                     <child>
+                                       <widget class="GtkLabel" id="dock_float_label">
+                                         <property name="visible">True</property>
+@@ -4150,7 +4150,7 @@
+                               <widget class="GtkHBox" id="hbox38">
+                                 <property name="visible">True</property>
+                                 <property name="can_focus">False</property>
+-                                <property name="spacing">12</property>
++                                <property name="spacing">4</property>
+                                 <child>
+                                   <widget class="GtkLabel" id="dock_direction_label">
+                                     <property name="visible">True</property>
+@@ -4235,7 +4235,7 @@
+                   <widget class="GtkVBox" id="vbox28">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label74">
+                         <property name="visible">True</property>
+@@ -4270,7 +4270,7 @@
+                           <widget class="GtkVBox" id="vbox31">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="spacing">6</property>
++                            <property name="spacing">2</property>
+                             <child>
+                               <widget class="GtkRadioButton" id="dock_stack_top">
+                                 <property name="label" translatable="yes">Keep dock _above other windows</property>
+@@ -4349,7 +4349,7 @@
+                   <widget class="GtkVBox" id="vbox29">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="spacing">6</property>
++                    <property name="spacing">2</property>
+                     <child>
+                       <widget class="GtkLabel" id="label75">
+                         <property name="visible">True</property>
+@@ -4384,7 +4384,7 @@
+                           <widget class="GtkVBox" id="vbox32">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="spacing">6</property>
++                            <property name="spacing">2</property>
+                             <child>
+                               <widget class="GtkCheckButton" id="dock_hide">
+                                 <property name="label" translatable="yes">_Hide off screen</property>
+@@ -4422,7 +4422,7 @@
+                                   <widget class="GtkHBox" id="hbox23">
+                                     <property name="visible">True</property>
+                                     <property name="can_focus">False</property>
+-                                    <property name="spacing">6</property>
++                                    <property name="spacing">2</property>
+                                     <child>
+                                       <widget class="GtkLabel" id="dock_hide_label">
+                                         <property name="visible">True</property>
+@@ -4503,7 +4503,7 @@
+                                   <widget class="GtkHBox" id="hbox57">
+                                     <property name="visible">True</property>
+                                     <property name="can_focus">False</property>
+-                                    <property name="spacing">6</property>
++                                    <property name="spacing">2</property>
+                                     <child>
+                                       <widget class="GtkLabel" id="dock_show_label">
+                                         <property name="visible">True</property>

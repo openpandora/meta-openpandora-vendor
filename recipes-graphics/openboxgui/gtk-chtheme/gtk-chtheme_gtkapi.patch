@@ -1,0 +1,24 @@
+diff -Naur a/theme_sel.c b/theme_sel.c
+--- a/theme_sel.c	2013-07-28 03:37:20.579109623 +0100
++++ b/theme_sel.c	2013-07-28 03:36:27.188462133 +0100
+@@ -110,7 +110,7 @@
+ 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+ 	gtk_container_add(GTK_CONTAINER(sw), theme_list);
+ 
+-	gtk_timeout_add(0, (GtkFunction)theme_list_focus, theme_list);
++	gtk_timeout_add(0, theme_list_focus, theme_list);
+ 
+ 	return sw;
+ }
+diff -Naur a/util.c b/util.c
+--- a/util.c	2013-07-28 03:37:12.987301940 +0100
++++ b/util.c	2013-07-28 03:36:15.829749844 +0100
+@@ -19,7 +19,7 @@
+ 
+ GtkWidget* unfocussable(GtkWidget *w)
+ {
+-	GTK_WIDGET_UNSET_FLAGS(w, GTK_CAN_FOCUS);
++	gtk_widget_set_can_focus(w, FALSE);
+ 	return w;
+ }
+ 

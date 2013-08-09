@@ -1,0 +1,12 @@
+diff -Naur a/src/config.c b/src/config.c
+--- a/src/config.c	2013-07-28 00:08:53.627455489 +0100
++++ b/src/config.c	2013-07-28 00:10:40.535597977 +0100
+@@ -583,7 +583,7 @@
+ 		char *app = strdup(value);
+ 		panel_config.launcher.list_apps = g_slist_append(panel_config.launcher.list_apps, app);
+ 	}
+-	else if (strcmp(key, "launcher_icon_theme") == 0) {
++	else if (strncmp(key, "launcher_item_app", 17) == 0) {
+ 		// if XSETTINGS manager running, tint2 use it.
+ 		if (!icon_theme_name)
+ 			icon_theme_name = strdup(value);
