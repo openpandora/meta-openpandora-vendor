@@ -151,7 +151,7 @@ fi
 
 selection=""
 while [ x$selection = x ]; do
-selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity --width=500 --height=310 --title="Select the Default GUI" --list --column "Name" --column "Description" --text "You can now select your preferred GUI - the GUI that will be loaded automatically on startup of the unit.\n\nYou can either select XFCE4 (a full desktop environment); Openbox (a highly-configurable window manager); or MiniMenu (a minimal UI similar to gaming devices).\n\nIf you select the last choice (GUISwitch), you will be prompted to choose a GUI each time you boot your Pandora.\n\nThis setting can always be changed later by running the Startup-Settings." )
+selection=$(cat /etc/pandora/conf/gui.conf | awk -F\; '{print $1 "\n" $2 }' | zenity --width=500 --height=310 --title="Select the Default GUI" --list --column "Name" --column "Description" --text "You can now select your preferred GUI - the GUI that will be loaded automatically on startup of the unit.\n\nYou can either select XFCE4, which is a full desktop environment (similar to a normal PC);\nor Openbox, a custom UI utilising a next-gen window manager;\nor MiniMenu, which is a minimal UI similar to gaming devices.\n\nIf you select the last choice (GUISwitch), you will be prompted to choose a GUI each time you boot your Pandora.\n\nThis setting can always be changed later by running the Startup-Settings." )
 if [ x$selection = x ]; then
   zenity --title="Error" --error --text="Please select a GUI." --timeout=6
 fi
