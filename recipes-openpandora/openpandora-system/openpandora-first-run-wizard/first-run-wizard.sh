@@ -304,16 +304,27 @@ update-rc.d -f wl1251-init remove
 # leave this one alone, needed for OTG host mode, powersaving should be ok on 3.2.39 at least
 #update-rc.d -f usb-gadget remove
 
+#edit 1 for .next image.  blacklisted modules needed to added to /etc/modprobe.d/ (modprobe.conf is ignored)
 # prevent wifi from being autoloaded on later kernels, let wl1251-init script do it
-if ! grep -q 'blacklist wl1251_sdio' /etc/modprobe.conf 2> /dev/null; then
-  echo 'blacklist wl1251_sdio' >> /etc/modprobe.conf
+#if ! grep -q 'blacklist wl1251_sdio' /etc/modprobe.conf 2> /dev/null; then
+#  echo 'blacklist wl1251_sdio' >> /etc/modprobe.conf
+#fi
+if ! grep -q 'blacklist wl1251_sdio' /etc/modprobe.d/blacklist.conf 2> /dev/null; then
+  echo 'blacklist wl1251_sdio' >> /etc/modprobe.d/blacklist.conf
 fi
 # we don't ship firmware for rtl8192cu, and it was reported not to work
 # with the right firmware anyway (not verified though)
 # vendor 8192cu is compiled instead for now
-if ! grep -q 'blacklist rtl8192cu' /etc/modprobe.conf 2> /dev/null; then
-  echo 'blacklist rtl8192cu' >> /etc/modprobe.conf
+#if ! grep -q 'blacklist rtl8192cu' /etc/modprobe.conf 2> /dev/null; then
+#  echo 'blacklist rtl8192cu' >> /etc/modprobe.conf
+#fi
+if ! grep -q 'blacklist rtl8192cu' /etc/modprobe.d/blacklist.conf 2> /dev/null; then
+  echo 'blacklist rtl8192cu' >> /etc/modprobe.d/blacklist.conf
 fi
+
+#edit 2 for .next image.  Add '-b' switch when udev calls modprobe, so it doesn't load blacklisted modules
+sed -i -e 's:modprobe $env:modprobe -b $env:' /etc/udev/rules.d/modprobe.rules
+
 
 # add Midi Module and zram
 echo snd-seq>>/etc/modules
