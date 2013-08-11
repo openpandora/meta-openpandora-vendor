@@ -172,7 +172,7 @@ function togglemenu
 			
 				/etc/init.d/wl1251-init start
 			
-				echo -n "OFF" > $XDG_CACHE_HOME/wifi		
+				echo -n "OFF" > /tmp/obcache/wifi		
 				;;
 
 			# "WiFi Hardware OFF"
@@ -182,7 +182,7 @@ function togglemenu
 			
 				/etc/init.d/wl1251-init stop
 	
-				echo -n "ON" > $XDG_CACHE_HOME/wifi
+				echo -n "ON" > /tmp/obcache/wifi
 				;;
 	
 			# "WiFi Applet ON"	

@@ -6,7 +6,7 @@ RDEPENDS_${PN} = "libx11-locale"
 
 PR = "r2"
 
-SRCREV = "1f6df17f337d55f0ad6dcffde762a09db0c4cf6d"
+SRCREV = "9e04a9b89504db67e28e76ce6ae56dd5d158741a"
 
 SRC_URI = "git://code.google.com/p/pandora-openbox-gui/;protocol=https"
 S = "${WORKDIR}/git"
