@@ -2,34 +2,35 @@
 #actions done when the menu button is pressed
 #only argument is the time the button was pressed in  seconds
 
-if [ "$1" -ge "2" ]; then #button was pressed 3 sec or longer, show list of apps to kill instead of launcher
-  killist=y
+user=$(cat /tmp/currentuser)
+
+# show list of apps to kill if Pandora button held down for 2 secs or longer
+if [ "$1" != "" ]; then
+	if [ "$1" -ge "2" ]; then
+		pidlist=$(pstree -lpA | grep pnd_run.sh | sed -ne 's/.*-\(.*\)(\([0-9]\+\))/\2\n \1/p' | su -c 'DISPLAY=:0.0 zenity --list --multiple --column "pid" --column "name" --title "kill" --text "which apps should be killed"' - $user)
+		for PID in $pidlist
+		do
+			kill -9 $PID
+		done
+	fi
 fi
 
+# Show menu (XFCE / Openbox) or kill current PND (MiniMenu) if Pandora key just pressed once
+
+# XFCE 4.10
 xpid=$(pidof xfce4-session)
 if [ $xpid ]; then
-  echo "xfce4 is running"
-  # note: max username length ps can output is 19, otherwise it prints uid
-  xfceuser=$(ps -o user:20= -C xfce4-session | tail -n1 | awk '{print $1}')
-  if [ $killist ]; then
-    echo "displaying kill list"
-    pidlist=$(pstree -lpA | grep pnd_run.sh | sed -ne 's/.*-\(.*\)(\([0-9]\+\))/\2\n \1/p' | su -c 'DISPLAY=:0.0 zenity --list --multiple --column "pid" --column "name" --title "kill" --text "which apps should be killed"' - $xfceuser | sed 's/|/\n/')
-    for PID in $pidlist
-    do
-      kill -9 $PID
-    done
-  else
-    # echo "starting appfinder"
-    # invoke the appfinder; nice app, but it takes a few seconds to come up
-    #su -c 'DISPLAY=:0.0 xfce4-appfinder' - $xfceuser
-    # invoke the bottom-left popup menu, for launching new apps, instead.
-    su -c 'DISPLAY=:0.0 /usr/pandora/scripts/op_xfcemenu.sh' - $xfceuser
-  fi
+	su -c "export DISPLAY=:0.0; export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$xpid/environ | cut -d= -f2-); /usr/bin/xfce4-panel --plugin-event=applicationsmenu:popup:bool:false || xdotool key Escape" $user	
+
+# Openbox
+elif [ $(pidof openbox) ]; then
+	su -c 'DISPLAY=:0.0 xdotool mousemove 50 50; DISPLAY=:0.0 xdotool key ctrl+XF86MenuKB' - $user
+
+# MiniMenu
 else
-  echo "no x, killing all pnd aps so x or DE gets restarted"
-  pidlist=$(pstree -lpA | grep pnd_run.sh | sed -ne 's/.*(\([0-9]\+\))/\1/p')
-  for PID in $pidlist
-  do
-    kill -9 $PID
-  done
+	pidlist=$(pstree -lpA | grep pnd_run.sh | sed -ne 's/.*(\([0-9]\+\))/\1/p')
+	for PID in $pidlist
+	do
+		kill -9 $PID
+	done
 fi

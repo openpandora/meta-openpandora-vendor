@@ -1,0 +1,74 @@
+diff -Naur a/src/battery/battery.c b/src/battery/battery.c
+--- a/src/battery/battery.c	2013-07-28 00:51:01.334566668 +0100
++++ b/src/battery/battery.c	2013-07-28 00:53:59.957033545 +0100
+@@ -159,7 +159,7 @@
+ 		g_error_free(error);
+ 	else {
+ 		while ((entryname=g_dir_read_name(directory))) {
+-			if (strncmp(entryname,"AC", 2) == 0) continue;
++			if (strncmp(entryname,"tw", 2) == 0) continue;
+ 
+ 			char *path1 = g_build_filename("/sys/class/power_supply", entryname, "present", NULL);
+ 			if (g_file_test (path1, G_FILE_TEST_EXISTS)) {
+@@ -178,12 +178,12 @@
+ 		return;
+ 	}
+ 
+-	char *path1 = g_build_filename(battery_dir, "energy_now", NULL);
++	char *path1 = g_build_filename(battery_dir, "charge_now", NULL);
+ 	if (g_file_test (path1, G_FILE_TEST_EXISTS)) {
+-		path_energy_now = g_build_filename(battery_dir, "energy_now", NULL);
+-		path_energy_full = g_build_filename(battery_dir, "energy_full", NULL);
++		path_energy_now = g_build_filename(battery_dir, "charge_now", NULL);
++		path_energy_full = g_build_filename(battery_dir, "charge_full", NULL);
+ 	}
+-	else {
++/*	else {
+ 		char *path2 = g_build_filename(battery_dir, "charge_now", NULL);
+ 		if (g_file_test (path2, G_FILE_TEST_EXISTS)) {
+ 			path_energy_now = g_build_filename(battery_dir, "charge_now", NULL);
+@@ -194,12 +194,14 @@
+ 		}
+ 		g_free(path2);
+ 	}
++*/
+ 
+-	path_current_now = g_build_filename(battery_dir, "power_now", NULL);
+-	if (!g_file_test (path_current_now, G_FILE_TEST_EXISTS)) {
++	path_current_now = g_build_filename(battery_dir, "current_now", NULL);
++/*	if (!g_file_test (path_current_now, G_FILE_TEST_EXISTS)) {
+ 		g_free(path_current_now);
+ 		path_current_now = g_build_filename(battery_dir, "current_now", NULL);
+ 	}
++*/
+ 
+ 	if (path_energy_now && path_energy_full) {
+ 		path_status = g_build_filename(battery_dir, "status", NULL);
+@@ -213,7 +215,7 @@
+ 		if (fp1 == NULL || fp2 == NULL || fp3 == NULL || fp4 == NULL) {
+ 			cleanup_battery();
+ 			default_battery();
+-			fprintf(stderr, "ERROR: battery applet can't open energy_now\n");
++			fprintf(stderr, "ERROR: battery applet can't open required files\n");
+ 		}
+ 		fclose(fp1);
+ 		fclose(fp2);
+@@ -361,14 +363,16 @@
+ 
+ 	fp = fopen(path_current_now, "r");
+ 	if(fp != NULL) {
+-		if (fgets(tmp, sizeof tmp, fp)) current_now = atoi(tmp);
++		if (fgets(tmp, sizeof tmp, fp)) current_now = abs(atoi(tmp));
+ 		fclose(fp);
+ 	}
+ 
+ 	if(current_now > 0) {
+ 		switch(battery_state.state) {
+ 			case BATTERY_CHARGING:
+-				seconds = 3600 * (energy_full - energy_now) / current_now;
++				/* open pandora: show 00:00 when battery charging */
++				/* seconds = 3600 * (energy_full - energy_now) / current_now; */
++				seconds = 0;
+ 				break;
+ 			case BATTERY_DISCHARGING:
+ 				seconds = 3600 * energy_now / current_now;

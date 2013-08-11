@@ -4,10 +4,9 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a42
 
 COMPATIBLE_MACHINE = "openpandora"
 
-RDEPENDS_${PN} = "bash sed gawk zenity dbus xwininfo procps bc python-pygtk"
-# rdepends failed recipes : gksu
+RDEPENDS_${PN} = "bash sed gawk zenity dbus xwininfo procps bc python-pygtk gksu pstree xdotool"
 
-PR = "r146"
+PR = "r149"
 PRINC := "${@int(PRINC) + 1}"
 
 SRC_URI = " \
@@ -85,10 +84,10 @@ SRC_URI = " \
 	  file://op_battlow.sh \ 
 	  file://op_bright_up.sh \  
 	  file://op_menu.sh \ 
-	  file://op_xfcemenu.sh \
 	  file://op_hugetlb.sh \
 	  file://op_gamma.sh \
 	  file://op_dsp.sh \
+	  file://openbox-functions.sh \
 "
 #          file://compo4all-manager.pnd \
 
@@ -122,7 +121,6 @@ do_install() {
 	  install -m 0755 ${WORKDIR}/op_touchinit.sh ${D}${prefix}/pandora/scripts/ 
 	  install -m 0755 ${WORKDIR}/op_bright_up.sh ${D}${prefix}/pandora/scripts/  
 	  install -m 0755 ${WORKDIR}/op_menu.sh ${D}${prefix}/pandora/scripts/ 
-	  install -m 0755 ${WORKDIR}/op_xfcemenu.sh ${D}${prefix}/pandora/scripts/ 
 	  install -m 0755 ${WORKDIR}/op_hugetlb.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/op_gamma.sh ${D}${prefix}/pandora/scripts/
 	  install -m 0755 ${WORKDIR}/reset_nubs.sh ${D}${prefix}/pandora/scripts/ 
@@ -133,7 +131,8 @@ do_install() {
 	  install -m 0644 ${WORKDIR}/nubmode.glade ${D}${prefix}/pandora/scripts/ 
 	  install -m 0644 ${WORKDIR}/tvout.glade ${D}${prefix}/pandora/scripts/ 
 	  install -m 0755 ${WORKDIR}/op_lidsettings.sh ${D}${prefix}/pandora/scripts/ 
-	  install -m 0755 ${WORKDIR}/op_dsp.sh ${D}${prefix}/pandora/scripts/ 
+	  install -m 0755 ${WORKDIR}/op_dsp.sh ${D}${prefix}/pandora/scripts/
+	  install -m 0755 ${WORKDIR}/openbox-functions.sh ${D}${prefix}/pandora/scripts/ 
 
 
           install -d ${D}${prefix}/pandora/apps/
