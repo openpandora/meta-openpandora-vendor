@@ -2,7 +2,7 @@ DESCRIPTION = "Openpandora extra packages"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3b58"
 
-PR = "r6"
+PR = "r7"
 
 inherit packagegroup
 
@@ -22,6 +22,7 @@ RDEPENDS_${PN} = " \
 	terminus-font \	
 	ttf-liberation-serif ttf-liberation-sans ttf-liberation-mono \
 	ttf-dejavu-common ttf-dejavu-sans ttf-dejavu-serif ttf-dejavu-sans-mono \
+	ttf-bitstream-vera \
 	evince \
 	midori \
 	fbgrab \
