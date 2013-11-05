@@ -38,8 +38,6 @@ do_install() {
   install -d ${D}${sysconfdir}/pandora/
   install -m 0644 ${WORKDIR}/.xinitrc ${D}${sysconfdir}/skel/.xinitrc
   install -m 0644 ${WORKDIR}/vimrc ${D}${sysconfdir}/skel/.vimrc
-  install -m 0644 ${WORKDIR}/bashrc ${D}${sysconfdir}/skel/.bashrc
-  install -m 0644 ${WORKDIR}/profile ${D}${sysconfdir}/skel/.profile
   install -m 0644 ${WORKDIR}/pam_environment ${D}${sysconfdir}/skel/.pam_environment
   install -m 0644 ${WORKDIR}/pndXmodmap ${D}${sysconfdir}/skel/.pndXmodmap
   install -m 0644 ${WORKDIR}/asoundrc ${D}${sysconfdir}/skel/.asoundrc
@@ -57,6 +55,8 @@ do_install() {
 }
 
 #  install -m 0644 ${WORKDIR}/op_btenabled ${D}${sysconfdir}/skel/.op_btenabled
+#  install -m 0644 ${WORKDIR}/bashrc ${D}${sysconfdir}/skel/.bashrc
+#  install -m 0644 ${WORKDIR}/profile ${D}${sysconfdir}/skel/.profile
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
