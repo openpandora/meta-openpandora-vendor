@@ -27,6 +27,7 @@ SRC_URI = " \
   file://gtkrc-2.0 \
 "
 #  file://op_btenabled \
+#
 
 # xsettings.xml is a hack until I can figure out why XDG configs are not setting the icon theme for Xfce/GTK+
 
