@@ -3,7 +3,7 @@ DESCRIPTION = "Default 'new user' files on the OpenPandora."
 COMPATIBLE_MACHINE = "openpandora"
 
 # /etc/skel is used by Shadow's useradd so you really have that installed for this to make sense ;)
-RDEPENDS = "shadow"
+RDEPENDS_${PN} = "shadow"
 
 PR = "r22"
 LICENSE = "MIT"
