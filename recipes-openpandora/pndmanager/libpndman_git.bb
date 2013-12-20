@@ -5,9 +5,9 @@ LICENSE  = "WTFPL"
 LIC_FILES_CHKSUM = "file://COPYING;md5=8365d07beeb5f39d87e846dca3ae7b64"
 
 DEPENDS  = "jansson bzip2 expat openssl curl"
-PR = "r2"
+PR = "r4"
 
-SRCREV = "8ff3d17fee1ea76df3b41c8b567cba2095c98db7"
+SRCREV = "d6b359992f661464c40629bbbb84016385f6951f"
 inherit cmake
 
 SRC_URI = "git://github.com/Cloudef/libpndman.git;protocol=git \

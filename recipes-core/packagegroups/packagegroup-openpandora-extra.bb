@@ -35,4 +35,5 @@ RDEPENDS_${PN} = " \
 	libpthread-stubs \
         libfaad libmikmod directfb polkit-gnome \
 	gksu \
+	pndmanager \
 "
