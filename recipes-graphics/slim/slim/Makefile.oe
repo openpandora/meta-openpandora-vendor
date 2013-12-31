@@ -2,7 +2,7 @@
 #######################################################
 
 
-SLIMLDFLAGS=-lXft -lX11 -lfreetype -lXrender -lfontconfig -lpng12 -lz -lm -lcrypt -lXmu -lpng -ljpeg -lrt -lpthread
+SLIMLDFLAGS=-lXft -lX11 -lfreetype -lXrender -lfontconfig -lpng16 -lz -lm -lcrypt -lXmu -lpng -ljpeg -lrt -lpthread
 CUSTOM=-DHAVE_SHADOW
 
 USE_PAM=1

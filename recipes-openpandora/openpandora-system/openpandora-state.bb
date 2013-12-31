@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a42
 
 COMPATIBLE_MACHINE = "openpandora"
 
-RDEPENDS = "openpandora-scripts"
+RDEPENDS_${PN} = "openpandora-scripts"
 
 PR = "r18"
 
@@ -41,11 +41,13 @@ do_install() {
           install -m 0644 ${WORKDIR}/brightness.state ${D}${sysconfdir}/pandora/conf/brightness.state
 	  install -m 0644 ${WORKDIR}/nubs.state ${D}${sysconfdir}/pandora/conf/nubs.state
 	  install -m 0644 ${WORKDIR}/dirty_expire_centisecs ${D}${sysconfdir}/pandora/conf/dirty_expire_centisecs
+      install -d ${D}/${base_libdir}/systemd/system
+      install -m 0644 ${WORKDIR}/pandora-state.service ${D}/${base_libdir}/systemd/system/pandora-state.service
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 FILES_${PN} += "${prefix} ${datadir}"
 
-SYSTEMD_PACKAGES = "${PN}-systemd"
-SYSTEMD_SERVICE_${PN}-systemd = "pandora-state.service"
+SYSTEMD_PACKAGES = "${PN}"
+SYSTEMD_SERVICE_${PN} = "pandora-state.service"

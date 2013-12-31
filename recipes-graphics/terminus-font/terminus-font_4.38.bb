@@ -22,13 +22,13 @@ do_configure_prepend () {
         chmod +x configure
 }
 
-pkg_postinst_append() {
+pkg_postinst_append_${PN}() {
     if [ -z "$D" ]; then
         update-fonts
     fi
 }
 
-pkg_postrm_append() {
+pkg_postrm_append_${PN}() {
     if [ -z "$D" ]; then
         update-fonts
     fi

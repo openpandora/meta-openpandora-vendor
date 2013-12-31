@@ -1,0 +1,24 @@
+From b6d23fd4e8212d90a7914b4c29209f6d146faf8d Mon Sep 17 00:00:00 2001
+From: Giannis Damigos <giannis.damigos@gmail.com>
+Date: Tue, 5 Nov 2013 12:56:12 +0200
+Subject: [PATCH] Include zlib
+
+---
+ fbgrab.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fbgrab.c b/fbgrab.c
+index fc89f5a..3c3e4b0 100644
+--- a/fbgrab.c
++++ b/fbgrab.c
+@@ -24,6 +24,7 @@
+ #include <sys/vt.h>   /* to handle vt changing */
+ #include <png.h>      /* PNG lib */
+ #include <linux/fb.h> /* to handle framebuffer ioctls */
++#include <zlib.h>
+ 
+ #define	VERSION	"1.0 beta 1"
+ #define	DEFAULT_FB	"/dev/fb0"
+-- 
+1.8.4.2
+

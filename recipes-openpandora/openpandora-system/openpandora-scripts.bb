@@ -90,6 +90,7 @@ SRC_URI = " \
 	  file://openbox-functions.sh \
 "
 #          file://compo4all-manager.pnd \
+#
 
 do_install() {
           install -d ${D}${prefix}/pandora/scripts/

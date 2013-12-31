@@ -36,5 +36,6 @@ RDEPENDS_${PN} = " \
 		openbox-theme-onyx-citrus \
 		openbox-theme-orang \
 		openbox-theme-syscrash \
+        libxinerama \
 "
 

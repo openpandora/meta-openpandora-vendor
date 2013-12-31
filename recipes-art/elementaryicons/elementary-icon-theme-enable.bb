@@ -8,7 +8,7 @@ RDEPENDS_${PN} = "elementary-icon-theme"
 ALLOW_EMPTY_${PN} = "1"
 PACKAGE_ARCH = "all"
 
-pkg_postinst() {
+pkg_postinst_${PN}() {
 #!/bin/sh
 mkdir -p $D${sysconfdir}/gtk-2.0
 touch $D${sysconfdir}/gtk-2.0/gtkrc

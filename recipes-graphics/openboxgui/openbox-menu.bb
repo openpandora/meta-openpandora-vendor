@@ -8,7 +8,7 @@ PR="r4"
 
 SRCREV = "6a684325d6be780b3355a4ee993b174e0a2e3103"
 
-SRC_URI = "git://code.google.com/p/pandora-openbox-menu/;protocol=https"
+SRC_URI = "git://code.google.com/p/pandora-openbox-menu/;protocol=http"
 S = "${WORKDIR}/git"
 
 inherit pkgconfig
