@@ -7,7 +7,9 @@ PR = "r2"
 
 DEPENDS = " zlib libpng "
 
-SRC_URI = "git://github.com/notespace/fbgrab.git"
+SRC_URI = "git://github.com/notespace/fbgrab.git \
+           file://0001-Include-zlib.patch \
+          "
 SRCREV = "cee7102f8cc560cf46798a32e823c6bb65e3b50f"
 S = "${WORKDIR}/git"
 

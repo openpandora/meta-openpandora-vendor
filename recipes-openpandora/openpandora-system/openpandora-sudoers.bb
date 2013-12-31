@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a42
 
 COMPATIBLE_MACHINE = "openpandora"
 
-RDEPENDS = "sudo"
+RDEPENDS_${PN} = "sudo"
 
 PR = "r22"
 

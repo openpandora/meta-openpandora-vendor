@@ -3,7 +3,7 @@ DESCRIPTION = "Default 'new user' files on the OpenPandora."
 COMPATIBLE_MACHINE = "openpandora"
 
 # /etc/skel is used by Shadow's useradd so you really have that installed for this to make sense ;)
-RDEPENDS = "shadow"
+RDEPENDS_${PN} = "shadow"
 
 PR = "r22"
 LICENSE = "MIT"
@@ -27,6 +27,7 @@ SRC_URI = " \
   file://gtkrc-2.0 \
 "
 #  file://op_btenabled \
+#
 
 # xsettings.xml is a hack until I can figure out why XDG configs are not setting the icon theme for Xfce/GTK+
 
@@ -37,8 +38,6 @@ do_install() {
   install -d ${D}${sysconfdir}/pandora/
   install -m 0644 ${WORKDIR}/.xinitrc ${D}${sysconfdir}/skel/.xinitrc
   install -m 0644 ${WORKDIR}/vimrc ${D}${sysconfdir}/skel/.vimrc
-  install -m 0644 ${WORKDIR}/bashrc ${D}${sysconfdir}/skel/.bashrc
-  install -m 0644 ${WORKDIR}/profile ${D}${sysconfdir}/skel/.profile
   install -m 0644 ${WORKDIR}/pam_environment ${D}${sysconfdir}/skel/.pam_environment
   install -m 0644 ${WORKDIR}/pndXmodmap ${D}${sysconfdir}/skel/.pndXmodmap
   install -m 0644 ${WORKDIR}/asoundrc ${D}${sysconfdir}/skel/.asoundrc
@@ -56,6 +55,8 @@ do_install() {
 }
 
 #  install -m 0644 ${WORKDIR}/op_btenabled ${D}${sysconfdir}/skel/.op_btenabled
+#  install -m 0644 ${WORKDIR}/bashrc ${D}${sysconfdir}/skel/.bashrc
+#  install -m 0644 ${WORKDIR}/profile ${D}${sysconfdir}/skel/.profile
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

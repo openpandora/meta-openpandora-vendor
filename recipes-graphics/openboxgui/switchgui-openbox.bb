@@ -8,7 +8,7 @@ PR = "r2"
 
 SRCREV = "9e04a9b89504db67e28e76ce6ae56dd5d158741a"
 
-SRC_URI = "git://code.google.com/p/pandora-openbox-gui/;protocol=https"
+SRC_URI = "git://code.google.com/p/pandora-openbox-gui/;protocol=http"
 S = "${WORKDIR}/git"
 	
 do_install() {
