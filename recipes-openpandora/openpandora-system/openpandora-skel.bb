@@ -12,8 +12,6 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=956931f56ef227f7d172a149ddb40b
 SRC_URI = " \
   file://LICENSE \
   file://.xinitrc \     
-  file://bashrc \
-  file://profile \
   file://mplayconfig \
   file://pam_environment \
   file://xsettings.xml \
@@ -55,9 +53,6 @@ do_install() {
 }
 
 #  install -m 0644 ${WORKDIR}/op_btenabled ${D}${sysconfdir}/skel/.op_btenabled
-#  install -m 0644 ${WORKDIR}/bashrc ${D}${sysconfdir}/skel/.bashrc
-#  install -m 0644 ${WORKDIR}/profile ${D}${sysconfdir}/skel/.profile
-
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 FILES_${PN} = "/*"
