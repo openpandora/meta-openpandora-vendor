@@ -1,4 +1,6 @@
 PRINC := "${@int(PRINC) + 1}"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-EXTRA_OECONF += " --without-ck "
+EXTRA_OECONF += " --without-ck \
+                  --with-session-tracking=systemd \
+                "
