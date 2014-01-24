@@ -2,7 +2,7 @@ DESCRIPTION = "Openpandora extra packages"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3b58"
 
-PR = "r8"
+PR = "r9"
 
 inherit packagegroup
 
@@ -36,4 +36,6 @@ RDEPENDS_${PN} = " \
         libfaad libmikmod directfb polkit-gnome \
 	gksu \
 	pndmanager \
+	libpng12 \
+	boost \
 "
