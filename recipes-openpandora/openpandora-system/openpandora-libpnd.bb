@@ -5,7 +5,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "openpandora"
 
 #old firmware version
-PR = "r67"
+PR = "r70"
 
 #.next modification
 PRINC := "${@int(PRINC) + 6}"
@@ -23,8 +23,7 @@ SRC_URI = " \
 	  file://udisks.patch \
 "
 
-#SRCREV = "6f277b9a9e9b4b6a642bc1e82028d5394faaae49"
-SRCREV  = "a677d5c0db43949d38bd48c3418b90e70bed2461"
+SRCREV  = "dce16882dd2c3468fb9d61680d89b22d3c59f07b"
 S = "${WORKDIR}/git"
 
 inherit update-rc.d
