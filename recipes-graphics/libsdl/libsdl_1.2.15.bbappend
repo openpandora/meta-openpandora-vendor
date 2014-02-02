@@ -1,16 +1,18 @@
-PRINC := "${@int(PRINC) + 1}"
+PRINC := "${@int(PRINC) + 2}"
 FILESEXTRAPATHS := "${THISDIR}/${PN}"
 
 DESCRIPTION = "Simple DirectMedia Layer (X11, Framebuffer, +some OMAP support)"
 LIC_FILES_CHKSUM = "file://COPYING;md5=27818cd7fd83877a8e3ef82b82798ef4"
 
 
-SRCREV = "ee7e6b2d8bc82029aac405d13f719f4532851224"
+SRCREV = "79b5de0442e5ec99b36a6e5dabfc6031232f93ff"
 
 SRC_URI = " \
     git://notaz.gp2x.de/~notaz/sdl_omap.git;protocol=git;branch=master \
-    file://sdl.m4 \
+    file://configure_tweak.patch \
 "
+#file://sdl.m4 
+
 
 S = "${WORKDIR}/git" 
   
