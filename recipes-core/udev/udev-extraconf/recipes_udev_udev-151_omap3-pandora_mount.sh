@@ -23,6 +23,12 @@ do
 	fi
 done
 
+requiresutf8arg() {
+	fstype="`$blkid -p -s TYPE -o value "$1"`"
+	[ "$fstype" = vfat ]
+	return
+}
+
 automount() {	
 	if [ -n "$name2" ] 
 	then
@@ -36,7 +42,13 @@ automount() {
 	! test -d "/media/$name" && mkdir -p "/media/$name"
 	
 	
-	if ! $MOUNT -t auto -o dirsync,noatime,umask=0 $DEVNAME "/media/$name" && ! $MOUNT -t auto -o dirsync,noatime $DEVNAME "/media/$name"
+	extramountoptions=
+	
+	if requiresutf8arg "$DEVNAME"; then
+		extramountoptions="$extramountoptions,utf8"
+	fi
+	
+	if ! $MOUNT -t auto -o "dirsync,noatime,umask=0$extramountoptions" $DEVNAME "/media/$name" && ! $MOUNT -t auto -o "dirsync,noatime$extramountoptions" $DEVNAME "/media/$name"
 	then
 		#logger "mount.sh/automount" "$MOUNT -t auto $DEVNAME \"/media/$name\" failed!"
 		rm_dir "/media/$name"
